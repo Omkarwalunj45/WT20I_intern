@@ -5,6 +5,7 @@ st.title('WT20I Performance Analysis Portal')
 
 pdf = pd.read_csv("Dataset/WT20I_Bat.csv")
 idf = pd.read_csv("Dataset/squads.csv")
+col1, col2 = st.columns(2)
 
 # Player Profile sidebar
 with col1:
