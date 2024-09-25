@@ -305,7 +305,7 @@ if sidebar_option == "Player Profile":
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
                     
             # Display the results
-            st.markdown("**Yearwise Performance**")
+            st.markdown(f"### **Yearwise performnce**")
             cols = result_df.columns.tolist()
 
             # Specify the desired order with 'year' first
