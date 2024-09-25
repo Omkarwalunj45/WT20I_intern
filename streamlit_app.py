@@ -222,20 +222,20 @@ if sidebar_option == "Player Profile":
                 temp_df = pdf[pdf['batsman'] == player_name]
                if not temp_df[temp_df['batting_team'] == country].empty:
                         continue
-                temp_df = temp_df[(temp_df['bowling_team'] == country)]
-                temp_df = cumulator(temp_df)
+               temp_df = temp_df[(temp_df['bowling_team'] == country)]
+               temp_df = cumulator(temp_df)
                     
                     # If temp_df is empty after applying cumulator, skip to the next iteration
-                if len(temp_df) == 0:
-                    continue  
+               if len(temp_df) == 0:
+                   continue  
                     
                     # Drop the specified columns and modify the column names
-                temp_df = temp_df.drop(columns=['final_year', 'batsman', 'batting_team'])
-                temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
+               temp_df = temp_df.drop(columns=['final_year', 'batsman', 'batting_team'])
+               temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
                     
                     # Display the results
-                st.markdown(f"### vs **{country.upper()}**")
-                st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))
+               st.markdown(f"### vs **{country.upper()}**")
+               st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))
             
         elif option == "Bowling":
             # Similar logic can be added here for bowling statistics if needed
