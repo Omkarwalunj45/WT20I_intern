@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
+import math as mt
 
 # Page settings
 st.set_page_config(page_title='WT20I Performance Analysis Portal', layout='wide')
@@ -16,6 +18,10 @@ idf['debut_year'] = idf['debut_year'].str.split('/').str[0]  # Extract the year 
 # Convert the relevant columns to integers
 columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']
 idf[columns_to_convert] = idf[columns_to_convert].astype(int)
+
+# Allowed countries
+allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh', 
+                     'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
 
 # Sidebar for selecting between "Player Profile" and "Matchup Analysis"
 sidebar_option = st.sidebar.radio(
@@ -74,42 +80,46 @@ if sidebar_option == "Player Profile":
         with col5:
             st.markdown("BOWLING STYLE:")
             st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for bowling style
-        
+
         with col6:
             st.markdown("PLAYING ROLE:")
             st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for playing role
 
     with tab2:
         st.header("Career Statistics")
-
-        # Dropdown for Batting or Bowling selection
-        option = st.selectbox("Select Career Stat Type", ("Batting", "Bowling"))
-
-        # Show Career Averages based on the dropdown
-        st.subheader("Career Performance")
-
-        # Display Career Averages based on selection
-        if option == "Batting":
-            # Create a temporary DataFrame and filter the player's row
-            temp_df = idf.drop(columns=['Unnamed: 0', 'final_year', 'matches_x', 'matches_y', 'surname', 'initial'])
-            player_stats = temp_df[temp_df['batsman'] == player_name]  # Filter for the selected player
-
-            # Convert column names to uppercase and replace underscores with spaces
-            player_stats.columns = [col.upper().replace('_', ' ') for col in player_stats.columns]
-
-            # Display the player's statistics in a table format with bold headers
-            st.markdown("### Batting Statistics")
-            st.table(player_stats.style.set_table_attributes("style='font-weight: bold;'"))  # Display the filtered DataFrame as a table
-
-        elif option == "Bowling":
-            # Similar logic can be added here for bowling statistics if needed
-            st.write("Bowling statistics feature is not yet implemented.")
+        # Display player statistics here
 
     with tab3:
         st.header("Current Form")
-        # Add current form content here
+        # Display player current form statistics here
 
-# If "Matchup Analysis" is selected
-elif sidebar_option == "Matchup Analysis":
-    st.header("Matchup Analysis")
-    # Add content for Matchup Analysis here
+    # New section for filtering by bowling team
+    st.subheader("Batsman Performance Against Teams")
+    team_performance_df = idf[idf['batsman'] == player_name].copy()
+    
+    # Create a dataframe to store results for each team
+    team_results = {}
+
+    for team in allowed_countries:
+        team_stats = team_performance_df[team_performance_df['bowling_team'] == team]
+        if not team_stats.empty:
+            # Aggregate statistics for the team
+            runs = team_stats['runs'].sum()
+            matches = team_stats['match_id'].nunique()
+            dismissals = team_stats['player_dismissed'].count()
+            highest_score = team_stats['batsman_runs'].max()
+
+            team_results[team] = {
+                'Runs': runs,
+                'Matches': matches,
+                'Dismissals': dismissals,
+                'Highest Score': highest_score
+            }
+
+    # Convert team results to DataFrame
+    results_df = pd.DataFrame(team_results).T.fillna(0)
+
+    # Display the results in a table format
+    st.dataframe(results_df)
+
+# The Matchup Analysis section can be added here if needed
