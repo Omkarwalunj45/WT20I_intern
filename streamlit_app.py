@@ -37,7 +37,7 @@ if sidebar_option == "Player Profile":
         # Display player profile information
         with col1:
             st.markdown("FULL NAME:")
-            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{player_info['player_name'].upper()}</span>", unsafe_allow_html=True)
+            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{player_info['player_name']}</span>", unsafe_allow_html=True)
         
         with col2:
             st.markdown("COUNTRY:")
@@ -66,18 +66,38 @@ if sidebar_option == "Player Profile":
     with tab2:
         st.header("Career Statistics")
 
-        # Dropdown for selecting Batting or Bowling statistics
-        stats_option = st.selectbox("Select statistics type:", ("Batting", "Bowling"))
+        # Dropdown for Batting or Bowling selection
+        option = st.selectbox("Select Career Stat Type", ("Batting", "Bowling"))
 
-        if stats_option == "Batting":
-            # Placeholder for batting statistics content
-            st.markdown("### Batting Statistics")
-            # Example: st.dataframe(pdf[pdf['player_name'] == player_name])  # Replace with actual data display
-            
-        elif stats_option == "Bowling":
-            # Placeholder for bowling statistics content
-            st.markdown("### Bowling Statistics")
-            # Example: st.dataframe(pdf[pdf['player_name'] == player_name])  # Replace with actual data display
+        # Show Career Averages based on the dropdown
+        st.subheader("Career Averages")
+
+        # Filter data from pdf for the selected player
+        player_data = pdf[pdf['player_name'] == player_name]
+
+        # If batting is selected, show batting stats
+        if option == "Batting":
+            st.write("Batting Career Averages")
+
+            # Display the player's batting statistics in a table format
+            if not player_data.empty:
+                # Selecting only necessary columns for Batting stats
+                batting_stats = player_data[['matches', 'innings', 'runs', 'average', 'strike_rate']]
+
+                # Capitalizing the headers and making them bold
+                batting_stats.columns = [f"**{col.upper()}**" for col in batting_stats.columns]
+
+                # Displaying the table
+                st.dataframe(batting_stats)
+            else:
+                st.write("No Batting Data Available.")
+
+        # If bowling is selected, show bowling stats (if available in the dataset)
+        if option == "Bowling":
+            st.write("Bowling Career Averages")
+
+            # Placeholder for bowling data – assuming future data will include bowling stats
+            st.write("No Bowling Data Available.")
 
     with tab3:
         st.header("Current Form")
