@@ -31,16 +31,26 @@ if sidebar_option == "Player Profile":
     with tab1:
         st.header("Overview")
         
-        # Display player profile information in the Overview tab, formatted like Cricinfo
+        # Create columns for horizontal layout
+        col1, col2, col3 = st.columns(3)
+
+        # Display player profile information
+        with col1:
+            st.markdown("FULL NAME:")
+            st.markdown(f"**{player_info['player_name'].upper()}**")
         
-        st.markdown(f" **FULL NAME:** {player_info['player_name'].upper()}")
-        st.markdown(f" **COUNTRY:** {player_info['team_name'].upper()}")
-        st.markdown(f" **BATTING STYLE:** {player_info['batting_hand'].upper()}")
+        with col2:
+            st.markdown("COUNTRY:")
+            st.markdown(f"**{player_info['team_name'].upper()}**")
         
-        # Placeholder values for Bowling Style, Playing Role, Age (to be added if data is available)
-        # st.write(f"**Bowling Style:** {player_info['bowling_hand'].upper()}")
-        # st.write(f"**Playing Role:** {player_info['playing_role'].upper()}")
-        # st.write(f"**Age:** {player_info['age']}")  # Assuming age is available in dataset
+        with col3:
+            st.markdown("AGE:")  # Placeholder for age
+            st.markdown("**N/A**")  # Placeholder for future age data
+
+        # Below the horizontal layout for batting style, bowling style, and role
+        st.markdown("**BATTING STYLE:** N/A")  # Placeholder for batting style
+        st.markdown("**BOWLING STYLE:** N/A")  # Placeholder for bowling style
+        st.markdown("**PLAYING ROLE:** N/A")  # Placeholder for playing role
 
     with tab2:
         st.header("Career Statistics")
