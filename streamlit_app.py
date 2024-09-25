@@ -8,7 +8,7 @@ st.title('WT20I Performance Analysis Portal')
 # Load data
 pdf = pd.read_csv("Dataset/women_bbb_t20_compressed.csv")
 idf = pd.read_csv("Dataset/updated_wt20i.csv")
-# ldf = pd.read_csv("Dataset/squads.csv")
+ldf = pd.read_csv("Dataset/squads.csv")  # Load squads.csv for batting type
 
 # Sidebar for selecting between "Player Profile" and "Matchup Analysis"
 sidebar_option = st.sidebar.radio(
@@ -25,9 +25,9 @@ if sidebar_option == "Player Profile":
 
     # Filter the data for the selected player
     player_info = idf[idf['batsman'] == player_name].iloc[0]
-    # ldata = ldf[ldf['player_name'] == player_name].iloc[0]
-    
-    
+
+    # Filter to get batting type from squads.csv
+    player_batting_type = ldf[ldf['player_name'] == player_name]['batting_hand'].values
 
     # Tabs for "Overview", "Career Statistics", and "Current Form"
     tab1, tab2, tab3 = st.tabs(["Overview", "Career Statistics", "Current Form"])
@@ -57,9 +57,10 @@ if sidebar_option == "Player Profile":
         # Below the first row for batting style, bowling style, and role
         with col4:
             st.markdown("BATTING STYLE:")
-            # st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{ldata['batting_hand'].upper()}</span>", unsafe_allow_html=True)
-            st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for future age data
-        
+            # Display batting type; make it bold
+            batting_type_display = player_batting_type[0] if player_batting_type else "N/A"
+            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{batting_type_display}</span>", unsafe_allow_html=True)
+
         with col5:
             st.markdown("BOWLING STYLE:")
             st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for bowling style
@@ -96,10 +97,8 @@ if sidebar_option == "Player Profile":
                 # Display header in a markdown format
                 st.markdown(f"<h4>{' | '.join(header)}</h4>", unsafe_allow_html=True)
 
-                # if not batting_stats.empty:
-                #    st.dataframe(batting_stats.style.hide_index())  # Hide index for a cleaner look
-                # else:
-                #     st.write("No Batting Data Available.")
+                # Display batting statistics, hide index for a cleaner look
+                st.dataframe(batting_stats.style.hide_index())
 
         # If bowling is selected, show bowling stats (if available in the dataset)
         if option == "Bowling":
