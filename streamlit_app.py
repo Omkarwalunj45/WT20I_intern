@@ -65,7 +65,19 @@ if sidebar_option == "Player Profile":
 
     with tab2:
         st.header("Career Statistics")
-        # Add career statistics content here
+
+        # Dropdown for selecting Batting or Bowling statistics
+        stats_option = st.selectbox("Select statistics type:", ("Batting", "Bowling"))
+
+        if stats_option == "Batting":
+            # Placeholder for batting statistics content
+            st.markdown("### Batting Statistics")
+            # Example: st.dataframe(pdf[pdf['player_name'] == player_name])  # Replace with actual data display
+            
+        elif stats_option == "Bowling":
+            # Placeholder for bowling statistics content
+            st.markdown("### Bowling Statistics")
+            # Example: st.dataframe(pdf[pdf['player_name'] == player_name])  # Replace with actual data display
 
     with tab3:
         st.header("Current Form")
