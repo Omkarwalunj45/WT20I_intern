@@ -253,7 +253,7 @@ if sidebar_option == "Player Profile":
                st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))
 
         
-            temp_df = pdf[pdf['player_name'] == player_name]
+            temp_df = pdf[pdf['batsman'] == player_name]
             
             def standardize_season(season):
                 if '/' in season:  # Check if the season is in 'YYYY/YY' format
