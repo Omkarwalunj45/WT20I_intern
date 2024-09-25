@@ -27,7 +27,7 @@ if sidebar_option == "Player Profile":
     player_info = idf[idf['batsman'] == player_name].iloc[0]
 
     # Filter to get batting type from squads.csv
-    player_batting_type = ldf[ldf['player_name'] == player_name]['batting_hand'].values
+    player_batting_type = ldf[ldf['player_name'] == player_name]
 
     # Tabs for "Overview", "Career Statistics", and "Current Form"
     tab1, tab2, tab3 = st.tabs(["Overview", "Career Statistics", "Current Form"])
