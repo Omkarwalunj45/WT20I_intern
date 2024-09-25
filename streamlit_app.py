@@ -79,17 +79,17 @@ if sidebar_option == "Player Profile":
         option = st.selectbox("Select Career Stat Type", ("Batting", "Bowling"))
 
         # Show Career Averages based on the dropdown
-        st.subheader("Career Averages")
+        st.subheader("Career Performance")
 
         # Display Career Averages based on selection
         if option == "Batting":
-            st.write("Batting Career Averages")
+            
             # Fetch and display the player's batting stats from your dataset
             # player_data = idf[idf['batsman'] == player_name]  # Adjust this line as necessary
             # st.write(player_data)  # Example: Display batting data
 
         elif option == "Bowling":
-            st.write("Bowling Career Averages")
+            
             # # Fetch and display the player's bowling stats from your dataset
             # # Assuming you have a similar DataFrame for bowling stats
             # bowling_data = pdf[pdf['bowler'] == player_name]  # Adjust this line as necessary
