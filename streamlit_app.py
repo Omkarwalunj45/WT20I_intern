@@ -12,7 +12,7 @@ pdf = pd.read_csv("Dataset/up_com_wt20i.csv")
 idf = pd.read_csv("Dataset/updated_wt20i.csv")
 ldf = pd.read_csv("Dataset/squads.csv")  # Load squads.csv for batting type
 idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']] = idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']].astype(int)
-pdf['runs'] = pdf['runs'].astype(int)
+
 
 def cumulator(temp_df):       
     # Create new columns for counting runs
