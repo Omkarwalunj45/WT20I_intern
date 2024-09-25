@@ -259,7 +259,7 @@ if sidebar_option == "Player Profile":
                st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))
 
         
-            tdf = pdf[pdf['batsman'] == 'Smriti Mandhana']
+            tdf = pdf[pdf['batsman'] == player_name]
 
             def standardize_season(season):
                 if '/' in season:  # Check if the season is in 'YYYY/YY' format
@@ -274,7 +274,7 @@ if sidebar_option == "Player Profile":
             
             # Optional: Convert to a sorted list (if needed)
             unique_seasons = sorted(set(unique_seasons))
-            print(unique_seasons)
+            # print(unique_seasons)
             tdf=pd.DataFrame(tdf)
             # print(temp_df.head(50))
             tdf['batsman_runs'] = tdf['batsman_runs'].astype(int)
@@ -284,14 +284,14 @@ if sidebar_option == "Player Profile":
             for season in unique_seasons:
                 print(i)
                 temp_df = tdf[(tdf['season'] == season)]
-                # print(temp_df.head())
+                print(temp_df.head())
                 temp_df = cumulator(temp_df)
                 if i==0:
                     result_df = temp_df  # Initialize with the first result_df
                     i=1+i
                 else:
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)
-                result_df = result_df.drop(columns=['batsman', 'batting_team'])
+                result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year'])
                 # Convert specific columns to integers
                 result_df['runs'] = result_df['runs'].astype(int)
                 result_df['hundreds'] =result_df['hundreds'].astype(int)
@@ -301,15 +301,14 @@ if sidebar_option == "Player Profile":
                 # Round off the remaining float columns to 2 decimal places
                 float_cols = result_df.select_dtypes(include=['float']).columns
                 result_df[float_cols] = result_df[float_cols].round(2)
-
-            result_df = idf.drop(columns=['debut_year'])    
-            result_df = result_df.rename(columns={'final_year': 'year'})
-            
-            # Changing column names to uppercase and replacing underscores with spaces
-            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]    
+            result_df=result_df.rename(columns={'final_year':'year'})
+            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+                    
+            # Display the results
             st.markdown("**Yearwise Performance**")
+               
+            # Display the table with bold font
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
-
 
     
         elif option == "Bowling":
