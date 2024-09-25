@@ -217,6 +217,7 @@ if sidebar_option == "Player Profile":
             pdf['ball'] = pd.to_numeric(pdf['ball'], errors='coerce') 
             # Applying the lambda function to calculate the 'over'
             pdf['over'] = pdf['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
+            i=0
             for country in allowed_countries:
                 temp_df = pdf[(pdf['batsman'] == player_name) & (pdf['bowling_team'] == country)]
                 
@@ -225,7 +226,8 @@ if sidebar_option == "Player Profile":
                 temp_df = temp_df.drop(columns=['final_year'])
                 temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
                 
-                st.markdown("### vs ",country in allowed_countries)
+                st.markdown("### vs ",allowed_countries[i])
+                i=i+1
                 st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'")) 
                     
             
