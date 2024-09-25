@@ -276,7 +276,7 @@ if sidebar_option == "Player Profile":
             # Run a for loop and pass temp_df to a cumulative function
             i=0
             for season in unique_seasons:
-                print(i)
+                
                 temp_df = tdf[(tdf['season'] == season)]
                 print(temp_df.head())
                 temp_df = cumulator(temp_df)
@@ -298,11 +298,11 @@ if sidebar_option == "Player Profile":
                 result_df=result_df.rename(columns={'last_year':'year'})
                 # result_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
                     
-                    # Display the results
-                st.markdown(f"### yearwise performance**")
+            # Display the results
+            st.markdown(f"### yearwise performance**")
                
-                # Display the table with bold font
-                st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+            # Display the table with bold font
+            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
     
         elif option == "Bowling":
