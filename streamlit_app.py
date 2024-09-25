@@ -223,7 +223,7 @@ if sidebar_option == "Player Profile":
                 
                 temp_df=cumulator(temp_df)
                  
-                temp_df = temp_df.drop(columns=['final_year'])
+                temp_df = temp_df.drop(columns=['final_year','batsman','batting_team'])
                 temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
                 
                 st.markdown(f"### vs **{country.upper()}**")
