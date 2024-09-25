@@ -115,7 +115,7 @@ def cumulator(temp_df):
     
     # Reset index for the final DataFrame
     bat_rec.reset_index(inplace=True, drop=True)
-    return df
+    return temp_df
 
 
 # Preprocess the debut column to extract the year
