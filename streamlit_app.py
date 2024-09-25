@@ -308,6 +308,13 @@ if sidebar_option == "Player Profile":
             st.markdown("**Yearwise Performance**")
                
             # Display the table with bold font
+            cols = result_df.columns.tolist()
+
+            # Specify the desired order with 'year' first
+            new_order = ['year'] + [col for col in cols if col != 'year']
+            
+            # Reindex the DataFrame with the new column order
+            result_df = result_df[new_order]
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
     
