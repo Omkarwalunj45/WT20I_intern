@@ -19,11 +19,11 @@ sidebar_option = st.sidebar.radio(
 if sidebar_option == "Player Profile":
     st.header("Player Profile")
 
-    # Player search input (selectbox)
-    player_name = st.selectbox("Search for a player", idf['player_name'].unique())
+    # Player search input (selectbox) from 'batsman' in pdf dataset
+    player_name = st.selectbox("Search for a player", pdf['batsman'].unique())
 
-    # Filter the data for the selected player
-    player_info = idf[idf['player_name'] == player_name].iloc[0]
+    # Filter the data for the selected player from pdf
+    player_info = idf[idf['player_name'] == player_name].iloc[0] if player_name in idf['player_name'].values else None
 
     # Tabs for "Overview", "Career Statistics", and "Current Form"
     tab1, tab2, tab3 = st.tabs(["Overview", "Career Statistics", "Current Form"])
@@ -35,33 +35,36 @@ if sidebar_option == "Player Profile":
         col1, col2, col3 = st.columns(3)
 
         # Display player profile information
-        with col1:
-            st.markdown("FULL NAME:")
-            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{player_info['player_name']}</span>", unsafe_allow_html=True)
-        
-        with col2:
-            st.markdown("COUNTRY:")
-            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{player_info['team_name'].upper()}</span>", unsafe_allow_html=True)
-        
-        with col3:
-            st.markdown("AGE:")  # Placeholder for age
-            st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for future age data
+        if player_info is not None:
+            with col1:
+                st.markdown("FULL NAME:")
+                st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{player_info['player_name']}</span>", unsafe_allow_html=True)
 
-        # Create columns for the second row (batting style, bowling style, playing role)
-        col4, col5, col6 = st.columns(3)
+            with col2:
+                st.markdown("COUNTRY:")
+                st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{player_info['team_name'].upper()}</span>", unsafe_allow_html=True)
 
-        # Below the first row for batting style, bowling style, and role
-        with col4:
-            st.markdown("BATTING STYLE:")
-            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{player_info['batting_hand'].upper()}</span>", unsafe_allow_html=True)
-        
-        with col5:
-            st.markdown("BOWLING STYLE:")
-            st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for bowling style
-        
-        with col6:
-            st.markdown("PLAYING ROLE:")
-            st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for playing role
+            with col3:
+                st.markdown("AGE:")  # Placeholder for age
+                st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for future age data
+
+            # Create columns for the second row (batting style, bowling style, playing role)
+            col4, col5, col6 = st.columns(3)
+
+            # Below the first row for batting style, bowling style, and role
+            with col4:
+                st.markdown("BATTING STYLE:")
+                st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{player_info['batting_hand'].upper()}</span>", unsafe_allow_html=True)
+
+            with col5:
+                st.markdown("BOWLING STYLE:")
+                st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for bowling style
+
+            with col6:
+                st.markdown("PLAYING ROLE:")
+                st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for playing role
+        else:
+            st.write("Player information not available.")
 
     with tab2:
         st.header("Career Statistics")
@@ -87,7 +90,7 @@ if sidebar_option == "Player Profile":
                 # Create a custom header for the DataFrame
                 header = batting_stats.columns.str.upper()  # Capitalize column names
                 header = [f"**{col}**" for col in header]  # Make headers bold
-                
+
                 # Display header in a markdown format
                 st.markdown(f"<h4>{' | '.join(header)}</h4>", unsafe_allow_html=True)
 
