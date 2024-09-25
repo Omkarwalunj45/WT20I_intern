@@ -115,7 +115,7 @@ def cumulator(temp_df):
     
     # Reset index for the final DataFrame
     bat_rec.reset_index(inplace=True, drop=True)
-    return temp_df
+    return bat_rec
 
 
 # Preprocess the debut column to extract the year
@@ -219,7 +219,7 @@ if sidebar_option == "Player Profile":
             pdf['over'] = pdf['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
             for country in allowed_countries:
                 temp_df = pdf[(pdf['batsman'] == player_name) & (pdf['bowling_team'] == country)]
-                print(len(temp_df))
+                # print(len(temp_df))
                 temp_df=cumulator(temp_df)
                 temp_df = temp_df.drop(columns=['Unnamed: 0', 'final_year', 'matches_x', 'matches_y', 'surname', 'initial'])
                 temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
