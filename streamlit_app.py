@@ -81,14 +81,18 @@ if sidebar_option == "Player Profile":
 
             # Display the player's batting statistics in a table format
             if not player_data.empty:
-                # Selecting only necessary columns for Batting stats
-                batting_stats = player_data[['matches', 'innings', 'runs', 'average', 'strike_rate']]
+                # Get the entire row for the player
+                batting_stats = player_data
 
-                # Capitalizing the headers and making them bold
-                batting_stats.columns = [f"**{col.upper()}**" for col in batting_stats.columns]
+                # Create a custom header for the DataFrame
+                header = batting_stats.columns.str.upper()  # Capitalize column names
+                header = [f"**{col}**" for col in header]  # Make headers bold
+                
+                # Display header in a markdown format
+                st.markdown(f"<h4>{' | '.join(header)}</h4>", unsafe_allow_html=True)
 
-                # Displaying the table
-                st.dataframe(batting_stats)
+                # Displaying the player's stats row
+                st.dataframe(batting_stats.style.hide_index())  # Hide index for a cleaner look
             else:
                 st.write("No Batting Data Available.")
 
