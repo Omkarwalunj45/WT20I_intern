@@ -303,12 +303,23 @@ if sidebar_option == "Player Profile":
                 result_df[float_cols] = result_df[float_cols].round(2)
 
             result_df = idf.drop(columns=['debut_year'])    
-            result_df=result_df.rename(columns={'last_year':'year'})
+            result_df = result_df.rename(columns={'last_year': 'year'})
+            
+            # Get all columns
             cols = result_df.columns.tolist()
+            
+            # Create new order, putting 'year' first and preserving the rest
             new_order = ['year'] + [col for col in cols if col != 'year']
-            result_df = result_df[new_order]
-            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-    
+            
+            # Debugging: Check if 'year' is in the columns before reordering
+            if 'year' not in cols:
+                st.write("Error: 'year' column not found after renaming!")
+            else:
+                # Reordering the columns
+                result_df = result_df[new_order]
+            
+    # Changing column names to uppercase and replacing underscores with spaces
+    result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]    
             st.markdown("Yearwise Performance")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
