@@ -229,7 +229,7 @@ if sidebar_option == "Player Profile":
                
                 temp_df = pdf[(pdf['batsman'] == player_name) & (pdf['bowling_team'] == country)]
                 temp_df=cumulator(temp_df)
-                temp_df = temp_df.drop(columns=['Unnamed: 0', 'final_year', 'matches_x', 'matches_y', 'surname', 'initial']
+                temp_df = temp_df.drop(columns=['Unnamed: 0', 'final_year', 'matches_x', 'matches_y', 'surname', 'initial'])
                 temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
                 st.markdown("### vs Teams")
                 st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'")) 
