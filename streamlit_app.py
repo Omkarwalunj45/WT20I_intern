@@ -78,7 +78,7 @@ if sidebar_option == "Player Profile":
         st.subheader("Career Averages")
 
         # Filter data from pdf for the selected player
-        player_data = idf[idf['batsmans'] == player_name]
+        player_data = idf[idf['batsman'] == player_name]
 
         # If batting is selected, show batting stats
         if option == "Batting":
