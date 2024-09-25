@@ -219,8 +219,9 @@ if sidebar_option == "Player Profile":
             pdf['over'] = pdf['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
             
             for country in allowed_countries:
-                if not pdf[pdf['batting_team'] != country].empty:
-                    temp_df = pdf[(pdf['bowling_team'] == country)]
+                temp_df=pdf(pdf['batsman']=='player_name')
+                if temp_df(temp_df['batting_team']!=country):
+                    temp_df = temp_df[(temp_df['bowling_team'] == country)]
                     temp_df = cumulator(temp_df)
                     
                     # If temp_df is empty after applying cumulator, skip to the next iteration
@@ -234,7 +235,6 @@ if sidebar_option == "Player Profile":
                     # Display the results
                     st.markdown(f"### vs **{country.upper()}**")
                     st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))
-
             
         elif option == "Bowling":
             # Similar logic can be added here for bowling statistics if needed
