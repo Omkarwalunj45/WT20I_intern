@@ -251,8 +251,6 @@ if sidebar_option == "Player Profile":
                
                # Display the table with bold font
                st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))
- 
-               st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))
             
         elif option == "Bowling":
             # Similar logic can be added here for bowling statistics if needed
