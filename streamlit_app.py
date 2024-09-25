@@ -57,7 +57,8 @@ if sidebar_option == "Player Profile":
         # Below the first row for batting style, bowling style, and role
         with col4:
             st.markdown("BATTING STYLE:")
-            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{ldata['batting_hand'].upper()}</span>", unsafe_allow_html=True)
+            # st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{ldata['batting_hand'].upper()}</span>", unsafe_allow_html=True)
+            st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for future age data
         
         with col5:
             st.markdown("BOWLING STYLE:")
