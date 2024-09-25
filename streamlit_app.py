@@ -271,10 +271,12 @@ if sidebar_option == "Player Profile":
             unique_seasons = sorted(set(unique_seasons))
             
             # Run a for loop and pass temp_df to a cumulative function
+            i=0
             for season in unique_seasons:
                 temp_df = cumulator(temp_df)
-                if result_df.empty:
+                if i==0:
                     result_df = temp_df  # Initialize with the first result_df
+                    i=1
                 else:
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)
                 result_df = result_df.drop(columns=['batsman', 'batting_team'])
