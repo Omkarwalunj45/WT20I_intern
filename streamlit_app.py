@@ -6,8 +6,9 @@ st.set_page_config(page_title='WT20I Performance Analysis Portal', layout='wide'
 st.title('WT20I Performance Analysis Portal')
 
 # Load data
-pdf = pd.read_csv("Dataset/WT20I_Bat.csv")
-idf = pd.read_csv("Dataset/squads.csv")
+pdf = pd.read_csv("Dataset/women_bbb_t20_compressed.csv")
+idf = pd.read_csv("Dataset/updated_wt20i.csv")
+ldf pd.read_csv("Dataset/squads.csv")
 
 # Sidebar for selecting between "Player Profile" and "Matchup Analysis"
 sidebar_option = st.sidebar.radio(
@@ -23,7 +24,8 @@ if sidebar_option == "Player Profile":
     player_name = st.selectbox("Search for a player", idf['player_name'].unique())
 
     # Filter the data for the selected player
-    player_info = idf[idf['player_name'] == player_name].iloc[0]
+    player_info = idf[idf['batsman'] == player_name].iloc[0]
+    ldata = ldf[ldf['batsman'] == player_name].iloc[0]
 
     # Tabs for "Overview", "Career Statistics", and "Current Form"
     tab1, tab2, tab3 = st.tabs(["Overview", "Career Statistics", "Current Form"])
@@ -37,11 +39,11 @@ if sidebar_option == "Player Profile":
         # Display player profile information
         with col1:
             st.markdown("FULL NAME:")
-            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{player_info['player_name']}</span>", unsafe_allow_html=True)
+            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{player_info['batsman']}</span>", unsafe_allow_html=True)
         
         with col2:
             st.markdown("COUNTRY:")
-            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{player_info['team_name'].upper()}</span>", unsafe_allow_html=True)
+            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{player_info['batting_team'].upper()}</span>", unsafe_allow_html=True)
         
         with col3:
             st.markdown("AGE:")  # Placeholder for age
@@ -53,7 +55,7 @@ if sidebar_option == "Player Profile":
         # Below the first row for batting style, bowling style, and role
         with col4:
             st.markdown("BATTING STYLE:")
-            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{player_info['batting_hand'].upper()}</span>", unsafe_allow_html=True)
+            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{ldata['batting_hand'].upper()}</span>", unsafe_allow_html=True)
         
         with col5:
             st.markdown("BOWLING STYLE:")
@@ -73,7 +75,7 @@ if sidebar_option == "Player Profile":
         st.subheader("Career Averages")
 
         # Filter data from pdf for the selected player
-        player_data = pdf[pdf['player_name'] == player_name]
+        player_data = idf[idf['player_name'] == player_name]
 
         # If batting is selected, show batting stats
         if option == "Batting":
