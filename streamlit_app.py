@@ -8,7 +8,7 @@ st.title('WT20I Performance Analysis Portal')
 # Load data
 pdf = pd.read_csv("Dataset/women_bbb_t20_compressed.csv")
 idf = pd.read_csv("Dataset/updated_wt20i.csv")
-ldf pd.read_csv("Dataset/squads.csv")
+ldf = pd.read_csv("Dataset/squads.csv")
 
 # Sidebar for selecting between "Player Profile" and "Matchup Analysis"
 sidebar_option = st.sidebar.radio(
