@@ -10,6 +10,13 @@ pdf = pd.read_csv("Dataset/up_com_wt20i.csv")
 idf = pd.read_csv("Dataset/updated_wt20i.csv")
 ldf = pd.read_csv("Dataset/squads.csv")  # Load squads.csv for batting type
 def cumulator(df):       
+    df['total_runs'] = df['runs_off_bat'] + df['extras']
+    df = df.rename(columns={'runs_off_bat': 'batsman_runs', 'wicket_type': 'dismissal_kind', 'striker': 'batsman', 'innings': 'inning'})
+    df = df.dropna(subset=['ball'])
+    # Convert the 'ball' column to numeric if it's not already (optional but recommended)
+    df['ball'] = pd.to_numeric(df['ball'], errors='coerce') 
+    # Applying the lambda function to calculate the 'over'
+    df['over'] = df['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
     # Create new columns for counting runs
     temp_df['is_dot'] = temp_df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
     temp_df['is_one'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
