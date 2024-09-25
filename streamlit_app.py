@@ -253,30 +253,36 @@ if sidebar_option == "Player Profile":
                st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))
 
         
-            temp_df = pdf[pdf['batsman'] == player_name]
-            
+            tdf = pdf[pdf['batsman'] == 'Smriti Mandhana']
+
             def standardize_season(season):
                 if '/' in season:  # Check if the season is in 'YYYY/YY' format
                     year = season.split('/')[0]  # Get the first part
                 else:
                     year = season  # Use as is if already in 'YYYY' format
                 return year.strip()  # Return the year stripped of whitespace
-            
-            temp_df['season'] = temp_df['season'].apply(standardize_season)
+            tdf['season'] =tdf['season'].apply(standardize_season)
             
             # Populate an array of unique seasons
-            unique_seasons = temp_df['season'].unique()
+            unique_seasons = tdf['season'].unique()
             
             # Optional: Convert to a sorted list (if needed)
             unique_seasons = sorted(set(unique_seasons))
-            
+            # print(unique_seasons)
+            tdf=pd.DataFrame(tdf)
+            # print(temp_df.head(50))
+            tdf['batsman_runs'] = tdf['batsman_runs'].astype(int)
+            tdf['total_runs'] = tdf['total_runs'].astype(int)
             # Run a for loop and pass temp_df to a cumulative function
             i=0
             for season in unique_seasons:
+                print(i)
+                temp_df = tdf[(tdf['season'] == season)]
+                print(temp_df.head())
                 temp_df = cumulator(temp_df)
                 if i==0:
                     result_df = temp_df  # Initialize with the first result_df
-                    i=1
+                    i=1+i
                 else:
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)
                 result_df = result_df.drop(columns=['batsman', 'batting_team'])
@@ -290,15 +296,15 @@ if sidebar_option == "Player Profile":
                 float_cols = result_df.select_dtypes(include=['float']).columns
                 result_df[float_cols] = result_df[float_cols].round(2)
                 result_df=result_df.rename(columns={'last_year':'year'})
-                                           
-                result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-                        
-                        # Display the results
-                st.markdown(f"### vs **{season}**")
-                   
+                result_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
+                    
+                    # Display the results
+                st.markdown(f"### yearwise performance**")
+               
                 # Display the table with bold font
                 st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
-                
+
+    
         elif option == "Bowling":
             # Similar logic can be added here for bowling statistics if needed
             st.write("Bowling statistics feature is not yet implemented.")
