@@ -96,7 +96,7 @@ if sidebar_option == "Player Profile":
                 # Display header in a markdown format
                 st.markdown(f"<h4>{' | '.join(header)}</h4>", unsafe_allow_html=True)
 
-               if not batting_stats.empty:
+                if not batting_stats.empty:
                    st.dataframe(batting_stats.style.hide_index())  # Hide index for a cleaner look
                 else:
                     st.write("No Batting Data Available.")
