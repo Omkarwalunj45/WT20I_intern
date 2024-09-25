@@ -12,13 +12,6 @@ pdf = pd.read_csv("Dataset/up_com_wt20i.csv")
 idf = pd.read_csv("Dataset/updated_wt20i.csv")
 ldf = pd.read_csv("Dataset/squads.csv")  # Load squads.csv for batting type
 idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']] = idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']].astype(int)
-pdf['total_runs'] = pdf['batsman_runs'] + pdf['extras']
-pdf = pdf.rename(columns={'runs_off_bat': 'batsman_runs', 'wicket_type': 'dismissal_kind', 'striker': 'batsman', 'innings': 'inning'})
-pdf = pdf.dropna(subset=['ball'])
-            # Convert the 'ball' column to numeric if it's not already (optional but recommended)
-pdf['ball'] = pd.to_numeric(pdf['ball'], errors='coerce') 
-            # Applying the lambda function to calculate the 'over'
-pdf['over'] = pdf['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
 
 
 def cumulator(temp_df):       
