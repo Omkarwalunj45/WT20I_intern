@@ -309,7 +309,7 @@ if sidebar_option == "Player Profile":
             result_df = result_df[new_order]
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
     
-            # st.markdown("Yearwise Performance")
+            st.markdown("Yearwise Performance")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
 
