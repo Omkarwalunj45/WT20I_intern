@@ -25,7 +25,8 @@ if sidebar_option == "Player Profile":
 
     # Filter the data for the selected player
     player_info = idf[idf['batsman'] == player_name].iloc[0]
-    ldata = ldf[ldf['batsman'] == player_name].iloc[0]
+    ldata = ldf[ldf['player-name'] == player_name].iloc[0]
+    
 
     # Tabs for "Overview", "Career Statistics", and "Current Form"
     tab1, tab2, tab3 = st.tabs(["Overview", "Career Statistics", "Current Form"])
