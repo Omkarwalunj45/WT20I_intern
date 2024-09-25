@@ -241,7 +241,7 @@ if sidebar_option == "Player Profile":
                # Convert specific columns to integers
                temp_df['runs'] = temp_df['runs'].astype(int)
                temp_df['hundreds'] = temp_df['hundreds'].astype(int)
-               temp_df['fifties'] = temp_df['fifties''].astype(int)
+               temp_df['fifties'] = temp_df['fiftie'].astype(int)
                temp_df['thirties'] = temp_df['thirties'].astype(int)
                temp_df['highest_score = temp_df['highest_score'].astype(int)
                
