@@ -309,13 +309,12 @@ if sidebar_option == "Player Profile":
             cols = result_df.columns.tolist()
 
             # Specify the desired order with 'year' first
-            new_order = ['YEAR + [col for col in cols if col != 'YEAR']
-            
+            new_order = ['YEAR'] + [col for col in cols if col != 'YEAR']
+                     
             # Reindex the DataFrame with the new column order
             result_df = result_df[new_order]
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
-    
         elif option == "Bowling":
             # Similar logic can be added here for bowling statistics if needed
             st.write("Bowling statistics feature is not yet implemented.")
