@@ -274,7 +274,7 @@ if sidebar_option == "Player Profile":
             
             # Optional: Convert to a sorted list (if needed)
             unique_seasons = sorted(set(unique_seasons))
-            # print(unique_seasons)
+            print(unique_seasons)
             tdf=pd.DataFrame(tdf)
             # print(temp_df.head(50))
             tdf['batsman_runs'] = tdf['batsman_runs'].astype(int)
@@ -282,7 +282,7 @@ if sidebar_option == "Player Profile":
             # Run a for loop and pass temp_df to a cumulative function
             i=0
             for season in unique_seasons:
-                # print(i)
+                print(i)
                 temp_df = tdf[(tdf['season'] == season)]
                 # print(temp_df.head())
                 temp_df = cumulator(temp_df)
@@ -303,7 +303,7 @@ if sidebar_option == "Player Profile":
                 result_df[float_cols] = result_df[float_cols].round(2)
 
             result_df = idf.drop(columns=['debut_year'])    
-            result_df = result_df.rename(columns={'last_year': 'year'})
+            result_df = result_df.rename(columns={'final_year': 'year'})
             
             # Changing column names to uppercase and replacing underscores with spaces
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]    
