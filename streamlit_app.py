@@ -10,6 +10,9 @@ pdf = pd.read_csv("Dataset/women_bbb_t20_compressed.csv")
 idf = pd.read_csv("Dataset/updated_wt20i.csv")
 ldf = pd.read_csv("Dataset/squads.csv")  # Load squads.csv for batting type
 
+# Preprocess the debut column to extract the year
+idf['debut'] = idf['debut'].str.split('/').str[0]  # Extract the year from "YYYY/YY"
+
 # Sidebar for selecting between "Player Profile" and "Matchup Analysis"
 sidebar_option = st.sidebar.radio(
     "Select an option:",
@@ -84,12 +87,15 @@ if sidebar_option == "Player Profile":
         # Display Career Averages based on selection
         if option == "Batting":
             # Create a temporary DataFrame and filter the player's row
-            temp_df = idf.copy()  # Create a temporary DataFrame
+            temp_df = idf.drop(columns=['Unnamed: 0', 'final_year', 'matches_x', 'matches_y', 'surname', 'initial'])
             player_stats = temp_df[temp_df['batsman'] == player_name]  # Filter for the selected player
 
-            # Display the player's statistics in a table format
+            # Convert column names to uppercase and bold
+            player_stats.columns = [col.upper() for col in player_stats.columns]
+
+            # Display the player's statistics in a table format with bold headers
             st.markdown("### Batting Statistics")
-            st.table(player_stats)  # Display the filtered DataFrame as a table
+            st.table(player_stats.style.set_table_attributes("style='font-weight: bold;'"))  # Display the filtered DataFrame as a table
 
         elif option == "Bowling":
             # Similar logic can be added here for bowling statistics if needed
