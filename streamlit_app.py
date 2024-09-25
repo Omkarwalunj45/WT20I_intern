@@ -30,27 +30,38 @@ if sidebar_option == "Player Profile":
 
     with tab1:
         st.header("Overview")
-        
-        # Create columns for horizontal layout
+
+        # Create columns for the first row (full name, country, age)
         col1, col2, col3 = st.columns(3)
 
         # Display player profile information
         with col1:
-            st.markdown("FULL NAME:")
-            st.markdown(f"**{player_info['player_name'].upper()}**")
+            st.markdown("**FULL NAME:**")
+            st.markdown(f"<span style='font-size: 20px;'>{player_info['player_name'].upper()}</span>", unsafe_allow_html=True)
         
         with col2:
-            st.markdown("COUNTRY:")
-            st.markdown(f"**{player_info['team_name'].upper()}**")
+            st.markdown("**COUNTRY:**")
+            st.markdown(f"<span style='font-size: 20px;'>{player_info['team_name'].upper()}</span>", unsafe_allow_html=True)
         
         with col3:
-            st.markdown("AGE:")  # Placeholder for age
-            st.markdown("**N/A**")  # Placeholder for future age data
+            st.markdown("**AGE:**")  # Placeholder for age
+            st.markdown("<span style='font-size: 20px;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for future age data
 
-        # Below the horizontal layout for batting style, bowling style, and role
-        st.markdown("**BATTING STYLE:** N/A")  # Placeholder for batting style
-        st.markdown("**BOWLING STYLE:** N/A")  # Placeholder for bowling style
-        st.markdown("**PLAYING ROLE:** N/A")  # Placeholder for playing role
+        # Create columns for the second row (batting style, bowling style, playing role)
+        col4, col5, col6 = st.columns(3)
+
+        # Below the first row for batting style, bowling style, and role
+        with col4:
+            st.markdown("**BATTING STYLE:**")
+            st.markdown("<span style='font-size: 20px;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for batting style
+        
+        with col5:
+            st.markdown("**BOWLING STYLE:**")
+            st.markdown("<span style='font-size: 20px;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for bowling style
+        
+        with col6:
+            st.markdown("**PLAYING ROLE:**")
+            st.markdown("<span style='font-size: 20px;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for playing role
 
     with tab2:
         st.header("Career Statistics")
