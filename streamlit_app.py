@@ -11,7 +11,7 @@ idf = pd.read_csv("Dataset/updated_wt20i.csv")
 ldf = pd.read_csv("Dataset/squads.csv")  # Load squads.csv for batting type
 
 # Preprocess the debut column to extract the year
-idf['debut'] = idf['debut'].str.split('/').str[0]  # Extract the year from "YYYY/YY"
+idf['debut_year'] = idf['debut_year'].str.split('/').str[0]  # Extract the year from "YYYY/YY"
 
 # Sidebar for selecting between "Player Profile" and "Matchup Analysis"
 sidebar_option = st.sidebar.radio(
