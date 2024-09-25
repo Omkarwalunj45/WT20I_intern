@@ -83,10 +83,13 @@ if sidebar_option == "Player Profile":
 
         # Display Career Averages based on selection
         if option == "Batting":
-            
-            batting_stats = idf.columns.tolist()  # Get the headers
-            st.markdown(f"<b>{' | '.join(batting_stats)}</b>", unsafe_allow_html=True)  # Bold headers
-            st.markdown(f"<b>{' | '.join(map(str, player_info))}</b>", unsafe_allow_html=True)  # Player stats in bold
+            # Create a temporary DataFrame and filter the player's row
+            temp_df = idf.copy()  # Create a temporary DataFrame
+            player_stats = temp_df[temp_df['batsman'] == player_name]  # Filter for the selected player
+
+            # Display the player's statistics in a table format
+            st.markdown("### Batting Statistics")
+            st.table(player_stats)  # Display the filtered DataFrame as a table
 
         elif option == "Bowling":
             # Similar logic can be added here for bowling statistics if needed
