@@ -32,11 +32,10 @@ if sidebar_option == "Player Profile":
         st.header("Overview")
         
         # Display player profile information in the Overview tab, formatted like Cricinfo
-        st.subheader("PLAYER DETAILS")
         
-        st.write(f"**Full Name:** {player_info['player_name'].upper()}")
-        st.write(f"**Country:** {player_info['team_name'].upper()}")
-        st.write(f"**Batting Style:** {player_info['batting_hand'].upper()}")
+        st.write(f"**#FULL NAME#:** {player_info['player_name'].upper()}")
+        st.write(f"**#COUNTRY#:** {player_info['team_name'].upper()}")
+        st.write(f"**#BATTING STYLE#:** {player_info['batting_hand'].upper()}")
         
         # Placeholder values for Bowling Style, Playing Role, Age (to be added if data is available)
         # st.write(f"**Bowling Style:** {player_info['bowling_hand'].upper()}")
