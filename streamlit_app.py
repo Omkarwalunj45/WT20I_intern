@@ -302,6 +302,14 @@ if sidebar_option == "Player Profile":
                 float_cols = result_df.select_dtypes(include=['float']).columns
                 result_df[float_cols] = result_df[float_cols].round(2)
                 # result_df=result_df.rename(columns={'last_year':'year'})
+            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+                    
+            # Display the results
+            st.markdown(f"### Yearwise Performance**")
+               
+            # Display the table with bold font
+            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+
 
     
         elif option == "Bowling":
