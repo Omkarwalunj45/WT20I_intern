@@ -228,6 +228,7 @@ if sidebar_option == "Player Profile":
             for country in allowed_countries:
                
                 temp_df = pdf[(pdf['batsman'] == player_name) & (pdf['bowling_team'] == country)]
+                print(len(temp_df))
                 temp_df=cumulator(temp_df)
                 temp_df = temp_df.drop(columns=['Unnamed: 0', 'final_year', 'matches_x', 'matches_y', 'surname', 'initial'])
                 temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
