@@ -97,8 +97,8 @@ if sidebar_option == "Player Profile":
                 # Display header in a markdown format
                 st.markdown(f"<h4>{' | '.join(header)}</h4>", unsafe_allow_html=True)
 
-                # Display batting statistics, hide index for a cleaner look
-                st.dataframe(batting_stats.style.hide_index())
+                # Display batting statistics without using the style
+                st.dataframe(batting_stats)  # Remove .style.hide_index() to avoid the error
 
         # If bowling is selected, show bowling stats (if available in the dataset)
         if option == "Bowling":
