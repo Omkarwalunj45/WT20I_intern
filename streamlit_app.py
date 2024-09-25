@@ -9,10 +9,7 @@ st.title('WT20I Performance Analysis Portal')
 pdf = pd.read_csv("Dataset/up_com_wt20i.csv")
 idf = pd.read_csv("Dataset/updated_wt20i.csv")
 ldf = pd.read_csv("Dataset/squads.csv")  # Load squads.csv for batting type
-def cumulator(df):
-    # Filter to include only allowed countries
-    temp_df = temp_df[temp_df['batting_team'].isin(allowed_countries)]
-    
+def cumulator(df):    
     # Renaming columns
     temp_df['total_runs'] = temp_df['runs_off_bat'] + temp_df['extras']
     temp_df = temp_df.rename(columns={'runs_off_bat': 'batsman_runs', 'wicket_type': 'dismissal_kind', 'striker': 'batsman', 'innings': 'inning'})
