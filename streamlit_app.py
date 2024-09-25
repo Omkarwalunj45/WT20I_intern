@@ -6,7 +6,7 @@ st.set_page_config(page_title='WT20I Performance Analysis Portal', layout='wide'
 st.title('WT20I Performance Analysis Portal')
 
 # Load data
-pdf = pd.read_csv("Dataset/women_bbb_t20_compressed.csv")
+pdf = pd.read_csv("Dataset/up_com_wt20i.csv")
 idf = pd.read_csv("Dataset/updated_wt20i.csv")
 ldf = pd.read_csv("Dataset/squads.csv")  # Load squads.csv for batting type
 
