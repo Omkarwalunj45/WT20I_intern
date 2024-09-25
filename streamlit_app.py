@@ -10,7 +10,7 @@ st.title('WT20I Performance Analysis Portal')
 # Load data
 pdf = pd.read_csv("Dataset/up_com_wt20i.csv",low_memory=False)
 idf = pd.read_csv("Dataset/updated_wt20i.csv",low_memory=False)
-ldf = pd.read_csv("Dataset/squads.csv")  # Load squads.csv for batting type
+ldf = pd.read_csv("Dataset/squads.csv",low_memory=False)  # Load squads.csv for batting type
 idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']] = idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']].astype(int)
 
 
@@ -305,7 +305,7 @@ if sidebar_option == "Player Profile":
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
                     
             # Display the results
-            st.markdown(f"### Yearwise Performance**")
+            st.markdown(f"### Yearwise Performance")
                
             # Display the table with bold font
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
