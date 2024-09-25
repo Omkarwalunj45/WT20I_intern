@@ -275,23 +275,23 @@ if sidebar_option == "Player Profile":
             temp_df = cumulator(temp_df)
             result_df = pd.concat([result_df, temp_df], ignore_index=True)
             result_df = result_df.drop(columns=['batsman', 'batting_team'])
-               # Convert specific columns to integers
-               result_df['runs'] = result_df['runs'].astype(int)
-               result_df['hundreds'] =result_df['hundreds'].astype(int)
-               result_df['fifties'] = result_df['fifties'].astype(int)
-               result_df['thirties'] = result_df['thirties'].astype(int)
-               result_df['highest_score'] = result_df['highest_score'].astype(int)
-               # Round off the remaining float columns to 2 decimal places
-               float_cols = result_df.select_dtypes(include=['float']).columns
-               result_df[float_cols] = result_df[float_cols].round(2)
-               result_df=result_df.rename(columns={'last_year'='year'}
-               result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+            # Convert specific columns to integers
+            result_df['runs'] = result_df['runs'].astype(int)
+            result_df['hundreds'] =result_df['hundreds'].astype(int)
+            result_df['fifties'] = result_df['fifties'].astype(int)
+            result_df['thirties'] = result_df['thirties'].astype(int)
+            result_df['highest_score'] = result_df['highest_score'].astype(int)
+            # Round off the remaining float columns to 2 decimal places
+            float_cols = result_df.select_dtypes(include=['float']).columns
+            result_df[float_cols] = result_df[float_cols].round(2)
+            result_df=result_df.rename(columns={'last_year'='year'}
+            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
                     
                     # Display the results
-               st.markdown(f"### vs **{season}**")
+            st.markdown(f"### vs **{season}**")
                
-               # Display the table with bold font
-               st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+            # Display the table with bold font
+            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
             
         elif option == "Bowling":
             # Similar logic can be added here for bowling statistics if needed
