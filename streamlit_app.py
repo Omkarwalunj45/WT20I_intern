@@ -282,9 +282,9 @@ if sidebar_option == "Player Profile":
             # Run a for loop and pass temp_df to a cumulative function
             i=0
             for season in unique_seasons:
-                print(i)
+                # print(i)
                 temp_df = tdf[(tdf['season'] == season)]
-                print(temp_df.head())
+                # print(temp_df.head())
                 temp_df = cumulator(temp_df)
                 if i==0:
                     result_df = temp_df  # Initialize with the first result_df
@@ -309,7 +309,7 @@ if sidebar_option == "Player Profile":
             result_df = result_df[new_order]
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
     
-            st.markdown("**Yearwise Performance")
+            st.markdown("Yearwise Performance")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
 
