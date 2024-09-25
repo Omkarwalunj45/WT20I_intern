@@ -226,7 +226,7 @@ if sidebar_option == "Player Profile":
                 temp_df=cumulator(temp_df)
                 print(temp_df.columns)
                  
-                temp_df = temp_df.drop(columns=['Unnamed: 0', 'final_year', 'matches_x', 'matches_y', 'surname', 'initial'])
+                temp_df = temp_df.drop(columns=['final_year'])
                 temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
                 
                 st.markdown("### vs Teams")
