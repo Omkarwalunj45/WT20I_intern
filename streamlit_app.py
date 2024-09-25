@@ -318,9 +318,9 @@ if sidebar_option == "Player Profile":
                 # Reordering the columns
                 result_df = result_df[new_order]
             
-    # Changing column names to uppercase and replacing underscores with spaces
-    result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]    
-            st.markdown("Yearwise Performance")
+            # Changing column names to uppercase and replacing underscores with spaces
+            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]    
+            st.markdown("**Yearwise Performance**")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
 
