@@ -219,17 +219,13 @@ if sidebar_option == "Player Profile":
             pdf['over'] = pdf['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
             for country in allowed_countries:
                 temp_df = pdf[(pdf['batsman'] == player_name) & (pdf['bowling_team'] == country)]
-                print(len(temp_df))
-                # print(temp_df.columns)
-                      
-
+                
                 temp_df=cumulator(temp_df)
-                print(temp_df.columns)
                  
                 temp_df = temp_df.drop(columns=['final_year'])
                 temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
                 
-                st.markdown("### vs Teams")
+                st.markdown("### vs country")
                 st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'")) 
                     
             
