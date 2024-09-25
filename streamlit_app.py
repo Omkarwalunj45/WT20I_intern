@@ -44,9 +44,8 @@ if sidebar_option == "Player Profile":
             st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{player_info['team_name'].upper()}</span>", unsafe_allow_html=True)
         
         with col3:
-            st.markdown("AGE:")
-            age = player_info.get('age', 'N/A')  # Use 'N/A' if age is not available
-            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{age}</span>", unsafe_allow_html=True)
+            st.markdown("AGE:")  # Placeholder for age
+            st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for future age data
 
         # Create columns for the second row (batting style, bowling style, playing role)
         col4, col5, col6 = st.columns(3)
@@ -54,18 +53,15 @@ if sidebar_option == "Player Profile":
         # Below the first row for batting style, bowling style, and role
         with col4:
             st.markdown("BATTING STYLE:")
-            batting_style = player_info.get('batting_hand', 'N/A')  # Use 'N/A' if batting style is not available
-            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{batting_style.upper()}</span>", unsafe_allow_html=True)
+            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{player_info['batting_hand'].upper()}</span>", unsafe_allow_html=True)
         
         with col5:
             st.markdown("BOWLING STYLE:")
-            bowling_style = player_info.get('bowling_hand', 'N/A')  # Use 'N/A' if bowling style is not available
-            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{bowling_style.upper()}</span>", unsafe_allow_html=True)
-
+            st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for bowling style
+        
         with col6:
             st.markdown("PLAYING ROLE:")
-            playing_role = player_info.get('playing_role', 'N/A')  # Use 'N/A' if playing role is not available
-            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{playing_role.upper()}</span>", unsafe_allow_html=True)
+            st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for playing role
 
     with tab2:
         st.header("Career Statistics")
