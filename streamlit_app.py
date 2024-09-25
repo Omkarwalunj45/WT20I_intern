@@ -219,8 +219,8 @@ if sidebar_option == "Player Profile":
             pdf['over'] = pdf['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
             
             for country in allowed_countries:
-                temp_df=pdf(pdf['batsman']=='player_name')
-                if temp_df(temp_df['batting_team']!=country):
+                temp_df = pdf[pdf['batsman'] == player_name]
+                if temp_df[temp_df['batting_team']!=country]:
                     temp_df = temp_df[(temp_df['bowling_team'] == country)]
                     temp_df = cumulator(temp_df)
                     
