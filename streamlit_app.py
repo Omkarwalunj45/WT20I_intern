@@ -84,16 +84,13 @@ if sidebar_option == "Player Profile":
         # Display Career Averages based on selection
         if option == "Batting":
             
-            # Fetch and display the player's batting stats from your dataset
-            # player_data = idf[idf['batsman'] == player_name]  # Adjust this line as necessary
-            # st.write(player_data)  # Example: Display batting data
+            batting_stats = idf.columns.tolist()  # Get the headers
+            st.markdown(f"<b>{' | '.join(batting_stats)}</b>", unsafe_allow_html=True)  # Bold headers
+            st.markdown(f"<b>{' | '.join(map(str, player_info))}</b>", unsafe_allow_html=True)  # Player stats in bold
 
         elif option == "Bowling":
-            
-            # # Fetch and display the player's bowling stats from your dataset
-            # # Assuming you have a similar DataFrame for bowling stats
-            # bowling_data = pdf[pdf['bowler'] == player_name]  # Adjust this line as necessary
-            # st.write(bowling_data)  # Example: Display bowling data
+            # Similar logic can be added here for bowling statistics if needed
+            st.write("Bowling statistics feature is not yet implemented.")
 
     with tab3:
         st.header("Current Form")
