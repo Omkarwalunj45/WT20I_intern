@@ -226,7 +226,7 @@ if sidebar_option == "Player Profile":
                 temp_df = temp_df.drop(columns=['final_year'])
                 temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
                 
-                st.markdown("### vs ",allowed_countries[i])
+                st.markdown("### vs ",country)
                 i=i+1
                 st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'")) 
                     
