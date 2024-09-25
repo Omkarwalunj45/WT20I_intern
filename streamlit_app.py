@@ -72,7 +72,32 @@ if sidebar_option == "Player Profile":
             st.markdown("PLAYING ROLE:")
             st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for playing role
 
-    # Continue with Career Statistics and Current Form tabs...
+    with tab2:
+        st.header("Career Statistics")
+
+        # Dropdown for Batting or Bowling selection
+        option = st.selectbox("Select Career Stat Type", ("Batting", "Bowling"))
+
+        # Show Career Averages based on the dropdown
+        st.subheader("Career Averages")
+
+        # Display Career Averages based on selection
+        if option == "Batting":
+            st.write("Batting Career Averages")
+            # Fetch and display the player's batting stats from your dataset
+            # player_data = idf[idf['batsman'] == player_name]  # Adjust this line as necessary
+            # st.write(player_data)  # Example: Display batting data
+
+        elif option == "Bowling":
+            st.write("Bowling Career Averages")
+            # # Fetch and display the player's bowling stats from your dataset
+            # # Assuming you have a similar DataFrame for bowling stats
+            # bowling_data = pdf[pdf['bowler'] == player_name]  # Adjust this line as necessary
+            # st.write(bowling_data)  # Example: Display bowling data
+
+    with tab3:
+        st.header("Current Form")
+        # Add current form content here
 
 # If "Matchup Analysis" is selected
 elif sidebar_option == "Matchup Analysis":
