@@ -14,7 +14,13 @@ ldf = pd.read_csv("Dataset/squads.csv")  # Load squads.csv for batting type
 idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']] = idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']].astype(int)
 
 
-def cumulator(temp_df):       
+def cumulator(temp_df):  
+    # print("Columns before cumulator:", temp_df.columns)
+    
+    # Create new columns for counting runs
+    if 'total_runs' not in temp_df.columns:
+        raise KeyError("Column 'total_runs' does not exist in temp_df.")
+
     # Create new columns for counting runs
     temp_df['is_dot'] = temp_df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
     temp_df['is_one'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
@@ -276,7 +282,7 @@ if sidebar_option == "Player Profile":
             # Run a for loop and pass temp_df to a cumulative function
             i=0
             for season in unique_seasons:
-                
+                print(i)
                 temp_df = tdf[(tdf['season'] == season)]
                 print(temp_df.head())
                 temp_df = cumulator(temp_df)
@@ -285,23 +291,17 @@ if sidebar_option == "Player Profile":
                     i=1+i
                 else:
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)
-            result_df = result_df.drop(columns=['batsman', 'batting_team'])
-                  # Convert specific columns to integers
-            result_df['runs'] = result_df['runs'].astype(int)
-            result_df['hundreds'] =result_df['hundreds'].astype(int)
-            result_df['fifties'] = result_df['fifties'].astype(int)
-            result_df['thirties'] = result_df['thirties'].astype(int)
-            result_df['highest_score'] = result_df['highest_score'].astype(int)
-            # Round off the remaining float columns to 2 decimal places
-            float_cols = result_df.select_dtypes(include=['float']).columns
-            result_df[float_cols] = result_df[float_cols].round(2)
-            # result_df=result_df.rename(columns={'last_year':'year'})
-            # result_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]          
-            # Display the results
-            st.markdown(f"### yearwise performance**")
-               
-            # Display the table with bold font
-            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+                result_df = result_df.drop(columns=['batsman', 'batting_team'])
+                # Convert specific columns to integers
+                result_df['runs'] = result_df['runs'].astype(int)
+                result_df['hundreds'] =result_df['hundreds'].astype(int)
+                result_df['fifties'] = result_df['fifties'].astype(int)
+                result_df['thirties'] = result_df['thirties'].astype(int)
+                result_df['highest_score'] = result_df['highest_score'].astype(int)
+                # Round off the remaining float columns to 2 decimal places
+                float_cols = result_df.select_dtypes(include=['float']).columns
+                result_df[float_cols] = result_df[float_cols].round(2)
+                # result_df=result_df.rename(columns={'last_year':'year'})
 
     
         elif option == "Bowling":
