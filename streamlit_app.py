@@ -237,18 +237,17 @@ if sidebar_option == "Player Profile":
                # Convert specific columns to integers
                temp_df['runs'] = temp_df['runs'].astype(int)
                temp_df['hundreds'] = temp_df['hundreds'].astype(int)
-               temp_df['fifties'] = temp_df['fiftie'].astype(int)
+               temp_df['fifties'] = temp_df['fifties'].astype(int)
                temp_df['thirties'] = temp_df['thirties'].astype(int)
                temp_df['highest_score'] = temp_df['highest_score'].astype(int)
+               # Round off the remaining float columns to 2 decimal places
+               float_cols = temp_df.select_dtypes(include=['float']).columns
+               temp_df[float_cols] = temp_df[float_cols].round(2) 
                 
                temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
                     
                     # Display the results
                st.markdown(f"### vs **{country.upper()}**")
-               
-               # Round off the remaining float columns to 2 decimal places
-               float_cols = temp_df.select_dtypes(include=['float']).columns
-               temp_df[float_cols] = temp_df[float_cols].round(2)
                
                # Display the table with bold font
                st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))
