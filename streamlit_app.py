@@ -301,13 +301,15 @@ if sidebar_option == "Player Profile":
                 # Round off the remaining float columns to 2 decimal places
                 float_cols = result_df.select_dtypes(include=['float']).columns
                 result_df[float_cols] = result_df[float_cols].round(2)
-                # result_df=result_df.rename(columns={'last_year':'year'})
+
+            result_df = idf.drop(columns=['debut_year'])    
+            result_df=result_df.rename(columns={'last_year':'year'})
+            cols = result_df.columns.tolist()
+            new_order = ['year'] + [col for col in cols if col != 'year']
+            result_df = result_df[new_order]
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-                    
-            # Display the results
+    
             st.markdown(f"### Yearwise Performance")
-               
-            # Display the table with bold font
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
 
