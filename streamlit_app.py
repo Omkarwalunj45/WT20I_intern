@@ -276,7 +276,7 @@ if sidebar_option == "Player Profile":
             result_df = pd.concat([result_df, temp_df], ignore_index=True)
             result_df = result_df.drop(columns=['batsman', 'batting_team'])
                # Convert specific columns to integers
-               resultdf['runs'] = result_df['runs'].astype(int)
+               result_df['runs'] = result_df['runs'].astype(int)
                result_df['hundreds'] =result_df['hundreds'].astype(int)
                result_df['fifties'] = result_df['fifties'].astype(int)
                result_df['thirties'] = result_df['thirties'].astype(int)
