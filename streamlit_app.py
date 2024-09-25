@@ -234,16 +234,17 @@ if sidebar_option == "Player Profile":
                     
                     # Drop the specified columns and modify the column names
                temp_df = temp_df.drop(columns=['final_year', 'batsman', 'batting_team'])
-               temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
-                    
-                    # Display the results
-               st.markdown(f"### vs **{country.upper()}**")
                # Convert specific columns to integers
                temp_df['runs'] = temp_df['runs'].astype(int)
                temp_df['hundreds'] = temp_df['hundreds'].astype(int)
                temp_df['fifties'] = temp_df['fiftie'].astype(int)
                temp_df['thirties'] = temp_df['thirties'].astype(int)
                temp_df['highest_score'] = temp_df['highest_score'].astype(int)
+                
+               temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
+                    
+                    # Display the results
+               st.markdown(f"### vs **{country.upper()}**")
                
                # Round off the remaining float columns to 2 decimal places
                float_cols = temp_df.select_dtypes(include=['float']).columns
