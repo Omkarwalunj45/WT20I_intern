@@ -31,12 +31,17 @@ if sidebar_option == "Player Profile":
     with tab1:
         st.header("Overview")
         
-        # Display player's profile information in the Overview tab
-        st.write(f"**Full Name:** {player_info['player_name']}")
-        st.write(f"**Country:** {player_info['team_name']}")
-        st.write(f"**Batting Style:** {player_info['batting_hand']}")
-        # Assuming the other details like Age, Bowling Style, Playing Role are also in idf
-        # Add those fields here similarly if available in the dataset.
+        # Display player profile information in the Overview tab, formatted like Cricinfo
+        st.subheader("PLAYER DETAILS")
+        
+        st.write(f"**Full Name:** {player_info['player_name'].upper()}")
+        st.write(f"**Country:** {player_info['team_name'].upper()}")
+        st.write(f"**Batting Style:** {player_info['batting_hand'].upper()}")
+        
+        # Placeholder values for Bowling Style, Playing Role, Age (to be added if data is available)
+        # st.write(f"**Bowling Style:** {player_info['bowling_hand'].upper()}")
+        # st.write(f"**Playing Role:** {player_info['playing_role'].upper()}")
+        # st.write(f"**Age:** {player_info['age']}")  # Assuming age is available in dataset
 
     with tab2:
         st.header("Career Statistics")
