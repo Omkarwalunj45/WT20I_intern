@@ -296,7 +296,7 @@ if sidebar_option == "Player Profile":
                 float_cols = result_df.select_dtypes(include=['float']).columns
                 result_df[float_cols] = result_df[float_cols].round(2)
                 result_df=result_df.rename(columns={'last_year':'year'})
-                result_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
+                # result_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
                     
                     # Display the results
                 st.markdown(f"### yearwise performance**")
