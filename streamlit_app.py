@@ -226,15 +226,11 @@ if sidebar_option == "Player Profile":
                      'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
             
             for country in allowed_countries:
-                # Filter the DataFrame for the specified player and current country
+               
                 temp_df = pdf[(pdf['batsman'] == player_name) & (pdf['bowling_team'] == country)]
                 temp_df=cumulator(temp_df)
-                # Create a temporary DataFrame and filter the player's row
-                temp_df = temp_df.drop(columns=['Unnamed: 0', 'final_year', 'matches_x', 'matches_y', 'surname', 'initial'])
-                # Convert column names to uppercase and replace underscores with spaces
+                temp_df = temp_df.drop(columns=['Unnamed: 0', 'final_year', 'matches_x', 'matches_y', 'surname', 'initial']
                 temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
-    
-                # Display the player's statistics in a table format with bold headers
                 st.markdown("### vs Teams")
                 st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'")) 
                     
