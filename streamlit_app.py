@@ -13,6 +13,9 @@ ldf = pd.read_csv("Dataset/squads.csv")  # Load squads.csv for batting type
 # Preprocess the debut column to extract the year
 idf['debut_year'] = idf['debut_year'].str.split('/').str[0]  # Extract the year from "YYYY/YY"
 
+# Convert the 'runs' column to integers
+idf['runs'] = idf['runs'].astype(int)
+
 # Sidebar for selecting between "Player Profile" and "Matchup Analysis"
 sidebar_option = st.sidebar.radio(
     "Select an option:",
@@ -90,8 +93,8 @@ if sidebar_option == "Player Profile":
             temp_df = idf.drop(columns=['Unnamed: 0', 'final_year', 'matches_x', 'matches_y', 'surname', 'initial'])
             player_stats = temp_df[temp_df['batsman'] == player_name]  # Filter for the selected player
 
-            # Convert column names to uppercase and bold
-            player_stats.columns = [col.upper() for col in player_stats.columns]
+            # Convert column names to uppercase and replace underscores with spaces
+            player_stats.columns = [col.upper().replace('_', ' ') for col in player_stats.columns]
 
             # Display the player's statistics in a table format with bold headers
             st.markdown("### Batting Statistics")
