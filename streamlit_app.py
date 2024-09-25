@@ -276,8 +276,6 @@ if sidebar_option == "Player Profile":
                 if accumulated_df.empty:
                     accumulated_df = result_df  # Initialize with the first result_df
                 else:
-                    #Check for column consistency before concatenation
-                    if result_df.columns.equals(accumulated_df.columns):
                     accumulated_df = pd.concat([accumulated_df, result_df], ignore_index=True)
                 result_df = result_df.drop(columns=['batsman', 'batting_team'])
                 # Convert specific columns to integers
