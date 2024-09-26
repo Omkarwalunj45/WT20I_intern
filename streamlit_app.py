@@ -12,7 +12,7 @@ pdf = pd.read_csv("Dataset/up_com_wt20i.csv",low_memory=False)
 idf = pd.read_csv("Dataset/updated_wt20i.csv",low_memory=False)
 ldf = pd.read_csv("Dataset/squads.csv",low_memory=False)  # Load squads.csv for batting type
 idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']] = idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']].astype(int)
-pdf = pdf.drop_duplicates(subset=['match_id', 'ball'], keep='first')
+# pdf = pdf.drop_duplicates(subset=['match_id', 'ball'], keep='first')
 
 def cumulator(temp_df):
     # First, remove duplicates based on match_id and ball within the same match
@@ -205,263 +205,263 @@ if sidebar_option == "Player Profile":
             # Display the player's statistics in a table format with bold headers
             st.markdown("### Batting Statistics")
             st.table(player_stats.style.set_table_attributes("style='font-weight: bold;'"))  # Display the filtered DataFrame as a table
-            allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh', 
-                     'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
-            pdf['total_runs'] = pdf['runs_off_bat'] + pdf['extras']
-            pdf = pdf.rename(columns={'runs_off_bat': 'batsman_runs', 'wicket_type': 'dismissal_kind', 'striker': 'batsman', 'innings': 'inning'})
-            pdf = pdf.dropna(subset=['ball'])
-            # Convert the 'ball' column to numeric if it's not already (optional but recommended)
-            pdf['ball'] = pd.to_numeric(pdf['ball'], errors='coerce') 
-            # Applying the lambda function to calculate the 'over'
-            pdf['over'] = pdf['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
+            # allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh', 
+            #          'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
+            # pdf['total_runs'] = pdf['runs_off_bat'] + pdf['extras']
+            # pdf = pdf.rename(columns={'runs_off_bat': 'batsman_runs', 'wicket_type': 'dismissal_kind', 'striker': 'batsman', 'innings': 'inning'})
+            # pdf = pdf.dropna(subset=['ball'])
+            # # Convert the 'ball' column to numeric if it's not already (optional but recommended)
+            # pdf['ball'] = pd.to_numeric(pdf['ball'], errors='coerce') 
+            # # Applying the lambda function to calculate the 'over'
+            # pdf['over'] = pdf['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
             
-            for country in allowed_countries:
-               temp_df = pdf[pdf['batsman'] == player_name]
-               if not temp_df[temp_df['batting_team'] == country].empty:
-                        continue
-               temp_df = temp_df[(temp_df['bowling_team'] == country)]
-               temp_df = cumulator(temp_df)
+            # for country in allowed_countries:
+            #    temp_df = pdf[pdf['batsman'] == player_name]
+            #    if not temp_df[temp_df['batting_team'] == country].empty:
+            #             continue
+            #    temp_df = temp_df[(temp_df['bowling_team'] == country)]
+            #    temp_df = cumulator(temp_df)
                     
-                    # If temp_df is empty after applying cumulator, skip to the next iteration
-               if len(temp_df) == 0:
-                   continue  
+            #         # If temp_df is empty after applying cumulator, skip to the next iteration
+            #    if len(temp_df) == 0:
+            #        continue  
                     
-                    # Drop the specified columns and modify the column names
-               temp_df = temp_df.drop(columns=['final_year', 'batsman', 'batting_team','debut_year'])
-               # Convert specific columns to integers
-               # Round off the remaining float columns to 2 decimal places
-               float_cols = temp_df.select_dtypes(include=['float']).columns
-               temp_df[float_cols] = temp_df[float_cols].round(2) 
+            #         # Drop the specified columns and modify the column names
+            #    temp_df = temp_df.drop(columns=['final_year', 'batsman', 'batting_team','debut_year'])
+            #    # Convert specific columns to integers
+            #    # Round off the remaining float columns to 2 decimal places
+            #    float_cols = temp_df.select_dtypes(include=['float']).columns
+            #    temp_df[float_cols] = temp_df[float_cols].round(2) 
                 
-               temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
-               cols = temp_df.columns.tolist()
+            #    temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
+            #    cols = temp_df.columns.tolist()
 
-               # Specify the desired order with 'year' first
-               new_order = ['MATCHES'] + [col for col in cols if col != 'MATCHES']
+            #    # Specify the desired order with 'year' first
+            #    new_order = ['MATCHES'] + [col for col in cols if col != 'MATCHES']
                          
-               # Reindex the DataFrame with the new column order
-               temp_df =temp_df[new_order]
+            #    # Reindex the DataFrame with the new column order
+            #    temp_df =temp_df[new_order]
  
                     
-                    # Display the results
-               st.markdown(f"### vs **{country.upper()}**")
+            #         # Display the results
+            #    st.markdown(f"### vs **{country.upper()}**")
                
-               # Display the table with bold font
-               st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))
+            #    # Display the table with bold font
+            #    st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))
 
         
-            tdf = pdf[pdf['batsman'] == player_name]
+            # tdf = pdf[pdf['batsman'] == player_name]
 
-            def standardize_season(season):
-                if '/' in season:  # Check if the season is in 'YYYY/YY' format
-                    year = season.split('/')[0]  # Get the first part
-                else:
-                    year = season  # Use as is if already in 'YYYY' format
-                return year.strip()  # Return the year stripped of whitespace
-            tdf['season'] =tdf['season'].apply(standardize_season)
+            # def standardize_season(season):
+            #     if '/' in season:  # Check if the season is in 'YYYY/YY' format
+            #         year = season.split('/')[0]  # Get the first part
+            #     else:
+            #         year = season  # Use as is if already in 'YYYY' format
+            #     return year.strip()  # Return the year stripped of whitespace
+            # tdf['season'] =tdf['season'].apply(standardize_season)
             
-            # Populate an array of unique seasons
-            unique_seasons = tdf['season'].unique()
+            # # Populate an array of unique seasons
+            # unique_seasons = tdf['season'].unique()
             
-            # Optional: Convert to a sorted list (if needed)
-            unique_seasons = sorted(set(unique_seasons))
-            # print(unique_seasons)
-            tdf=pd.DataFrame(tdf)
-            # print(temp_df.head(50))
-            tdf['batsman_runs'] = tdf['batsman_runs'].astype(int)
-            tdf['total_runs'] = tdf['total_runs'].astype(int)
-            # Run a for loop and pass temp_df to a cumulative function
-            i=0
-            for season in unique_seasons:
-                print(i)
-                temp_df = tdf[(tdf['season'] == season)]
-                print(temp_df.head())
-                temp_df = cumulator(temp_df)
-                if i==0:
-                    result_df = temp_df  # Initialize with the first result_df
-                    i=1+i
-                else:
-                    result_df = pd.concat([result_df, temp_df], ignore_index=True)
-                result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year'])
-                # Convert specific columns to integers
-                # Round off the remaining float columns to 2 decimal places
-                float_cols = result_df.select_dtypes(include=['float']).columns
-                result_df[float_cols] = result_df[float_cols].round(2)
+            # # Optional: Convert to a sorted list (if needed)
+            # unique_seasons = sorted(set(unique_seasons))
+            # # print(unique_seasons)
+            # tdf=pd.DataFrame(tdf)
+            # # print(temp_df.head(50))
+            # tdf['batsman_runs'] = tdf['batsman_runs'].astype(int)
+            # tdf['total_runs'] = tdf['total_runs'].astype(int)
+            # # Run a for loop and pass temp_df to a cumulative function
+            # i=0
+            # for season in unique_seasons:
+            #     print(i)
+            #     temp_df = tdf[(tdf['season'] == season)]
+            #     print(temp_df.head())
+            #     temp_df = cumulator(temp_df)
+            #     if i==0:
+            #         result_df = temp_df  # Initialize with the first result_df
+            #         i=1+i
+            #     else:
+            #         result_df = pd.concat([result_df, temp_df], ignore_index=True)
+            #     result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year'])
+            #     # Convert specific columns to integers
+            #     # Round off the remaining float columns to 2 decimal places
+            #     float_cols = result_df.select_dtypes(include=['float']).columns
+            #     result_df[float_cols] = result_df[float_cols].round(2)
+            # # result_df=result_df.rename(columns={'final_year':'year'})
+            # # result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+                    
+            # # Display the results
+            # st.markdown(f"### **Yearwise Performnce**")
+            # cols = result_df.columns.tolist()
+
+            # # Specify the desired order with 'year' first
+            # new_order = ['YEAR'] + [col for col in cols if col != 'YEAR']
+                     
+            # # Reindex the DataFrame with the new column order
+            # result_df = result_df[new_order]
+            # st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+
+            # tdf = pdf[pdf['batsman'] == player_name]
+            # temp_df=tdf[(tdf['inning']==1)]
+            # temp_df=cumulator(temp_df)
+            # temp_df['inning']=1
+            # cols = temp_df.columns.tolist()
+            # new_order = ['inning'] + [col for col in cols if col != 'inning']          
+            # # Reindex the DataFrame with the new column order
+            # temp_df =temp_df[new_order] 
+            # result_df = temp_df
+            # temp_df=tdf[(tdf['inning']==2)]
+            # temp_df=cumulator(temp_df)
+            # temp_df['inning']=2
+            # cols = temp_df.columns.tolist()
+            # new_order = ['inning'] + [col for col in cols if col != 'inning']          
+            # # Reindex the DataFrame with the new column order
+            # temp_df =temp_df[new_order] 
+            # result_df = pd.concat([result_df, temp_df], ignore_index=True)
+            # result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','matches','final_year'])
+            # # Convert specific columns to integers
+            # # Round off the remaining float columns to 2 decimal places
+            # float_cols = result_df.select_dtypes(include=['float']).columns
+            # result_df[float_cols] = result_df[float_cols].round(2)
             # result_df=result_df.rename(columns={'final_year':'year'})
             # result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
                     
-            # Display the results
-            st.markdown(f"### **Yearwise Performnce**")
-            cols = result_df.columns.tolist()
+            # # Display the results
+            # st.markdown(f"### **Inningwise Performnce**")
+            # st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
-            # Specify the desired order with 'year' first
-            new_order = ['YEAR'] + [col for col in cols if col != 'YEAR']
-                     
-            # Reindex the DataFrame with the new column order
-            result_df = result_df[new_order]
-            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
-
-            tdf = pdf[pdf['batsman'] == player_name]
-            temp_df=tdf[(tdf['inning']==1)]
-            temp_df=cumulator(temp_df)
-            temp_df['inning']=1
-            cols = temp_df.columns.tolist()
-            new_order = ['inning'] + [col for col in cols if col != 'inning']          
-            # Reindex the DataFrame with the new column order
-            temp_df =temp_df[new_order] 
-            result_df = temp_df
-            temp_df=tdf[(tdf['inning']==2)]
-            temp_df=cumulator(temp_df)
-            temp_df['inning']=2
-            cols = temp_df.columns.tolist()
-            new_order = ['inning'] + [col for col in cols if col != 'inning']          
-            # Reindex the DataFrame with the new column order
-            temp_df =temp_df[new_order] 
-            result_df = pd.concat([result_df, temp_df], ignore_index=True)
-            result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','matches','final_year'])
-            # Convert specific columns to integers
-            # Round off the remaining float columns to 2 decimal places
-            float_cols = result_df.select_dtypes(include=['float']).columns
-            result_df[float_cols] = result_df[float_cols].round(2)
-            result_df=result_df.rename(columns={'final_year':'year'})
-            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-                    
-            # Display the results
-            st.markdown(f"### **Inningwise Performnce**")
-            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
-
-            venue_country_map = {
-            'Melbourne Cricket Ground': 'Australia',
-            'Simonds Stadium, South Geelong': 'Australia',
-            'Adelaide Oval': 'Australia',
-            'Sinhalese Sports Club Ground': 'Sri Lanka',
-            'Saxton Oval': 'New Zealand',
-            'Asian Institute of Technology Ground': 'Thailand',
-            'North Sydney Oval': 'Australia',
-            'Manuka Oval': 'Australia',
-            'Coolidge Cricket Ground': 'Antigua',
-            'Sharjah Cricket Stadium': 'UAE',
-            'Senwes Park': 'South Africa',
-            'Buffalo Park': 'South Africa',
-            'The Wanderers Stadium': 'South Africa',
-            'SuperSport Park': 'South Africa',
-            'Newlands': 'South Africa',
-            'The Cooper Associates County Ground': 'England',
-            'County Ground': 'England',
-            'Brabourne Stadium': 'India',
-            'Bay Oval': 'New Zealand',
-            'Pukekura Park': 'New Zealand',
-            'Seddon Park': 'New Zealand',
-            'Nondescripts Cricket Club Ground': 'Sri Lanka',
-            'Mangaung Oval': 'South Africa',
-            'Allan Border Field': 'Australia',
-            'VRA Ground': 'Netherlands',
-            'Kinrara Academy Oval': 'Malaysia',
-            'Royal Selangor Club': 'Malaysia',
-            'Providence Stadium': 'Guyana',
-            'Daren Sammy National Cricket Stadium, Gros Islet': 'St Lucia',
-            'Sir Vivian Richards Stadium, North Sound': 'Antigua',
-            'Westpac Stadium': 'New Zealand',
-            'Eden Park': 'New Zealand',
-            'Brian Lara Stadium, Tarouba': 'Trinidad and Tobago',
-            'Colts Cricket Club Ground': 'Sri Lanka',
-            'Colombo Cricket Club Ground': 'Sri Lanka',
-            'Chilaw Marians Cricket Club Ground': 'Sri Lanka',
-            'County Ground, Hove': 'England',
-            'Barsapara Cricket Stadium': 'India',
-            'Southend Club Cricket Stadium': 'Pakistan',
-            'Sydney Showground Stadium': 'Australia',
-            'W.A.C.A. Ground': 'Australia',
-            'Junction Oval': 'Australia',
-            'Sydney Cricket Ground': 'Australia',
-            'P Sara Oval': 'Sri Lanka',
-            'LC de Villiers Oval': 'South Africa',
-            'City Oval': 'South Africa',
-            'Willowmoore Park': 'South Africa',
-            'Basin Reserve': 'New Zealand',
-            'Forthill': 'Scotland',
-            'Kensington Oval, Barbados': 'Barbados',
-            'Lalabhai Contractor Stadium': 'India',
-            'Darren Sammy National Cricket Stadium, St Lucia': 'St Lucia',
-            'Gaddafi Stadium': 'Pakistan',
-            'Kingsmead': 'South Africa',
-            'Sky Stadium': 'New Zealand',
-            'McLean Park': 'New Zealand',
-            'Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium': 'India',
-            'County Ground, Northampton': 'England',
-            'County Ground, Chelmsford': 'England',
-            'The Cooper Associates County Ground, Taunton': 'England',
-            'Carrara Oval': 'Australia',
-            'Coolidge Cricket Ground, Antigua': 'Antigua',
-            'John Davies Oval, Queenstown': 'New Zealand',
-            'Edgbaston, Birmingham': 'England',
-            'Kinrara Academy Oval, Kuala Lumpur': 'Malaysia',
-            'County Ground, New Road, Worcester': 'England',
-            'County Ground, Derby': 'England',
-            'Riverside Ground, Chester-le-Street': 'England',
-            'County Ground, Bristol': 'England',
-            'Bready Cricket Club, Magheramason, Bready': 'Ireland',
-            'Rangiri Dambulla International Stadium': 'Sri Lanka',
-            'Sheikh Zayed Stadium, Abu Dhabi': 'UAE',
-            'Sylhet International Cricket Stadium, Academy Ground': 'Bangladesh',
-            'Kennington Oval, London': 'England',
-            "Lord's, London": 'England',
-            'St George\'s Park, Gqeberha': 'South Africa',
-            'Hagley Oval, Christchurch': 'New Zealand',
-            'Bellerive Oval, Hobart': 'Australia',
-            'Dr DY Patil Sports Academy, Mumbai': 'India',
-            'National Stadium, Karachi': 'Pakistan',
-            'Shere Bangla National Stadium, Mirpur': 'Bangladesh',
-            'Diamond Oval, Kimberley': 'South Africa',
-            'Headingley, Leeds': 'England',
-            'The Rose Bowl, Southampton': 'England',
-            'Trent Bridge': 'England',
-            'Wankhede Stadium, Mumbai': 'India',
-            'Eden Gardens': 'India',
-            # Add more as needed
-            }
+            # venue_country_map = {
+            # 'Melbourne Cricket Ground': 'Australia',
+            # 'Simonds Stadium, South Geelong': 'Australia',
+            # 'Adelaide Oval': 'Australia',
+            # 'Sinhalese Sports Club Ground': 'Sri Lanka',
+            # 'Saxton Oval': 'New Zealand',
+            # 'Asian Institute of Technology Ground': 'Thailand',
+            # 'North Sydney Oval': 'Australia',
+            # 'Manuka Oval': 'Australia',
+            # 'Coolidge Cricket Ground': 'Antigua',
+            # 'Sharjah Cricket Stadium': 'UAE',
+            # 'Senwes Park': 'South Africa',
+            # 'Buffalo Park': 'South Africa',
+            # 'The Wanderers Stadium': 'South Africa',
+            # 'SuperSport Park': 'South Africa',
+            # 'Newlands': 'South Africa',
+            # 'The Cooper Associates County Ground': 'England',
+            # 'County Ground': 'England',
+            # 'Brabourne Stadium': 'India',
+            # 'Bay Oval': 'New Zealand',
+            # 'Pukekura Park': 'New Zealand',
+            # 'Seddon Park': 'New Zealand',
+            # 'Nondescripts Cricket Club Ground': 'Sri Lanka',
+            # 'Mangaung Oval': 'South Africa',
+            # 'Allan Border Field': 'Australia',
+            # 'VRA Ground': 'Netherlands',
+            # 'Kinrara Academy Oval': 'Malaysia',
+            # 'Royal Selangor Club': 'Malaysia',
+            # 'Providence Stadium': 'Guyana',
+            # 'Daren Sammy National Cricket Stadium, Gros Islet': 'St Lucia',
+            # 'Sir Vivian Richards Stadium, North Sound': 'Antigua',
+            # 'Westpac Stadium': 'New Zealand',
+            # 'Eden Park': 'New Zealand',
+            # 'Brian Lara Stadium, Tarouba': 'Trinidad and Tobago',
+            # 'Colts Cricket Club Ground': 'Sri Lanka',
+            # 'Colombo Cricket Club Ground': 'Sri Lanka',
+            # 'Chilaw Marians Cricket Club Ground': 'Sri Lanka',
+            # 'County Ground, Hove': 'England',
+            # 'Barsapara Cricket Stadium': 'India',
+            # 'Southend Club Cricket Stadium': 'Pakistan',
+            # 'Sydney Showground Stadium': 'Australia',
+            # 'W.A.C.A. Ground': 'Australia',
+            # 'Junction Oval': 'Australia',
+            # 'Sydney Cricket Ground': 'Australia',
+            # 'P Sara Oval': 'Sri Lanka',
+            # 'LC de Villiers Oval': 'South Africa',
+            # 'City Oval': 'South Africa',
+            # 'Willowmoore Park': 'South Africa',
+            # 'Basin Reserve': 'New Zealand',
+            # 'Forthill': 'Scotland',
+            # 'Kensington Oval, Barbados': 'Barbados',
+            # 'Lalabhai Contractor Stadium': 'India',
+            # 'Darren Sammy National Cricket Stadium, St Lucia': 'St Lucia',
+            # 'Gaddafi Stadium': 'Pakistan',
+            # 'Kingsmead': 'South Africa',
+            # 'Sky Stadium': 'New Zealand',
+            # 'McLean Park': 'New Zealand',
+            # 'Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium': 'India',
+            # 'County Ground, Northampton': 'England',
+            # 'County Ground, Chelmsford': 'England',
+            # 'The Cooper Associates County Ground, Taunton': 'England',
+            # 'Carrara Oval': 'Australia',
+            # 'Coolidge Cricket Ground, Antigua': 'Antigua',
+            # 'John Davies Oval, Queenstown': 'New Zealand',
+            # 'Edgbaston, Birmingham': 'England',
+            # 'Kinrara Academy Oval, Kuala Lumpur': 'Malaysia',
+            # 'County Ground, New Road, Worcester': 'England',
+            # 'County Ground, Derby': 'England',
+            # 'Riverside Ground, Chester-le-Street': 'England',
+            # 'County Ground, Bristol': 'England',
+            # 'Bready Cricket Club, Magheramason, Bready': 'Ireland',
+            # 'Rangiri Dambulla International Stadium': 'Sri Lanka',
+            # 'Sheikh Zayed Stadium, Abu Dhabi': 'UAE',
+            # 'Sylhet International Cricket Stadium, Academy Ground': 'Bangladesh',
+            # 'Kennington Oval, London': 'England',
+            # "Lord's, London": 'England',
+            # 'St George\'s Park, Gqeberha': 'South Africa',
+            # 'Hagley Oval, Christchurch': 'New Zealand',
+            # 'Bellerive Oval, Hobart': 'Australia',
+            # 'Dr DY Patil Sports Academy, Mumbai': 'India',
+            # 'National Stadium, Karachi': 'Pakistan',
+            # 'Shere Bangla National Stadium, Mirpur': 'Bangladesh',
+            # 'Diamond Oval, Kimberley': 'South Africa',
+            # 'Headingley, Leeds': 'England',
+            # 'The Rose Bowl, Southampton': 'England',
+            # 'Trent Bridge': 'England',
+            # 'Wankhede Stadium, Mumbai': 'India',
+            # 'Eden Gardens': 'India',
+            # # Add more as needed
+            # }
             
-            # Creating a DataFrame to display venues and their corresponding countries
-            pdf['country'] = pdf['venue'].map(venue_country_map)
-            allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh',
-                     'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
-            i=0
-            for country in allowed_countries:
-                temp_df = pdf[pdf['batsman'] == player_name]
-                # print(temp_df.match_id.unique())
-                # print(temp_df.head(20))
-                temp_df = temp_df[(temp_df['country'] == country)]
-                temp_df = cumulator(temp_df)
-                temp_df['country']=country.upper()
-                cols = temp_df.columns.tolist()
-                new_order = ['country'] + [col for col in cols if col != 'country']
-                # Reindex the DataFrame with the new column order
-                temp_df =temp_df[new_order]
-                # print(temp_df)
-             # If temp_df is empty after applying cumulator, skip to the next iteration
-                if len(temp_df) == 0:
-                   continue
-                elif i==0:
-                    result_df = temp_df
-                    i=i+1
-                else:
-                    result_df = result_df.reset_index(drop=True)
-                    temp_df = temp_df.reset_index(drop=True)
-                    result_df = result_df.loc[:, ~result_df.columns.duplicated()]
+            # # Creating a DataFrame to display venues and their corresponding countries
+            # pdf['country'] = pdf['venue'].map(venue_country_map)
+            # allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh',
+            #          'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
+            # i=0
+            # for country in allowed_countries:
+            #     temp_df = pdf[pdf['batsman'] == player_name]
+            #     # print(temp_df.match_id.unique())
+            #     # print(temp_df.head(20))
+            #     temp_df = temp_df[(temp_df['country'] == country)]
+            #     temp_df = cumulator(temp_df)
+            #     temp_df['country']=country.upper()
+            #     cols = temp_df.columns.tolist()
+            #     new_order = ['country'] + [col for col in cols if col != 'country']
+            #     # Reindex the DataFrame with the new column order
+            #     temp_df =temp_df[new_order]
+            #     # print(temp_df)
+            #  # If temp_df is empty after applying cumulator, skip to the next iteration
+            #     if len(temp_df) == 0:
+            #        continue
+            #     elif i==0:
+            #         result_df = temp_df
+            #         i=i+1
+            #     else:
+            #         result_df = result_df.reset_index(drop=True)
+            #         temp_df = temp_df.reset_index(drop=True)
+            #         result_df = result_df.loc[:, ~result_df.columns.duplicated()]
             
-                    result_df = pd.concat([result_df, temp_df],ignore_index=True)
+            #         result_df = pd.concat([result_df, temp_df],ignore_index=True)
                     
             
-                result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','final_year','matches'])
-                # # Round off the remaining float columns to 2 decimal places
-                # float_cols = result_df.select_dtypes(include=['float']).columns
-                # result_df[float_cols] = result_df[float_cols].round(2)
-            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-            cols = result_df.columns.tolist()
-            new_order = ['COUNTRY'] + [col for col in cols if col != 'COUNTRY']
-            result_df = result_df[new_order]
-            result_df = result_df.loc[:, ~result_df.columns.duplicated()]
-            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+            #     result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','final_year','matches'])
+            #     # # Round off the remaining float columns to 2 decimal places
+            #     # float_cols = result_df.select_dtypes(include=['float']).columns
+            #     # result_df[float_cols] = result_df[float_cols].round(2)
+            # result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+            # cols = result_df.columns.tolist()
+            # new_order = ['COUNTRY'] + [col for col in cols if col != 'COUNTRY']
+            # result_df = result_df[new_order]
+            # result_df = result_df.loc[:, ~result_df.columns.duplicated()]
+            # st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
           
 
             
