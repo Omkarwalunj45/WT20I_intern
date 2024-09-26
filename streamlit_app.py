@@ -561,6 +561,7 @@ if sidebar_option == "Player Profile":
                 
                 # Display the player's bowling statistics in a table format with bold headers
             player_stats = player_stats.drop(columns=['UNNAMED: 0','BOWLER'])
+            player_stats.drop_index()
             st.markdown("### Bowling Statistics")
             st.table(player_stats.style.set_table_attributes("style='font-weight: bold;'"))  # Display the filtered DataFrame as a table
 
