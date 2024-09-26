@@ -687,6 +687,7 @@ elif sidebar_option == "Matchup Analysis":
         cols = result_df.columns.tolist()
 
         # Reindex the DataFrame with the new column order
+        result_df=result_df.sort_values('YEAR',ascending=TRUE)
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
     elif grouping_option == "Venue":
         # Filter the DataFrame for the selected batsman and bowler
@@ -748,9 +749,11 @@ elif sidebar_option == "Matchup Analysis":
     
         # Specify the desired order with 'venue' first
         new_order = ['VENUE'] + [col for col in cols if col != 'VENUE']
+        
                       
         # Reindex the DataFrame with the new column order
         result_df = result_df[new_order]
+        result_df=result_df.sort_values('YEAR',ascending=TRUE)
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
     else:
         # Assuming pdf is your main DataFrame
@@ -786,6 +789,7 @@ elif sidebar_option == "Matchup Analysis":
         result_df['FINAL YEAR']=result_df['FINAL YEAR'].apply(standardize_season)
         
         result_df = result_df.rename(columns={'FINAL YEAR': 'YEAR'})   
+        result_df=result_df.sort_values('YEAR',ascending=TRUE)
         
         # Display the results
         st.markdown("### **Innings Performance**")
