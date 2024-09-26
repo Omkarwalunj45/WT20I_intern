@@ -10,7 +10,7 @@ st.title('WT20I Performance Analysis Portal')
 # Load data
 pdf = pd.read_csv("Dataset/up_com_wt20i.csv",low_memory=False)
 idf = pd.read_csv("Dataset/lifesaver.csv",low_memory=False)
-info_df=pd.read_csv("Dataset/player_info_w.csv",low_memory=False)
+info_df=pd.read_csv("Dataset/w_info_final.csv",low_memory=False)
 def round_up_floats(df, decimal_places=2):
     # Round up only for float columns
     float_cols = df.select_dtypes(include=['float'])
@@ -134,7 +134,6 @@ sidebar_option = st.sidebar.radio(
     ("Player Profile", "Matchup Analysis","Strength vs Weakness","Team Builder")
 )
 
-# If "Player Profile" is selected
 if sidebar_option == "Player Profile":
     st.header("Player Profile")
 
@@ -143,27 +142,16 @@ if sidebar_option == "Player Profile":
 
     # Filter the data for the selected player
     player_info = idf[idf['batsman'] == player_name].iloc[0]
-    # p_info = info_df[info_df['player_name'] == player_name].iloc[0]
+
+    # Check if the player exists in info_df
     matching_rows = info_df[info_df['player_name'] == player_name]
 
     if not matching_rows.empty:
         # If there is a matching row, access the first one
         p_info = matching_rows.iloc[0]
-        
-        # Now you can safely access p_info['bowling_style'] or other fields
-        st.write(f"Player info: {p_info}")
     else:
-        # Handle the case where no player matches
         st.write(f"No player found with the name '{player_name}'")
-
-    # Filter to get batting type from squads.csv
-    player_batting_type = ldf[ldf['player_name'] == player_name]['batting_hand']
-
-    # Check for existence of batting type
-    if not player_batting_type.empty:
-        batting_type_display = player_batting_type.iloc[0]  # Get the batting type
-    else:
-        batting_type_display = "N/A"  # Default if no type is found
+        p_info = None  # Set a fallback
 
     # Tabs for "Overview", "Career Statistics", and "Current Form"
     tab1, tab2, tab3 = st.tabs(["Overview", "Career Statistics", "Current Form"])
@@ -184,26 +172,38 @@ if sidebar_option == "Player Profile":
             st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{player_info['batting_team'].upper()}</span>", unsafe_allow_html=True)
         
         with col3:
-            st.markdown("AGE:")  # Placeholder for age
-            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{p_info['age']}</span>", unsafe_allow_html=True)  # Placeholder for future age data
+            st.markdown("AGE:")
+            if p_info is not None:
+                st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{p_info['age']}</span>", unsafe_allow_html=True)
+            else:
+                st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)
 
         # Create columns for the second row (batting style, bowling style, playing role)
         col4, col5, col6 = st.columns(3)
 
         with col4:
             st.markdown("BATTING STYLE:")
-            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{p_info['batting_style'].upper()}</span>", unsafe_allow_html=True)
+            if p_info is not None:
+                st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{p_info['batting_style'].upper()}</span>", unsafe_allow_html=True)
+            else:
+                st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)
 
         with col5:
             st.markdown("BOWLING STYLE:")
-            if p_info['bowling_style']=='Wicketkeeper':
-                st.markdown("<span style='font-size: 20px; font-weight: bold;'>NONE</span>", unsafe_allow_html=True)  # Placeholder for bowling style
+            if p_info is not None:
+                if p_info['bowling_style'] == 'Wicketkeeper':
+                    st.markdown("<span style='font-size: 20px; font-weight: bold;'>NONE</span>", unsafe_allow_html=True)
+                else:
+                    st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{p_info['bowling_style'].upper()}</span>", unsafe_allow_html=True)
             else:
-                st.markdown("<span style='font-size: 20px; font-weight: bold;'>{p_info['bowling_style'].upper()}</span>", unsafe_allow_html=True)  # Placeholder for bowling style
-        
+                st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)
+
         with col6:
             st.markdown("PLAYING ROLE:")
-            st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for playing role
+            if p_info is not None:
+                st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{p_info['role'].upper()}</span>", unsafe_allow_html=True)
+            else:
+                st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)
 
     with tab2:
         st.header("Career Statistics")
