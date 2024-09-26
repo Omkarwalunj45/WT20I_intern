@@ -678,10 +678,11 @@ if sidebar_option == "Player Profile":
                 # Add the country column with the current country's value
                 temp_df['opponent'] = country.upper()
             
-                # # Reorder columns to make 'country' the first column
-                # cols = temp_df.columns.tolist()
-                # new_order = ['opponent'] + [col for col in cols if col != 'country']
-                # temp_df = temp_df[new_order]
+                # Reorder columns to make 'country' the first column
+                cols = temp_df.columns.tolist()
+                new_order = ['opponent'] + [col for col in cols if col != 'country']
+                temp_df = temp_df[new_order]
+                
             
                 # Concatenate results into result_df
                 if i == 0:
@@ -691,6 +692,8 @@ if sidebar_option == "Player Profile":
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)
             
             # Display the final result_df
+            result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
+            result_df.columns = [col.upper().replace('_', ' ') for col in player_stats.columns]
             st.markdown("### Opponentwise Performance")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
   
@@ -724,7 +727,7 @@ if sidebar_option == "Player Profile":
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)  # Append subsequent data
             
             # Drop unnecessary columns
-            # result_df = result_df.drop(columns=['bowler', 'bowling_team', 'debut_year', 'matches_x', 'matches_y'])
+            # result_df = result_df.drop(columns=['bowler','debut_year'])
             
             # Round off float columns to 2 decimal places
             # float_cols = result_df.select_dtypes(include=['float']).columns
