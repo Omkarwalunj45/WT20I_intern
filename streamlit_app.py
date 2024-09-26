@@ -607,7 +607,7 @@ elif sidebar_option == "Matchup Analysis":
             else:
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)
         # Drop unnecessary columns related to performance metrics
-        columns_to_drop = ['batsman', 'bowler', 'batting_team', 'debut_year', 'matches_x', 'matches_y', 'fifties', 'hundreds', 'thirties', 'highest_score']
+        columns_to_drop = ['batsman', 'bowler', 'batting_team', 'debut_year', 'matches_x', 'matches_y', 'fifties', 'hundreds', 'thirties', 'highest_score','matches']
         result_df = result_df.drop(columns=columns_to_drop, errors='ignore')
 
         # Convert specific columns to integers and fill NaN values
