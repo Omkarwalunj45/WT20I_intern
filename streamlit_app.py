@@ -683,6 +683,62 @@ if sidebar_option == "Player Profile":
                 # Display the results for the current country
                 st.markdown(f"### vs **{country.upper()}**")
                 st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))  # Display table with bold headers
+
+            tdf = bpdf[bpdf['bowler'] == player_name]  # Filter data for the specific bowler
+
+            def standardize_season(season):
+                if '/' in season:  # Check if the season is in 'YYYY/YY' format
+                    year = season.split('/')[0]  # Get the first part
+                else:
+                    year = season  # Use as is if already in 'YYYY' format
+                return year.strip()  # Return the year stripped of whitespace
+            
+            # Standardize the 'season' column
+            tdf['season'] = tdf['season'].apply(standardize_season)
+            
+            # Populate an array of unique seasons
+            unique_seasons = sorted(set(tdf['season'].unique()))  # Optional: Sorted list of unique seasons
+            
+            # Initialize an empty DataFrame to store the final results
+            i = 0
+            for season in unique_seasons:
+                temp_df = tdf[tdf['season'] == season]  # Filter data for the current season
+                temp_df = bcum(temp_df)  # Apply the cumulative function (specific to your logic)
+                
+                if i == 0:
+                    result_df = temp_df  # Initialize the result_df with the first season's data
+                    i += 1
+                else:
+                    result_df = pd.concat([result_df, temp_df], ignore_index=True)  # Append subsequent data
+            
+            # Drop unnecessary columns
+            /result_df = result_df.drop(columns=['bowler', 'bowling_team', 'debut_year', 'matches_x', 'matches_y'])
+            
+            # Round off float columns to 2 decimal places
+            # float_cols = result_df.select_dtypes(include=['float']).columns
+            # result_df[float_cols] = result_df[float_cols].round(2)
+            
+            # Rename 'final_year' to 'year'
+            # result_df = result_df.rename(columns={'final_year': 'year'})
+            
+            # Convert column names to uppercase and replace underscores with spaces
+            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+            
+            # No need to convert columns to integer (for bowling-specific data)
+            
+            # Display the results
+            st.markdown(f"### **Yearwise Bowling Performance**")
+            cols = result_df.columns.tolist()
+            
+            # # Specify the desired order with 'YEAR' first
+            # new_order = ['YEAR'] + [col for col in cols if col != 'YEAR']
+            
+            # # Reindex the DataFrame with the new column order
+            # result_df = result_df[new_order]
+            
+            # Display the table with bold headers
+            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+
                 
 
             
