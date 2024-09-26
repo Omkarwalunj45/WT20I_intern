@@ -200,7 +200,7 @@ if sidebar_option == "Player Profile":
                    continue  
                     
                     # Drop the specified columns and modify the column names
-               temp_df = temp_df.drop(columns=['final_year', 'batsman', 'batting_team','debut_year'])
+               # temp_df = temp_df.drop(columns=['final_year', 'batsman', 'batting_team','debut_year'])
                # Convert specific columns to integers
                temp_df['runs'] = temp_df['runs'].astype(int)
                temp_df['hundreds'] = temp_df['hundreds'].astype(int)
@@ -260,7 +260,7 @@ if sidebar_option == "Player Profile":
                     i=1+i
                 else:
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)
-                result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year'])
+                # result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year'])
                 # Convert specific columns to integers
                 result_df['runs'] = result_df['runs'].astype(int)
                 result_df['hundreds'] =result_df['hundreds'].astype(int)
@@ -301,7 +301,7 @@ if sidebar_option == "Player Profile":
             # Reindex the DataFrame with the new column order
             temp_df =temp_df[new_order] 
             result_df = pd.concat([result_df, temp_df], ignore_index=True)
-            result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','matches','final_year'])
+            # result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','matches','final_year'])
             # Convert specific columns to integers
             result_df['runs'] = result_df['runs'].astype(int)
             result_df['hundreds'] =result_df['hundreds'].astype(int)
