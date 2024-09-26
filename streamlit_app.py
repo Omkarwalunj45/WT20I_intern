@@ -628,6 +628,53 @@ elif sidebar_option == "Matchup Analysis":
         # Reindex the DataFrame with the new column order
         result_df = result_df[new_order]
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+    elif grouping_option == "Match":
+        tdf = pdf[(pdf['batsman'] == batter_name) & (pdf['bowler'] == bowler_name)]
+
+        # Populate an array of unique match IDs
+        unique_matches = sorted(set(tdf['match_id'].unique()))
+
+        # Ensure tdf is a DataFrame
+        tdf = pd.DataFrame(tdf)
+        tdf['batsman_runs'] = tdf['batsman_runs'].astype(int)
+        tdf['total_runs'] = tdf['total_runs'].astype(int)
+
+        # Initialize an empty result DataFrame
+        result_df = pd.DataFrame()
+        i = 0
+
+        # Run a for loop and pass temp_df to a cumulative function
+        for match_id in unique_matches:
+            temp_df = tdf[tdf['match_id'] == match_id]
+            temp_df = cumulator(temp_df)
+
+            if i == 0:
+                result_df = temp_df  # Initialize with the first result_df
+                i = 1 + i
+            else:
+                result_df = pd.concat([result_df, temp_df], ignore_index=True)
+
+        # Drop unnecessary columns related to performance metrics
+        columns_to_drop = ['batsman', 'bowler', 'batting_team', 'debut_year', 'matches_x', 'matches_y', 
+                           'fifties', 'hundreds', 'thirties', 'highest_score', 'season','matches']
+        result_df = result_df.drop(columns=columns_to_drop, errors='ignore')
+
+        # Convert specific columns to integers and fill NaN values
+        columns_to_convert = ['runs', 'dismissals']
+        for col in columns_to_convert:
+            result_df[col] = result_df[col].fillna(0).astype(int)
+
+        # Rename columns for better presentation
+        result_df = result_df.rename(columns={'match_id': 'MATCH ID'})
+        result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+
+        # Display the results
+        st.markdown("### **Matchwise Performance**")
+        cols = result_df.columns.tolist()
+
+        # Reindex the DataFrame with the new column order
+        st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+
 
 
 
