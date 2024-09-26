@@ -290,17 +290,17 @@ if sidebar_option == "Player Profile":
                     i=1+i
                 else:
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)
-                result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year'])
+                # result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year'])
                 # Convert specific columns to integers
                 # Round off the remaining float columns to 2 decimal places
-                float_cols = result_df.select_dtypes(include=['float']).columns
-                result_df[float_cols] = result_df[float_cols].round(2)
+                # float_cols = result_df.select_dtypes(include=['float']).columns
+                # result_df[float_cols] = result_df[float_cols].round(2)
                 temp_df[columns_to_convert] = temp_df[columns_to_convert].fillna(0)
                 
                # Convert the specified columns to integer type
                 temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
  
-            # result_df=result_df.rename(columns={'final_year':'year'})
+            result_df=result_df.rename(columns={'final_year':'year'})
             # result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
                     
             # Display the results
