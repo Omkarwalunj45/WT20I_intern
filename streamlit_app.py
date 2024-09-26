@@ -627,16 +627,8 @@ if sidebar_option == "Player Profile":
                          'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
     
             # Calculating total runs and renaming relevant columns
-            bpdf['total_runs'] = bpdf['runs_off_bat'] + bpdf['extras']
-            bpdf = bpdf.rename(columns={'runs_off_bat': 'batsman_runs', 'wicket_type': 'dismissal_kind', 'striker': 'batsman', 'innings': 'inning', 'bowler': 'bowler_name'})
-            bpdf = bpdf.dropna(subset=['ball'])
             
             # Convert the 'ball' column to numeric if it's not already
-            bpdf['ball'] = pd.to_numeric(bpdf['ball'], errors='coerce')
-            
-            # Calculate 'over' by applying lambda function
-            bpdf['over'] = bpdf['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
-        
             # Iterate over allowed countries for bowling analysis
             for country in allowed_countries:
                 temp_df = pdf[pdf['bowler_name'] == player_name]  # Filter data for selected bowler
