@@ -239,7 +239,7 @@ if sidebar_option == "Player Profile":
                    continue  
                     
                     # Drop the specified columns and modify the column names
-               temp_df = temp_df.drop(columns=['final_year', 'batsman', 'batting_team'])
+               temp_df = temp_df.drop(columns=['final_year', 'batsman', 'batting_team','debut_year'])
                # Convert specific columns to integers
                temp_df['runs'] = temp_df['runs'].astype(int)
                temp_df['hundreds'] = temp_df['hundreds'].astype(int)
@@ -251,6 +251,14 @@ if sidebar_option == "Player Profile":
                temp_df[float_cols] = temp_df[float_cols].round(2) 
                 
                temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
+               cols = temp_df.columns.tolist()
+
+               # Specify the desired order with 'year' first
+               new_order = ['MATCHES'] + [col for col in cols if col != 'YEAR']
+                         
+               # Reindex the DataFrame with the new column order
+               temp_df =temp_df[new_order]
+ 
                     
                     # Display the results
                st.markdown(f"### vs **{country.upper()}**")
