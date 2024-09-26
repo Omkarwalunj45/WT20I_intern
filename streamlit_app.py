@@ -96,7 +96,7 @@ def cumulator(temp_df):
     
     bat_rec['BPD'] = bat_rec.apply(lambda x: bpd(x['ball'], x['dismissals']), axis=1)
     bat_rec['BPB'] = bat_rec.apply(lambda x: bpb(x['ball'], (x['fours'] + x['sixes'])), axis=1)
-    bat_rec['nbdry_sr'] = bat_rec.apply(lambda x: ((x['dots'] * 0 + x['ones'] * 1 + x['twos'] * 2 + x['threes'] * 3) /x['dots'] + x['ones'] + x['twos'] + x['threes']) * 100)if (x['dots'] + x['ones'] + x['twos'] + x['threes']) > 0 else 0,axis=1)
+    bat_rec['nbdry_sr'] = bat_rec.apply(lambda x: ((x['dots'] * 0 + x['ones'] * 1 + x['twos'] * 2 + x['threes'] * 3) /x['dots'] + x['ones'] + x['twos'] + x['threes']) * 100) if (x['dots'] + x['ones'] + x['twos'] + x['threes']) > 0 else 0,axis=1))
     bat_rec['AVG'] = bat_rec.apply(lambda x: avg(x['runs'], x['dismissals'], x['innings']), axis=1)
     bat_rec['dot_percentage'] = (bat_rec['dots'] / bat_rec['ball']) * 100
 
