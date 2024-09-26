@@ -574,6 +574,24 @@ elif sidebar_option == "Matchup Analysis":
 
     # Dropdown for grouping options
     grouping_option = st.selectbox("Group By", ["Year", "Match", "Venue", "Inning"])
+    matchup_df = pdf[(pdf['batsman'] == batsman_name) & (pdf['bowler'] == bowler_name)]
+
+    # Step 3: Create a download option for the DataFrame
+    if not matchup_df.empty:
+        # Convert the DataFrame to CSV
+        csv = matchup_df.to_csv(index=False)
+        # Use StringIO to allow download as a file
+        csv_io = StringIO(csv)
+        
+        # Step 4: Implement the download button
+        st.download_button(
+            label="Download Matchup Data as CSV",
+            data=csv_io.getvalue(),
+            file_name=f"{batsman_name}_vs_{bowler_name}_matchup.csv",
+            mime="text/csv"
+        )
+    else:
+        st.warning("No data available for the selected matchup.")
 
     if grouping_option == "Year":
         tdf = pdf[(pdf['batsman'] == batter_name) & (pdf['bowler'] == bowler_name)]
