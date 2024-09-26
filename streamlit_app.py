@@ -235,10 +235,10 @@ if sidebar_option == "Player Profile":
                columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']
 
                # Fill NaN values with 0
-               df[columns_to_convert] = df[columns_to_convert].fillna(0)
+               temp_df[columns_to_convert] = temp_df[columns_to_convert].fillna(0)
                 
                # Convert the specified columns to integer type
-               df[columns_to_convert] = df[columns_to_convert].astype(int)
+               temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
  
                 
                temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
