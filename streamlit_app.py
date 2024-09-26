@@ -743,7 +743,7 @@ if sidebar_option == "Player Profile":
             
             # Display the results
             st.markdown(f"### **Yearwise Bowling Performance**")
-            cols = result_df.columns.tolist()
+            # cols = result_df.columns.tolist()
             
             # # Specify the desired order with 'YEAR' first
             # new_order = ['YEAR'] + [col for col in cols if col != 'YEAR']
