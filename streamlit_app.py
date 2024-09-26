@@ -143,7 +143,18 @@ if sidebar_option == "Player Profile":
 
     # Filter the data for the selected player
     player_info = idf[idf['batsman'] == player_name].iloc[0]
-    p_info = info_df[info_df['player_name'] == player_name].iloc[0]
+    # p_info = info_df[info_df['player_name'] == player_name].iloc[0]
+    matching_rows = info_df[info_df['player_name'] == player_name]
+
+if not matching_rows.empty:
+    # If there is a matching row, access the first one
+    p_info = matching_rows.iloc[0]
+    
+    # Now you can safely access p_info['bowling_style'] or other fields
+    st.write(f"Player info: {p_info}")
+else:
+    # Handle the case where no player matches
+    st.write(f"No player found with the name '{player_name}'")
 
     # Filter to get batting type from squads.csv
     player_batting_type = ldf[ldf['player_name'] == player_name]['batting_hand']
