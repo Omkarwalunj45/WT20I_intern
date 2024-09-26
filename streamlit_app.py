@@ -674,7 +674,7 @@ if sidebar_option == "Player Profile":
                     continue
             
                 # Drop unwanted columns
-                temp_df = temp_df.drop(columns=['bowler'])
+                # temp_df = temp_df.drop(columns=['bowler'])
             
                 # Round up float columns (assuming `round_up_floats()` is already defined)
                 temp_df = round_up_floats(temp_df)
@@ -683,9 +683,9 @@ if sidebar_option == "Player Profile":
                 temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
             
                 # Reorder columns (you can adjust the column names as needed)
-                cols = temp_df.columns.tolist()
-                new_order = ['INNING'] + [col for col in cols if col != 'INNING']
-                temp_df = temp_df[new_order]  # Reindex the DataFrame with new order
+                # cols = temp_df.columns.tolist()
+                # new_order = ['INNING'] + [col for col in cols if col != 'INNING']
+                # temp_df = temp_df[new_order]  # Reindex the DataFrame with new order
             
                 # Display the results for the current country
                 st.markdown(f"### vs **{country.upper()}**")
