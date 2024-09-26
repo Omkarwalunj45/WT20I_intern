@@ -185,7 +185,7 @@ if sidebar_option == "Player Profile":
         
         with col3:
             st.markdown("AGE:")  # Placeholder for age
-            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{p_info['age'])}</span>", unsafe_allow_html=True)  # Placeholder for future age data
+            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{(p_info['age'])}</span>", unsafe_allow_html=True)  # Placeholder for future age data
 
         # Create columns for the second row (batting style, bowling style, playing role)
         col4, col5, col6 = st.columns(3)
