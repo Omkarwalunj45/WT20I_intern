@@ -547,8 +547,24 @@ if sidebar_option == "Player Profile":
             
 
         elif option == "Bowling":
-            # Similar logic can be added here for bowling statistics if needed
-            st.write("Bowling statistics feature is not yet implemented.")
+            elif option == "Bowling":
+                # Prepare the DataFrame for displaying player-specific bowling statistics
+                temp_df = bidf
+                
+                # Filter for the selected player
+                player_stats = temp_df[temp_df['bowler'] == player_name]  # Assuming bidf has bowler data
+                
+                # Convert column names to uppercase and replace underscores with spaces
+                player_stats.columns = [col.upper().replace('_', ' ') for col in player_stats.columns]
+                
+                # Function to round float values if necessary (assuming round_up_floats exists)
+                player_stats = round_up_floats(player_stats)
+                
+                # Display the player's bowling statistics in a table format with bold headers
+                st.markdown("### Bowling Statistics")
+                st.table(player_stats.style.set_table_attributes("style='font-weight: bold;'"))  # Display the filtered DataFrame as a table
+
+            
 
     with tab3:
         st.header("Current Form")
