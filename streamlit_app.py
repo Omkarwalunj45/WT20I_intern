@@ -20,6 +20,7 @@ def cumulator(temp_df):
     temp_df = temp_df.drop_duplicates(subset=['match_id', 'ball'], keep='first')
     print(f"After removing duplicates based on 'match_id' and 'ball': {temp_df.shape}")
 
+
     # Ensure 'total_runs' exists
     if 'total_runs' not in temp_df.columns:
         raise KeyError("Column 'total_runs' does not exist in temp_df.")
