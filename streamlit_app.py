@@ -14,6 +14,7 @@ def round_up_floats(df, decimal_places=2):
     # Round up only for float columns
     float_cols = df.select_dtypes(include=['float'])
     df[float_cols.columns] = np.ceil(float_cols * (10 ** decimal_places)) / (10 ** decimal_places)
+    df[float_cols.columns] = df[float_cols.columns].applymap(lambda x: '%.2f' % x)
     return df
 
 # Define the columns related to runs
