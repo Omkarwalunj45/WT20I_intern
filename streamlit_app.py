@@ -549,14 +549,6 @@ if sidebar_option == "Player Profile":
 # If "Matchup Analysis" is selected
 elif sidebar_option == "Matchup Analysis":
     st.header("Matchup Analysis")
-    import pandas as pd
-sgsggsgs
-elif sidebar_option == "Matchup Analysis":
-    st.header("Matchup Analysis")
-
-    # Load your PDF data into a DataFrame (assuming you have done this elsewhere in your code)
-    # pdf_data = pd.read_csv('path_to_your_pdf_converted_data.csv')  # or use a relevant method to load your PDF
-
     # Filter unique batters and bowlers from the DataFrame
     unique_batters = pdf_data['batsman'].unique()  # Adjust the column name as per your PDF data structure
     unique_bowlers = pdf_data['bowler'].unique()    # Adjust the column name as per your PDF data structure
