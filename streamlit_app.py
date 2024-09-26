@@ -585,7 +585,7 @@ elif sidebar_option == "Matchup Analysis":
         st.download_button(
             label="Download Matchup Data as CSV",
             data=csv,  # Pass the CSV string directly
-            file_name=f"{batsman_name}_vs_{bowler_name}_matchup.csv",
+            file_name=f"{batter_name}_vs_{bowler_name}_matchup.csv",
             mime="text/csv"  # Specify the MIME type for CSV
         )
     else:
