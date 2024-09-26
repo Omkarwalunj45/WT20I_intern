@@ -328,7 +328,7 @@ if sidebar_option == "Player Profile":
             temp_df=cumulator(temp_df)
             temp_df['inning']=1
             cols = temp_df.columns.tolist()
-            new_order = ['inning'] + [col for col in cols if col != 'inning]          
+            new_order = ['inning'] + [col for col in cols if col != 'inning']          
             # Reindex the DataFrame with the new column order
             temp_df =temp_df[new_order] 
             result_df = temp_df
