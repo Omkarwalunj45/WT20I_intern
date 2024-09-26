@@ -177,6 +177,12 @@ def bcum(df):
     # Fill NaN values for bowlers with no 3W hauls or maiden overs
     bowl_rec['three_wicket_hauls'] = bowl_rec['three_wicket_hauls'].fillna(0)
     bowl_rec['maiden_overs'] = bowl_rec['maiden_overs'].fillna(0)
+    debut_year = temp_df.groupby('bowler')['season'].min().reset_index()
+    final_year = temp_df.groupby('bowler')['season'].max().reset_index()
+    debut_year.rename(columns={'season': 'debut_year'}, inplace=True)
+    final_year.rename(columns={'season': 'final_year'}, inplace=True)
+    summary_df = summary_df.merge(debut_year, on='batsman').merge(final_year, on='batsman')
+
 
     # Calculate additional metrics
     bowl_rec['dot%'] = (bowl_rec['dots'] / bowl_rec['balls']) * 100
@@ -704,6 +710,7 @@ if sidebar_option == "Player Profile":
             for season in unique_seasons:
                 temp_df = tdf[tdf['season'] == season]  # Filter data for the current season
                 temp_df = bcum(temp_df)  # Apply the cumulative function (specific to your logic)
+                temp_df['YEAR'] = season
                 
                 if i == 0:
                     result_df = temp_df  # Initialize the result_df with the first season's data
