@@ -340,7 +340,7 @@ if sidebar_option == "Player Profile":
             # Reindex the DataFrame with the new column order
             temp_df =temp_df[new_order] 
             result_df = pd.concat([result_df, temp_df], ignore_index=True)
-            result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year',''matches','last_year'])
+            result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','matches','last_year'])
             # Convert specific columns to integers
             result_df['runs'] = result_df['runs'].astype(int)
             result_df['hundreds'] =result_df['hundreds'].astype(int)
