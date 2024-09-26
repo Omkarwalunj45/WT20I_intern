@@ -549,4 +549,27 @@ if sidebar_option == "Player Profile":
 # If "Matchup Analysis" is selected
 elif sidebar_option == "Matchup Analysis":
     st.header("Matchup Analysis")
-    # Add content for Matchup Analysis here
+    import pandas as pd
+
+elif sidebar_option == "Matchup Analysis":
+    st.header("Matchup Analysis")
+
+    # Load your PDF data into a DataFrame (assuming you have done this elsewhere in your code)
+    # pdf_data = pd.read_csv('path_to_your_pdf_converted_data.csv')  # or use a relevant method to load your PDF
+
+    # Filter unique batters and bowlers from the DataFrame
+    unique_batters = pdf_data['batsman'].unique()  # Adjust the column name as per your PDF data structure
+    unique_bowlers = pdf_data['bowler'].unique()    # Adjust the column name as per your PDF data structure
+
+    # Search box for Batters
+    batter_name = st.selectbox("Select a Batter", unique_batters)
+
+    # Search box for Bowlers
+    bowler_name = st.selectbox("Select a Bowler", unique_bowlers)
+
+    # Dropdown for grouping options
+    grouping_option = st.selectbox("Group By", ["Year", "Match", "Venue", "Inning"])
+
+    # You can add more logic below to process the selected batter, bowler, and grouping option
+    # For example, filtering the pdf_data based on the selected batter and bowler
+
