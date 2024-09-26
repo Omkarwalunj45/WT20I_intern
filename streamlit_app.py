@@ -737,7 +737,7 @@ if sidebar_option == "Player Profile":
             # result_df = result_df.rename(columns={'final_year': 'year'})
             
             # Convert column names to uppercase and replace underscores with spaces
-            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+            # result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
             
             # No need to convert columns to integer (for bowling-specific data)
             
