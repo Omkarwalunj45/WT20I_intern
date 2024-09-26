@@ -746,6 +746,56 @@ if sidebar_option == "Player Profile":
             # Display the table with bold headers
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
+            # Filter data for the specific bowler
+            tdf = bpdf[bpdf['bowler'] == player_name]
+            
+            # Process for the first inning
+            temp_df = tdf[(tdf['inning'] == 1)]
+            temp_df = bcum(temp_df)  # Apply the cumulative function specific to bowlers
+            temp_df['inning'] = 1  # Add the inning number
+            
+            # Reorder columns to have 'inning' first
+            cols = temp_df.columns.tolist()
+            new_order = ['inning'] + [col for col in cols if col != 'inning']          
+            temp_df = temp_df[new_order] 
+            
+            # Initialize result_df with the first inning's data
+            result_df = temp_df
+            
+            # Process for the second inning
+            temp_df = tdf[(tdf['inning'] == 2)]
+            temp_df = bcum(temp_df)  # Apply the cumulative function specific to bowlers
+            temp_df['inning'] = 2  # Add the inning number
+            
+            # Reorder columns to have 'inning' first
+            cols = temp_df.columns.tolist()
+            new_order = ['inning'] + [col for col in cols if col != 'inning']          
+            temp_df = temp_df[new_order] 
+            
+            # Concatenate the results for both innings
+            result_df = pd.concat([result_df, temp_df], ignore_index=True)
+            
+            # Drop unnecessary columns
+            # result_df = result_df.drop(columns=['bowler', 'bowling_team', 'debut_year', 'matches_x', 'matches_y', 'final_year'])
+            
+            # # Round off float columns to 2 decimal places
+            # float_cols = result_df.select_dtypes(include=['float']).columns
+            # result_df[float_cols] = result_df[float_cols].round(2)
+            
+            # Rename 'final_year' to 'year' if it exists
+            result_df = result_df.rename(columns={'final_year': 'year'})
+            
+            # Convert column names to uppercase and replace underscores with spaces
+            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+            
+            # Drop unnecessary columns
+            # result_df = result_df.drop(columns=['MATCHES'])
+            
+            # Display the results
+            st.markdown(f"### **Inningwise Bowling Performance**")
+            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+
+
                 
 
             
