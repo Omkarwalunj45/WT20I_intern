@@ -449,7 +449,7 @@ if sidebar_option == "Player Profile":
             }
             
             # Creating a DataFrame to display venues and their corresponding countries
-           pdf['country'] = pdf['venue'].map(venue_country_map)
+            pdf['country'] = pdf['venue'].map(venue_country_map)
             i=0
             for country in allowed_countries:
                 temp_df = pdf[pdf['batsman'] == player_name]
