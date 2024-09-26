@@ -21,7 +21,7 @@ def standardize_season(season):
           year = season.split('/')[0]  # Get the first part
     else:
           year = season  # Use as is if already in 'YYYY' format
-     return year.strip()  # Return the year stripped of whitespace
+    return year.strip()  # Return the year stripped of whitespace
 # Define the columns related to runs
 columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_scores']
 ldf = pd.read_csv("Dataset/squads.csv",low_memory=False)  # Load squads.csv for batting type
