@@ -752,7 +752,7 @@ elif sidebar_option == "Matchup Analysis":
         # Reindex the DataFrame with the new column order
         result_df = result_df[new_order]
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
-     else grouping_option == "Inning":
+   else grouping_option == "Inning":
         # Assuming pdf is your main DataFrame
         # Filter for innings 1 and 2 and prepare to accumulate results
         innings = [1, 2]
