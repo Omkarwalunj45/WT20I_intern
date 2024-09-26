@@ -331,33 +331,41 @@ if sidebar_option == "Player Profile":
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
             tdf = pdf[pdf['batsman'] == player_name]
-            # temp_df=tdf[(tdf['inning']==1)]
-            # temp_df=cumulator(temp_df)
-            # temp_df['inning']=1
-            # cols = temp_df.columns.tolist()
-            # new_order = ['inning'] + [col for col in cols if col != 'inning']          
-            # # Reindex the DataFrame with the new column order
-            # temp_df =temp_df[new_order] 
-            # result_df = temp_df
-            # temp_df=tdf[(tdf['inning']==2)]
-            # temp_df=cumulator(temp_df)
-            # temp_df['inning']=2
-            # cols = temp_df.columns.tolist()
-            # new_order = ['inning'] + [col for col in cols if col != 'inning']          
-            # # Reindex the DataFrame with the new column order
-            # temp_df =temp_df[new_order] 
-            # result_df = pd.concat([result_df, temp_df], ignore_index=True)
-            # result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','matches','final_year'])
-            # # Convert specific columns to integers
-            # # Round off the remaining float columns to 2 decimal places
-            # float_cols = result_df.select_dtypes(include=['float']).columns
-            # result_df[float_cols] = result_df[float_cols].round(2)
-            # result_df=result_df.rename(columns={'final_year':'year'})
-            # result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+            temp_df=tdf[(tdf['inning']==1)]
+            temp_df=cumulator(temp_df)
+            temp_df['inning']=1
+            cols = temp_df.columns.tolist()
+            new_order = ['inning'] + [col for col in cols if col != 'inning']          
+            # Reindex the DataFrame with the new column order
+            temp_df =temp_df[new_order] 
+            result_df = temp_df
+            temp_df=tdf[(tdf['inning']==2)]
+            temp_df=cumulator(temp_df)
+            temp_df['inning']=2
+            cols = temp_df.columns.tolist()
+            new_order = ['inning'] + [col for col in cols if col != 'inning']          
+            # Reindex the DataFrame with the new column order
+            temp_df =temp_df[new_order] 
+            result_df = pd.concat([result_df, temp_df], ignore_index=True)
+            result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','matches_x','matchhes_y','final_year'])
+            # Convert specific columns to integers
+            # Round off the remaining float columns to 2 decimal places
+            float_cols = result_df.select_dtypes(include=['float']).columns
+            result_df[float_cols] = result_df[float_cols].round(2)
+            
+            result_df=result_df.rename(columns={'final_year':'year'})
+            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+            columns_to_convert = ['RUNS', 'HUNDREDS', 'FIFTIES', 'THIRTIES', 'HIGHEST SCORE']
+
+               # Fill NaN values with 0
+            result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+                
+               # Convert the specified columns to integer type
+            result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
                     
-            # # Display the results
-            # st.markdown(f"### **Inningwise Performnce**")
-            # st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+            # Display the results
+            st.markdown(f"### **Inningwise Performnce**")
+            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
             # venue_country_map = {
             # 'Melbourne Cricket Ground': 'Australia',
