@@ -666,7 +666,7 @@ if sidebar_option == "Player Profile":
                     continue
                 
                 # Drop unwanted columns
-                temp_df = temp_df.drop(columns=['final_year', 'bowler_name', 'bowling_team', 'debut_year', 'matches_x', 'matches_y'])
+                # temp_df = temp_df.drop(columns=['final_year', 'bowler_name', 'bowling_team', 'debut_year', 'matches_x', 'matches_y'])
                 
                 # Round up float columns (assuming `round_up_floats()` is already defined)
                 temp_df = round_up_floats(temp_df)
