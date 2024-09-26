@@ -16,8 +16,8 @@ pdf = pdf.drop_duplicates(subset=['match_id', 'ball'], keep='first')
 
 
 def cumulator(df):
-  print(f"Before removing duplicates based on 'match_id' and 'ball': {temp_df.shape}")
-  temp_df = temp_df.drop_duplicates(subset=['match_id', 'ball'], keep='first')
+  print(f"Before removing duplicates based on 'match_id' and 'ball': {df.shape}")
+  df = df.drop_duplicates(subset=['match_id', 'ball'], keep='first')
     
   print(f"After removing duplicates based on 'match_id' and 'ball': {temp_df.shape}")
   import pandas as pd
