@@ -11,6 +11,8 @@ st.title('WT20I Performance Analysis Portal')
 pdf = pd.read_csv("Dataset/up_com_wt20i.csv",low_memory=False)
 idf = pd.read_csv("Dataset/lifesaver.csv",low_memory=False)
 info_df=pd.read_csv("Dataset/w_info_final.csv",low_memory=False)
+bpdf=pd.read_csv("Dataset/final_cum_wbowl.csv",low_memory=False)
+bidf=pd.read_csv("Dataset/lifesaver_bowl.csv",low_memory=False)
 def round_up_floats(df, decimal_places=2):
     # Round up only for float columns
     float_cols = df.select_dtypes(include=['float'])
