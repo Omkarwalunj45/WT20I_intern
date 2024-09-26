@@ -13,6 +13,7 @@ idf = pd.read_csv("Dataset/updated_wt20i.csv",low_memory=False)
 ldf = pd.read_csv("Dataset/squads.csv",low_memory=False)  # Load squads.csv for batting type
 idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']] = idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']].astype(int)
 pdf = pdf.drop_duplicates(subset=['match_id', 'ball'], keep='first')
+dhdhdhh
 
 def cumulator(temp_df):  
     # print("Columns before cumulator:", temp_df.columns)
