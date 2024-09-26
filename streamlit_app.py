@@ -810,11 +810,8 @@ if sidebar_option == "Player Profile":
                 temp_df = bpdf[bpdf['bowler'] == player_name]  # Change to 'bowler'
                 temp_df = temp_df[(temp_df['country'] == country)]
                 temp_df = bcum(temp_df)  # Use bcum instead of cumulator
-                temp_df['country'] = country.upper()
+                temp_df.insert(0, 'country', country.upper())
                 
-                cols = temp_df.columns.tolist()
-                new_order = ['country'] + [col for col in cols if col != 'country']
-                temp_df = temp_df[new_order]
             
                 # If temp_df is empty after applying bcum, skip to the next iteration
                 if len(temp_df) == 0:
