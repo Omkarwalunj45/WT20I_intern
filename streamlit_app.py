@@ -13,13 +13,6 @@ idf = pd.read_csv("Dataset/lifesaver.csv",low_memory=False)
 
 # Define the columns related to runs
 columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_scores']
-
-# Fill NaN values with 0
-idf[columns_to_convert] = idf[columns_to_convert].fillna(0)
-
-# Convert the specified columns to integer type
-idf[columns_to_convert] = idf[columns_to_convert].astype(int)
-
 ldf = pd.read_csv("Dataset/squads.csv",low_memory=False)  # Load squads.csv for batting type
 # pdf = pdf.drop_duplicates(subset=['match_id', 'ball'], keep='first')
 
