@@ -647,6 +647,7 @@ elif sidebar_option == "Matchup Analysis":
         for match_id in unique_matches:
             temp_df = tdf[tdf['match_id'] == match_id]
             temp_df = cumulator(temp_df)
+            temp_df.insert(0, 'MATCH_ID', temp_df['match_id'].iloc[0])
 
             if i == 0:
                 result_df = temp_df  # Initialize with the first result_df
