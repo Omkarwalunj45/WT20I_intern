@@ -574,7 +574,7 @@ elif sidebar_option == "Matchup Analysis":
 
     # Dropdown for grouping options
     grouping_option = st.selectbox("Group By", ["Year", "Match", "Venue", "Inning"])
-    matchup_df = pdf[(pdf['batsman'] == batsman_name) & (pdf['bowler'] == bowler_name)]
+    matchup_df = pdf[(pdf['batsman'] == batter_name) & (pdf['bowler'] == bowler_name)]
 
     # Step 3: Create a download option for the DataFrame
     if not matchup_df.empty:
