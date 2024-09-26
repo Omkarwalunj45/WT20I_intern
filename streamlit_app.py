@@ -254,7 +254,7 @@ if sidebar_option == "Player Profile":
                cols = temp_df.columns.tolist()
 
                # Specify the desired order with 'year' first
-               new_order = ['MATCHES'] + [col for col in cols if col != 'YEAR']
+               new_order = ['MATCHES'] + [col for col in cols if col != 'MATCHES']
                          
                # Reindex the DataFrame with the new column order
                temp_df =temp_df[new_order]
