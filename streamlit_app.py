@@ -92,13 +92,13 @@ def cumulator(temp_df):
     def DP(balls, dots):
       return (dots / balls) * 100
     
-    bat_rec['SR'] = bat_rec.apply(lambda x: (x['runs'] / x['ball']) * 100, axis=1)
+    summary_df['SR'] = summary_df.apply(lambda x: (x['runs'] / x['ball']) * 100, axis=1)
     
-    bat_rec['BPD'] = bat_rec.apply(lambda x: bpd(x['ball'], x['dismissals']), axis=1)
-    bat_rec['BPB'] = bat_rec.apply(lambda x: bpb(x['ball'], (x['fours'] + x['sixes'])), axis=1)
-    bat_rec['nbdry_sr'] = bat_rec.apply(lambda x: ((x['dots'] * 0 + x['ones'] * 1 + x['twos'] * 2 + x['threes'] * 3) /(x['dots'] + x['ones'] + x['twos'] + x['threes']) * 100) if (x['dots'] + x['ones'] + x['twos'] + x['threes']) > 0 else 0,axis=1)
-    bat_rec['AVG'] = bat_rec.apply(lambda x: avg(x['runs'], x['dismissals'], x['innings']), axis=1)
-    bat_rec['dot_percentage'] = (bat_rec['dots'] / bat_rec['ball']) * 100
+    summary_df['BPD'] = summary_df.apply(lambda x: bpd(x['ball'], x['dismissals']), axis=1)
+    summary_df['BPB'] = summary_df.apply(lambda x: bpb(x['ball'], (x['fours'] + x['sixes'])), axis=1)
+    summary_df['nbdry_sr'] = summary_df.apply(lambda x: ((x['dots'] * 0 + x['ones'] * 1 + x['twos'] * 2 + x['threes'] * 3) /(x['dots'] + x['ones'] + x['twos'] + x['threes']) * 100) if (x['dots'] + x['ones'] + x['twos'] + x['threes']) > 0 else 0,axis=1)
+    summary_df['AVG'] =summary_df.apply(lambda x: avg(x['runs'], x['dismissals'], x['innings']), axis=1)
+    summary_df['dot_percentage'] = (summary_df['dots'] / summary_df['ball']) * 100
 
 
     debut_year = temp_df.groupby('batsman')['season'].min().reset_index()
