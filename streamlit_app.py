@@ -631,7 +631,7 @@ if sidebar_option == "Player Profile":
             # Convert the 'ball' column to numeric if it's not already
             # Iterate over allowed countries for bowling analysis
             for country in allowed_countries:
-                temp_df = pdf[pdf['bowler_name'] == player_name]  # Filter data for selected bowler
+                temp_df = pdf[pdf['bowler'] == player_name]  # Filter data for selected bowler
                 
                 # Check if the bowler has bowled against the current country
                 if not temp_df[temp_df['bowling_team'] == country].empty:
