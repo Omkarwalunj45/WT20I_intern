@@ -128,6 +128,65 @@ def cumulator(temp_df):
 
     return summary_df
 
+def bcum(df):
+    # First, remove duplicates based on match_id and ball within the same match
+    print(f"Before removing duplicates based on 'match_id' and 'ball': {df.shape}")
+    df = df.drop_duplicates(subset=['match_id', 'ball'], keep='first')
+    print(f"After removing duplicates based on 'match_id' and 'ball': {df.shape}")
+
+    # Define helper columns for various runs
+    df['is_dot'] = df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
+    df['is_one'] = df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
+    df['is_two'] = df['batsman_runs'].apply(lambda x: 1 if x == 2 else 0)
+    df['is_three'] = df['batsman_runs'].apply(lambda x: 1 if x == 3 else 0)
+    df['is_four'] = df['batsman_runs'].apply(lambda x: 1 if x == 4 else 0)
+    df['is_six'] = df['batsman_runs'].apply(lambda x: 1 if x == 6 else 0)
+
+    # Create various aggregates
+    runs = pd.DataFrame(df.groupby(['bowler'])['batsman_runs'].sum()).reset_index().rename(columns={'batsman_runs': 'runs'})
+    innings = pd.DataFrame(df.groupby(['bowler'])['match_id'].nunique()).reset_index().rename(columns={'match_id': 'innings'})
+    balls = pd.DataFrame(df.groupby(['bowler'])['ball'].count()).reset_index().rename(columns={'ball': 'balls'})
+    wkts = pd.DataFrame(df.groupby(['bowler'])['bowler_wkt'].sum()).reset_index().rename(columns={'bowler_wkt': 'wkts'})
+    dots = pd.DataFrame(df.groupby(['bowler'])['is_dot'].sum()).reset_index().rename(columns={'is_dot': 'dots'})
+    ones = pd.DataFrame(df.groupby(['bowler'])['is_one'].sum()).reset_index().rename(columns={'is_one': 'ones'})
+    twos = pd.DataFrame(df.groupby(['bowler'])['is_two'].sum()).reset_index().rename(columns={'is_two': 'twos'})
+    threes = pd.DataFrame(df.groupby(['bowler'])['is_three'].sum()).reset_index().rename(columns={'is_three': 'threes'})
+    fours = pd.DataFrame(df.groupby(['bowler'])['is_four'].sum()).reset_index().rename(columns={'is_four': 'fours'})
+    sixes = pd.DataFrame(df.groupby(['bowler'])['is_six'].sum()).reset_index().rename(columns={'is_six': 'sixes'})
+
+    # Calculate 3W or more hauls by bowler
+    dismissals_count = df.groupby(['bowler', 'match_id'])['bowler_wkt'].sum()
+    three_wicket_hauls = dismissals_count[dismissals_count >= 3].groupby('bowler').count().reset_index().rename(columns={'bowler_wkt': 'three_wicket_hauls'})
+
+    # Identify maiden overs (group by match and over, check if total_runs == 0)
+    df['over'] = df['ball'].apply(lambda x: int(x))  # Assuming ball represents the ball within an over
+    maiden_overs = df.groupby(['bowler', 'match_id', 'over']).filter(lambda x: x['total_runs'].sum() == 0)
+    maiden_overs_count = maiden_overs.groupby('bowler')['over'].count().reset_index().rename(columns={'over': 'maiden_overs'})
+
+    # Merge all metrics into a single DataFrame
+    bowl_rec = pd.merge(innings, balls, on='bowler')\
+                 .merge(runs, on='bowler')\
+                 .merge(wkts, on='bowler')\
+                 .merge(sixes, on='bowler')\
+                 .merge(fours, on='bowler')\
+                 .merge(dots, on='bowler')\
+                 .merge(three_wicket_hauls, on='bowler', how='left')\
+                 .merge(maiden_overs_count, on='bowler', how='left')
+
+    # Fill NaN values for bowlers with no 3W hauls or maiden overs
+    bowl_rec['three_wicket_hauls'] = bowl_rec['three_wicket_hauls'].fillna(0)
+    bowl_rec['maiden_overs'] = bowl_rec['maiden_overs'].fillna(0)
+
+    # Calculate additional metrics
+    bowl_rec['dot%'] = (bowl_rec['dots'] / bowl_rec['balls']) * 100
+    bowl_rec = bowl_rec[bowl_rec.innings >= 10]
+    bowl_rec['avg'] = bowl_rec['runs'] / bowl_rec['wkts']
+    bowl_rec['sr'] = bowl_rec['balls'] / bowl_rec['wkts']
+    bowl_rec['econ'] = (bowl_rec['runs'] * 6 / bowl_rec['balls'])
+
+    return bowl_rec
+
+
 # Preprocess the debut column to extract the year
 idf['debut_year'] = idf['debut_year'].str.split('/').str[0]  # Extract the year from "YYYY/YY"
 
@@ -563,6 +622,63 @@ if sidebar_option == "Player Profile":
             player_stats = player_stats.drop(columns=['UNNAMED: 0','BOWLER'])
             st.markdown("### Bowling Statistics")
             st.table(player_stats.style.set_table_attributes("style='font-weight: bold;'"))  # Display the filtered DataFrame as a table
+
+            allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh', 
+                         'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
+    
+            # Calculating total runs and renaming relevant columns
+            bpdf['total_runs'] = bpdf['runs_off_bat'] + bpdf['extras']
+            bpdf = bpdf.rename(columns={'runs_off_bat': 'batsman_runs', 'wicket_type': 'dismissal_kind', 'striker': 'batsman', 'innings': 'inning', 'bowler': 'bowler_name'})
+            bpdf = bpdf.dropna(subset=['ball'])
+            
+            # Convert the 'ball' column to numeric if it's not already
+            bpdf['ball'] = pd.to_numeric(bpdf['ball'], errors='coerce')
+            
+            # Calculate 'over' by applying lambda function
+            bpdf['over'] = bpdf['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
+        
+            # Iterate over allowed countries for bowling analysis
+            for country in allowed_countries:
+                temp_df = pdf[pdf['bowler_name'] == player_name]  # Filter data for selected bowler
+                
+                # Check if the bowler has bowled against the current country
+                if not temp_df[temp_df['bowling_team'] == country].empty:
+                    continue  # Skip if no data found for this country
+                
+                temp_df = temp_df[temp_df['batting_team'] == country]  # Filter for the country team faced
+                
+                # Apply the bowler cumulation function (bcum)
+                temp_df = bcum(temp_df)
+                
+                # If the DataFrame is empty after applying `bcum`, skip this iteration
+                if len(temp_df) == 0:
+                    continue
+                
+                # Drop unwanted columns
+                # temp_df = temp_df.drop(columns=['final_year', 'bowler_name', 'bowling_team', 'debut_year', 'matches_x', 'matches_y'])
+                
+                # Round up float columns (assuming `round_up_floats()` is already defined)
+                temp_df = round_up_floats(temp_df)
+                
+                # Define columns to convert to integer type
+                columns_to_convert = ['runs', 'wickets', 'maidens', 'economy_rate', 'best_figures']
+        
+                # Fill NaN values with 0 and convert specified columns to integers
+                temp_df[columns_to_convert] = temp_df[columns_to_convert].fillna(0)
+                temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
+                
+                # Convert column names to uppercase and replace underscores with spaces
+                temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
+                
+                # Reorder columns (you can adjust the column names as needed)
+                cols = temp_df.columns.tolist()
+                new_order = ['MATCHES'] + [col for col in cols if col != 'MATCHES']
+                temp_df = temp_df[new_order]  # Reindex the DataFrame with new order
+                
+                # Display the results for the current country
+                st.markdown(f"### vs **{country.upper()}**")
+                st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))
+                    
 
             
 
