@@ -49,14 +49,18 @@ def cumulator(temp_df):
     match_runs = temp_df.groupby(['batsman', 'match_id'])['batsman_runs'].sum().reset_index()
     
     # Count 100s, 50s, and 30s
+    # Assuming match_runs contains runs per innings, not aggregated over multiple matches.
+    
+    # Calculate hundreds, fifties, and thirties
     hundreds = match_runs[match_runs['batsman_runs'] >= 100].groupby('batsman').size().reset_index(name='hundreds')
     fifties = match_runs[(match_runs['batsman_runs'] >= 50) & (match_runs['batsman_runs'] < 100)].groupby('batsman').size().reset_index(name='fifties')
     thirties = match_runs[(match_runs['batsman_runs'] >= 30) & (match_runs['batsman_runs'] < 50)].groupby('batsman').size().reset_index(name='thirties')
     
-    # Calculate the highest score for each batsman
-    highest_scores = match_runs.groupby('batsman')['batsman_runs'].max().reset_index(name='highest_score')
+    # Calculate highest score for each batsman from individual innings
+    highest_scores = match_runs.groupby(['batsman', 'match_id'])['batsman_runs'].sum().reset_index()  # Ensure match_id is used to avoid summing across multiple innings
+    highest_scores = highest_scores.groupby('batsman')['batsman_runs'].max().reset_index(name='highest_score')
     
-    # Fill NaNs with 0 for counts in case a batsman has none
+    # Fill NaNs with 0 for counts
     hundreds['hundreds'] = hundreds['hundreds'].fillna(0)
     fifties['fifties'] = fifties['fifties'].fillna(0)
     thirties['thirties'] = thirties['thirties'].fillna(0)
@@ -78,6 +82,7 @@ def cumulator(temp_df):
         .merge(thirties, on='batsman', how='left').fillna(0)
         .merge(highest_scores, on='batsman', how='left').fillna(0)
     )
+
     
     # Ensure to count matches as well
     matches = temp_df.groupby('batsman')['match_id'].nunique().reset_index(name='matches')
