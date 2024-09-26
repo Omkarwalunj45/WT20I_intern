@@ -657,8 +657,8 @@ elif sidebar_option == "Matchup Analysis":
                 result_df = pd.concat([result_df, temp_df], ignore_index=True)
 
         # Drop unnecessary columns related to performance metrics
-        result_df['last_year']=result_df['last_year'].apply(standardize_season)
-        result_df = result_df.rename(columns={'final_year': 'year'})
+        # result_df['last_year']=result_df['last_year'].apply(standardize_season)
+        # result_df = result_df.rename(columns={'final_year': 'year'})
         columns_to_drop = ['batsman', 'bowler', 'batting_team', 'debut_year', 'matches_x', 'matches_y', 
                            'fifties', 'hundreds', 'thirties', 'highest_score', 'season','matches']
         result_df = result_df.drop(columns=columns_to_drop, errors='ignore')
@@ -726,9 +726,9 @@ elif sidebar_option == "Matchup Analysis":
             result_df[col] = result_df[col].fillna(0).astype(int)
     
         # Rename and format columns
-        result_df['last_year']=result_df['last_year'].apply(standardize_season)
+        # result_df['last_year']=result_df['last_year'].apply(standardize_season)
         
-        result_df = result_df.rename(columns={'final_year': 'year'})    
+        # result_df = result_df.rename(columns={'final_year': 'year'})    
         result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
     
         # Display the results
