@@ -9,7 +9,7 @@ st.title('WT20I Performance Analysis Portal')
 
 # Load data
 pdf = pd.read_csv("Dataset/up_com_wt20i.csv",low_memory=False)
-idf = pd.read_csv("Dataset/updated_wt20i.csv",low_memory=False)
+# idf = pd.read_csv("Dataset/updated_wt20i.csv",low_memory=False)
 ldf = pd.read_csv("Dataset/squads.csv",low_memory=False)  # Load squads.csv for batting type
 idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']] = idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']].astype(int)
 # pdf = pdf.drop_duplicates(subset=['match_id', 'ball'], keep='first')
@@ -113,7 +113,7 @@ def cumulator(temp_df):
 
     return summary_df
 
-
+idf = cumulator(pdf)
 # Preprocess the debut column to extract the year
 idf['debut_year'] = idf['debut_year'].str.split('/').str[0]  # Extract the year from "YYYY/YY"
 
