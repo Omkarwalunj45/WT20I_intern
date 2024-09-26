@@ -133,6 +133,7 @@ def bcum(df):
     print(f"Before removing duplicates based on 'match_id' and 'ball': {df.shape}")
     df = df.drop_duplicates(subset=['match_id', 'ball'], keep='first')
     print(f"After removing duplicates based on 'match_id' and 'ball': {df.shape}")
+    df['total_runs']=df['batsman_runs']+df['extras']
 
     # Define helper columns for various runs
     df['is_dot'] = df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
@@ -599,11 +600,7 @@ if sidebar_option == "Player Profile":
             result_df = result_df.drop(columns=['MATCHES'])
             st.markdown(f"### **In Host Country**")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
-          
-
-            
-
-            
+              
 
         elif option == "Bowling":
             # Prepare the DataFrame for displaying player-specific bowling statistics
