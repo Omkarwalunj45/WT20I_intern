@@ -10,6 +10,7 @@ st.title('WT20I Performance Analysis Portal')
 # Load data
 pdf = pd.read_csv("Dataset/up_com_wt20i.csv",low_memory=False)
 idf = pd.read_csv("Dataset/lifesaver.csv",low_memory=False)
+info_df=pd.read_csv("Dataset/player_info_w.csv",low_memory=False)
 def round_up_floats(df, decimal_places=2):
     # Round up only for float columns
     float_cols = df.select_dtypes(include=['float'])
@@ -142,6 +143,7 @@ if sidebar_option == "Player Profile":
 
     # Filter the data for the selected player
     player_info = idf[idf['batsman'] == player_name].iloc[0]
+    p_info = info_df[info_df['player_name'] == player_name].iloc[0]
 
     # Filter to get batting type from squads.csv
     player_batting_type = ldf[ldf['player_name'] == player_name]['batting_hand']
@@ -172,18 +174,21 @@ if sidebar_option == "Player Profile":
         
         with col3:
             st.markdown("AGE:")  # Placeholder for age
-            st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for future age data
+            st.markdown("<span style='font-size: 20px; font-weight: bold;'>{p_info['age'].upper()}</span>", unsafe_allow_html=True)  # Placeholder for future age data
 
         # Create columns for the second row (batting style, bowling style, playing role)
         col4, col5, col6 = st.columns(3)
 
         with col4:
             st.markdown("BATTING STYLE:")
-            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{batting_type_display}</span>", unsafe_allow_html=True)
+            st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{p_info['batting_style'].upper()}</span>", unsafe_allow_html=True)
 
         with col5:
             st.markdown("BOWLING STYLE:")
-            st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)  # Placeholder for bowling style
+            if p_info['bowling_style']=='Wicketkeeper':
+                st.markdown("<span style='font-size: 20px; font-weight: bold;'>NONE</span>", unsafe_allow_html=True)  # Placeholder for bowling style
+            else:
+                st.markdown("<span style='font-size: 20px; font-weight: bold;'>{p_info['bowling_style'].upper()}</span>", unsafe_allow_html=True)  # Placeholder for bowling style
         
         with col6:
             st.markdown("PLAYING ROLE:")
