@@ -181,7 +181,7 @@ def bcum(df):
     final_year = df.groupby('bowler')['season'].max().reset_index()
     debut_year.rename(columns={'season': 'debut_year'}, inplace=True)
     final_year.rename(columns={'season': 'final_year'}, inplace=True)
-    bowl_rec = bowl_rec.merge(debut_year, on='bowl_rec').merge(final_year, on='bowl_rec')
+    bowl_rec = bowl_rec.merge(debut_year, on='bowler').merge(final_year, on='bowler')
 
 
     # Calculate additional metrics
