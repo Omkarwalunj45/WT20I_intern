@@ -578,21 +578,18 @@ elif sidebar_option == "Matchup Analysis":
 
     # Step 3: Create a download option for the DataFrame
     if not matchup_df.empty:
-        # Convert the DataFrame to CSV
-        csv = matchup_df.to_csv(index=False)
-        # Use StringIO to allow download as a file
-        csv_io = StringIO(csv)
+        # Convert the DataFrame to CSV format
+        csv = matchup_df.to_csv(index=False)  # Generate CSV string
         
-        # Step 4: Implement the download button
+        # Step 4: Create the download button
         st.download_button(
             label="Download Matchup Data as CSV",
-            data=csv_io.getvalue(),
+            data=csv,  # Pass the CSV string directly
             file_name=f"{batsman_name}_vs_{bowler_name}_matchup.csv",
-            mime="text/csv"
+            mime="text/csv"  # Specify the MIME type for CSV
         )
     else:
         st.warning("No data available for the selected matchup.")
-
     if grouping_option == "Year":
         tdf = pdf[(pdf['batsman'] == batter_name) & (pdf['bowler'] == bowler_name)]
 
