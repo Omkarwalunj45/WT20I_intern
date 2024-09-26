@@ -227,7 +227,7 @@ if sidebar_option == "Player Profile":
                    continue  
                     
                     # Drop the specified columns and modify the column names
-            #    temp_df = temp_df.drop(columns=['final_year', 'batsman', 'batting_team','debut_year'])
+               temp_df = temp_df.drop(columns=['final_year', 'batsman', 'batting_team','debut_year','matches_x','matches_y'])
             #    # Convert specific columns to integers
             #    # Round off the remaining float columns to 2 decimal places
             #    float_cols = temp_df.select_dtypes(include=['float']).columns
