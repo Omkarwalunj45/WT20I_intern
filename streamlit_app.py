@@ -629,12 +629,12 @@ if sidebar_option == "Player Profile":
 
             
             allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh', 
-                                 'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
-            
+                     'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
+
             # Checking if 'total_runs', 'batsman_runs', 'dismissal_kind', 'batsman', and 'over' are already in bpdf
             if 'total_runs' not in bpdf.columns:
                 bpdf['total_runs'] = bpdf['runs_off_bat'] + bpdf['extras']  # Create total_runs column
-                
+            
                 # Renaming necessary columns if they don't exist in the desired format
                 bpdf = bpdf.rename(columns={
                     'runs_off_bat': 'batsman_runs', 
@@ -643,10 +643,10 @@ if sidebar_option == "Player Profile":
                     'innings': 'inning', 
                     'bowler': 'bowler_name'
                 })
-                
+            
                 # Drop rows where 'ball' is missing, if not already done
                 bpdf = bpdf.dropna(subset=['ball'])
-                
+            
             # Convert the 'ball' column to numeric if it's not already
             if not pd.api.types.is_numeric_dtype(bpdf['ball']):
                 bpdf['ball'] = pd.to_numeric(bpdf['ball'], errors='coerce')
@@ -654,42 +654,42 @@ if sidebar_option == "Player Profile":
             # Calculate 'over' by applying lambda function (check if the 'over' column is already present)
             if 'over' not in bpdf.columns:
                 bpdf['over'] = bpdf['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
-        
+            
             # Iterate over allowed countries for bowling analysis
             for country in allowed_countries:
                 temp_df = bpdf[bpdf['bowler'] == player_name]  # Filter data for the selected bowler
-                
+            
                 # Check if the bowler has bowled against the current country
-                if not temp_df[temp_df['bowling_team'] == country].empty:
+                if temp_df[temp_df['batting_team'] == country].empty:
                     continue  # Skip if no data found for this country
-                
-                temp_df = temp_df[temp_df['batting_team'] == country]  # Filter for the opposition team
-                
+            
+                # Filter for the batting team
+                temp_df = temp_df[temp_df['batting_team'] == country]
+            
                 # Apply the bowler cumulative function (bcum)
                 temp_df = bcum(temp_df)
-                
+            
                 # If the DataFrame is empty after applying `bcum`, skip this iteration
-                if len(temp_df) == 0:
+                if temp_df.empty:
                     continue
-                
+            
                 # Drop unwanted columns
                 temp_df = temp_df.drop(columns=['bowler'])
-                
+            
                 # Round up float columns (assuming `round_up_floats()` is already defined)
                 temp_df = round_up_floats(temp_df)
-                
+            
                 # Convert column names to uppercase and replace underscores with spaces
                 temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
-                
+            
                 # Reorder columns (you can adjust the column names as needed)
                 cols = temp_df.columns.tolist()
-                new_order = ['INNINGS'] + [col for col in cols if col != 'INNINGS']
+                new_order = ['INNING'] + [col for col in cols if col != 'INNING']
                 temp_df = temp_df[new_order]  # Reindex the DataFrame with new order
-                
-                
+            
                 # Display the results for the current country
                 st.markdown(f"### vs **{country.upper()}**")
-                st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))  # Display table with bold headers
+                st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))    
 
             tdf = bpdf[bpdf['bowler'] == player_name]  # Filter data for the specific bowler
 
