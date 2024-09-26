@@ -681,10 +681,10 @@ if sidebar_option == "Player Profile":
                 # Convert column names to uppercase and replace underscores with spaces
                 temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
                 
-                # Reorder columns (you can adjust the column names as needed)
-                cols = temp_df.columns.tolist()
-                new_order = ['MATCHES'] + [col for col in cols if col != 'MATCHES']
-                temp_df = temp_df[new_order]  # Reindex the DataFrame with new order
+                # # Reorder columns (you can adjust the column names as needed)
+                # cols = temp_df.columns.tolist()
+                # new_order = ['MATCHES'] + [col for col in cols if col != 'MATCHES']
+                # temp_df = temp_df[new_order]  # Reindex the DataFrame with new order
                 
                 # Display the results for the current country
                 st.markdown(f"### vs **{country.upper()}**")
