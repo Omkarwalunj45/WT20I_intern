@@ -192,6 +192,97 @@ def bcum(df):
     bowl_rec['econ'] = (bowl_rec['runs'] * 6 / bowl_rec['balls'])
 
     return bowl_rec
+    
+venue_country_map = {
+            'Melbourne Cricket Ground': 'Australia',
+            'Simonds Stadium, South Geelong': 'Australia',
+            'Adelaide Oval': 'Australia',
+            'Sinhalese Sports Club Ground': 'Sri Lanka',
+            'Saxton Oval': 'New Zealand',
+            'Asian Institute of Technology Ground': 'Thailand',
+            'North Sydney Oval': 'Australia',
+            'Manuka Oval': 'Australia',
+            'Coolidge Cricket Ground': 'Antigua',
+            'Sharjah Cricket Stadium': 'UAE',
+            'Senwes Park': 'South Africa',
+            'Buffalo Park': 'South Africa',
+            'The Wanderers Stadium': 'South Africa',
+            'SuperSport Park': 'South Africa',
+            'Newlands': 'South Africa',
+            'The Cooper Associates County Ground': 'England',
+            'County Ground': 'England',
+            'Brabourne Stadium': 'India',
+            'Bay Oval': 'New Zealand',
+            'Pukekura Park': 'New Zealand',
+            'Seddon Park': 'New Zealand',
+            'Nondescripts Cricket Club Ground': 'Sri Lanka',
+            'Mangaung Oval': 'South Africa',
+            'Allan Border Field': 'Australia',
+            'VRA Ground': 'Netherlands',
+            'Kinrara Academy Oval': 'Malaysia',
+            'Royal Selangor Club': 'Malaysia',
+            'Providence Stadium': 'Guyana',
+            'Daren Sammy National Cricket Stadium, Gros Islet': 'St Lucia',
+            'Sir Vivian Richards Stadium, North Sound': 'Antigua',
+            'Westpac Stadium': 'New Zealand',
+            'Eden Park': 'New Zealand',
+            'Brian Lara Stadium, Tarouba': 'Trinidad and Tobago',
+            'Colts Cricket Club Ground': 'Sri Lanka',
+            'Colombo Cricket Club Ground': 'Sri Lanka',
+            'Chilaw Marians Cricket Club Ground': 'Sri Lanka',
+            'County Ground, Hove': 'England',
+            'Barsapara Cricket Stadium': 'India',
+            'Southend Club Cricket Stadium': 'Pakistan',
+            'Sydney Showground Stadium': 'Australia',
+            'W.A.C.A. Ground': 'Australia',
+            'Junction Oval': 'Australia',
+            'Sydney Cricket Ground': 'Australia',
+            'P Sara Oval': 'Sri Lanka',
+            'LC de Villiers Oval': 'South Africa',
+            'City Oval': 'South Africa',
+            'Willowmoore Park': 'South Africa',
+            'Basin Reserve': 'New Zealand',
+            'Forthill': 'Scotland',
+            'Kensington Oval, Barbados': 'Barbados',
+            'Lalabhai Contractor Stadium': 'India',
+            'Darren Sammy National Cricket Stadium, St Lucia': 'St Lucia',
+            'Gaddafi Stadium': 'Pakistan',
+            'Kingsmead': 'South Africa',
+            'Sky Stadium': 'New Zealand',
+            'McLean Park': 'New Zealand',
+            'Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium': 'India',
+            'County Ground, Northampton': 'England',
+            'County Ground, Chelmsford': 'England',
+            'The Cooper Associates County Ground, Taunton': 'England',
+            'Carrara Oval': 'Australia',
+            'Coolidge Cricket Ground, Antigua': 'Antigua',
+            'John Davies Oval, Queenstown': 'New Zealand',
+            'Edgbaston, Birmingham': 'England',
+            'Kinrara Academy Oval, Kuala Lumpur': 'Malaysia',
+            'County Ground, New Road, Worcester': 'England',
+            'County Ground, Derby': 'England',
+            'Riverside Ground, Chester-le-Street': 'England',
+            'County Ground, Bristol': 'England',
+            'Bready Cricket Club, Magheramason, Bready': 'Ireland',
+            'Rangiri Dambulla International Stadium': 'Sri Lanka',
+            'Sheikh Zayed Stadium, Abu Dhabi': 'UAE',
+            'Sylhet International Cricket Stadium, Academy Ground': 'Bangladesh',
+            'Kennington Oval, London': 'England',
+            "Lord's, London": 'England',
+            'St George\'s Park, Gqeberha': 'South Africa',
+            'Hagley Oval, Christchurch': 'New Zealand',
+            'Bellerive Oval, Hobart': 'Australia',
+            'Dr DY Patil Sports Academy, Mumbai': 'India',
+            'National Stadium, Karachi': 'Pakistan',
+            'Shere Bangla National Stadium, Mirpur': 'Bangladesh',
+            'Diamond Oval, Kimberley': 'South Africa',
+            'Headingley, Leeds': 'England',
+            'The Rose Bowl, Southampton': 'England',
+            'Trent Bridge': 'England',
+            'Wankhede Stadium, Mumbai': 'India',
+            'Eden Gardens': 'India',
+            # Add more as needed
+            }
 
 
 # Preprocess the debut column to extract the year
@@ -464,96 +555,6 @@ if sidebar_option == "Player Profile":
             st.markdown(f"### **Inningwise Performnce**")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
-            venue_country_map = {
-            'Melbourne Cricket Ground': 'Australia',
-            'Simonds Stadium, South Geelong': 'Australia',
-            'Adelaide Oval': 'Australia',
-            'Sinhalese Sports Club Ground': 'Sri Lanka',
-            'Saxton Oval': 'New Zealand',
-            'Asian Institute of Technology Ground': 'Thailand',
-            'North Sydney Oval': 'Australia',
-            'Manuka Oval': 'Australia',
-            'Coolidge Cricket Ground': 'Antigua',
-            'Sharjah Cricket Stadium': 'UAE',
-            'Senwes Park': 'South Africa',
-            'Buffalo Park': 'South Africa',
-            'The Wanderers Stadium': 'South Africa',
-            'SuperSport Park': 'South Africa',
-            'Newlands': 'South Africa',
-            'The Cooper Associates County Ground': 'England',
-            'County Ground': 'England',
-            'Brabourne Stadium': 'India',
-            'Bay Oval': 'New Zealand',
-            'Pukekura Park': 'New Zealand',
-            'Seddon Park': 'New Zealand',
-            'Nondescripts Cricket Club Ground': 'Sri Lanka',
-            'Mangaung Oval': 'South Africa',
-            'Allan Border Field': 'Australia',
-            'VRA Ground': 'Netherlands',
-            'Kinrara Academy Oval': 'Malaysia',
-            'Royal Selangor Club': 'Malaysia',
-            'Providence Stadium': 'Guyana',
-            'Daren Sammy National Cricket Stadium, Gros Islet': 'St Lucia',
-            'Sir Vivian Richards Stadium, North Sound': 'Antigua',
-            'Westpac Stadium': 'New Zealand',
-            'Eden Park': 'New Zealand',
-            'Brian Lara Stadium, Tarouba': 'Trinidad and Tobago',
-            'Colts Cricket Club Ground': 'Sri Lanka',
-            'Colombo Cricket Club Ground': 'Sri Lanka',
-            'Chilaw Marians Cricket Club Ground': 'Sri Lanka',
-            'County Ground, Hove': 'England',
-            'Barsapara Cricket Stadium': 'India',
-            'Southend Club Cricket Stadium': 'Pakistan',
-            'Sydney Showground Stadium': 'Australia',
-            'W.A.C.A. Ground': 'Australia',
-            'Junction Oval': 'Australia',
-            'Sydney Cricket Ground': 'Australia',
-            'P Sara Oval': 'Sri Lanka',
-            'LC de Villiers Oval': 'South Africa',
-            'City Oval': 'South Africa',
-            'Willowmoore Park': 'South Africa',
-            'Basin Reserve': 'New Zealand',
-            'Forthill': 'Scotland',
-            'Kensington Oval, Barbados': 'Barbados',
-            'Lalabhai Contractor Stadium': 'India',
-            'Darren Sammy National Cricket Stadium, St Lucia': 'St Lucia',
-            'Gaddafi Stadium': 'Pakistan',
-            'Kingsmead': 'South Africa',
-            'Sky Stadium': 'New Zealand',
-            'McLean Park': 'New Zealand',
-            'Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium': 'India',
-            'County Ground, Northampton': 'England',
-            'County Ground, Chelmsford': 'England',
-            'The Cooper Associates County Ground, Taunton': 'England',
-            'Carrara Oval': 'Australia',
-            'Coolidge Cricket Ground, Antigua': 'Antigua',
-            'John Davies Oval, Queenstown': 'New Zealand',
-            'Edgbaston, Birmingham': 'England',
-            'Kinrara Academy Oval, Kuala Lumpur': 'Malaysia',
-            'County Ground, New Road, Worcester': 'England',
-            'County Ground, Derby': 'England',
-            'Riverside Ground, Chester-le-Street': 'England',
-            'County Ground, Bristol': 'England',
-            'Bready Cricket Club, Magheramason, Bready': 'Ireland',
-            'Rangiri Dambulla International Stadium': 'Sri Lanka',
-            'Sheikh Zayed Stadium, Abu Dhabi': 'UAE',
-            'Sylhet International Cricket Stadium, Academy Ground': 'Bangladesh',
-            'Kennington Oval, London': 'England',
-            "Lord's, London": 'England',
-            'St George\'s Park, Gqeberha': 'South Africa',
-            'Hagley Oval, Christchurch': 'New Zealand',
-            'Bellerive Oval, Hobart': 'Australia',
-            'Dr DY Patil Sports Academy, Mumbai': 'India',
-            'National Stadium, Karachi': 'Pakistan',
-            'Shere Bangla National Stadium, Mirpur': 'Bangladesh',
-            'Diamond Oval, Kimberley': 'South Africa',
-            'Headingley, Leeds': 'England',
-            'The Rose Bowl, Southampton': 'England',
-            'Trent Bridge': 'England',
-            'Wankhede Stadium, Mumbai': 'India',
-            'Eden Gardens': 'India',
-            # Add more as needed
-            }
             
             # Creating a DataFrame to display venues and their corresponding countries
             pdf['country'] = pdf['venue'].map(venue_country_map)
@@ -746,6 +747,8 @@ if sidebar_option == "Player Profile":
             # Display the table with bold headers
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
+            
+
             # Filter data for the specific bowler
             tdf = bpdf[bpdf['bowler'] == player_name]
             
@@ -794,6 +797,54 @@ if sidebar_option == "Player Profile":
             # Display the results
             st.markdown(f"### **Inningwise Bowling Performance**")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+
+            
+            
+            # Creating a DataFrame to display venues and their corresponding countries
+            bpdf['country'] = bpdf['venue'].map(venue_country_map)
+            allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh',
+                                 'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
+            
+            i = 0
+            for country in allowed_countries:
+                temp_df = bpdf[bpdf['bowler'] == player_name]  # Change to 'bowler'
+                temp_df = temp_df[(temp_df['country'] == country)]
+                temp_df = bcum(temp_df)  # Use bcum instead of cumulator
+                temp_df['country'] = country.upper()
+                
+                cols = temp_df.columns.tolist()
+                new_order = ['country'] + [col for col in cols if col != 'country']
+                temp_df = temp_df[new_order]
+            
+                # If temp_df is empty after applying bcum, skip to the next iteration
+                if len(temp_df) == 0:
+                    continue
+                elif i == 0:
+                    result_df = temp_df
+                    i += 1
+                else:
+                    result_df = result_df.reset_index(drop=True)
+                    temp_df = temp_df.reset_index(drop=True)
+                    result_df = result_df.loc[:, ~result_df.columns.duplicated()]
+            
+                    result_df = pd.concat([result_df, temp_df], ignore_index=True)
+            
+                # result_df = result_df.drop(columns=['bowler', 'bowling_team', 'debut_year', 'final_year', 'matches_x', 'matches_y'])
+                
+                # # Round off the remaining float columns to 2 decimal places
+                # float_cols = result_df.select_dtypes(include=['float']).columns
+                # result_df[float_cols] = result_df[float_cols].round(2)
+            
+            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+            result_df = round_up_floats(result_df)
+            # cols = result_df.columns.tolist()
+            # new_order = ['COUNTRY'] + [col for col in cols if col != 'COUNTRY']
+            # result_df = result_df[new_order]
+            # result_df = result_df.drop(columns=['MATCHES'])  # Drop matches if not needed
+            
+            st.markdown(f"### **In Host Country**")
+            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+
 
 
                 
