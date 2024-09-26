@@ -688,6 +688,7 @@ elif sidebar_option == "Matchup Analysis":
 
         # Reindex the DataFrame with the new column order
         result_df=result_df.sort_values('YEAR',ascending=True)
+        result_df=result_df[['MATCH ID'],['YEAR'] + [col for col in result_df.columns if col not in ['MATCH ID','YEAR']]]]
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
     elif grouping_option == "Venue":
         # Filter the DataFrame for the selected batsman and bowler
@@ -754,6 +755,7 @@ elif sidebar_option == "Matchup Analysis":
         # Reindex the DataFrame with the new column order
         result_df = result_df[new_order]
         result_df=result_df.sort_values('YEAR',ascending=True)
+        result_df=result_df[['VENUE'],['YEAR'] + [col for col in result_df.columns if col not in ['VENUE','YEAR']]]]
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
     else:
         # Assuming pdf is your main DataFrame
@@ -793,6 +795,7 @@ elif sidebar_option == "Matchup Analysis":
         
         # Display the results
         st.markdown("### **Innings Performance**")
+        result_df=result_df[['INNING'],['YEAR'] + [col for col in result_df.columns if col not in ['INNING','YEAR']]]]
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
         
