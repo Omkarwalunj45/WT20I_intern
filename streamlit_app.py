@@ -752,6 +752,46 @@ elif sidebar_option == "Matchup Analysis":
         # Reindex the DataFrame with the new column order
         result_df = result_df[new_order]
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+     else grouping_option == "Inning":
+        # Assuming pdf is your main DataFrame
+        # Filter for innings 1 and 2 and prepare to accumulate results
+        innings = [1, 2]
+        result_df = pd.DataFrame()  # Initialize an empty DataFrame for results
+        
+        for inning in innings:
+            # Filter for the specific inning
+            tdf = pdf[(pdf['batsman'] == batter_name) & (pdf['bowler'] == bowler_name) & (pdf['inning'] == inning)]
+            
+            # Check if there's any data for the current inning
+            if not tdf.empty:
+                # Call the cumulator function
+                temp_df = cumulator(tdf)
+        
+                # Add the inning as the first column in temp_df
+                temp_df.insert(0, 'INNING', inning)
+        
+                # Concatenate to the main result DataFrame
+                result_df = pd.concat([result_df, temp_df], ignore_index=True)
+        
+        # After processing both innings, drop unnecessary columns if needed
+        columns_to_drop = ['batsman', 'bowler', 'batting_team', 'debut_year', 'matches_x', 'matches_y', 'fifties', 'hundreds', 'thirties', 'highest_score', 'matches']
+        result_df = result_df.drop(columns=columns_to_drop, errors='ignore')
+        
+        # Convert specific columns to integers and fill NaN values
+        columns_to_convert = ['runs', 'dismissals']
+        for col in columns_to_convert:
+            result_df[col] = result_df[col].fillna(0).astype(int)
+        
+        result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+        result_df['FINAL YEAR']=result_df['FINAL YEAR'].apply(standardize_season)
+        
+        result_df = result_df.rename(columns={'FINAL YEAR': 'YEAR'})   
+        
+        # Display the results
+        st.markdown("### **Innings Performance**")
+        st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+
+        
     
     
     
