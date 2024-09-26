@@ -10,6 +10,11 @@ st.title('WT20I Performance Analysis Portal')
 # Load data
 pdf = pd.read_csv("Dataset/up_com_wt20i.csv",low_memory=False)
 idf = pd.read_csv("Dataset/lifesaver.csv",low_memory=False)
+def round_up_floats(df, decimal_places=2):
+    # Round up only for float columns
+    float_cols = df.select_dtypes(include=['float'])
+    df[float_cols.columns] = np.ceil(float_cols * (10 ** decimal_places)) / (10 ** decimal_places)
+    return df
 
 # Define the columns related to runs
 columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_scores']
@@ -201,7 +206,7 @@ if sidebar_option == "Player Profile":
 
             # Convert column names to uppercase and replace underscores with spaces
             player_stats.columns = [col.upper().replace('_', ' ') for col in player_stats.columns]
-
+            player_stats=round_up_floats(player_stats)
             # Display the player's statistics in a table format with bold headers
             st.markdown("### Batting Statistics")
             st.table(player_stats.style.set_table_attributes("style='font-weight: bold;'"))  # Display the filtered DataFrame as a table
@@ -232,6 +237,7 @@ if sidebar_option == "Player Profile":
             #    # Round off the remaining float columns to 2 decimal places
             #    float_cols = temp_df.select_dtypes(include=['float']).columns
             #    temp_df[float_cols] = temp_df[float_cols].round(2) 
+               temp_df = round_up_floats(temp_df) 
                columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']
 
                # Fill NaN values with 0
@@ -311,6 +317,7 @@ if sidebar_option == "Player Profile":
             temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
             result_df=result_df.rename(columns={'final_year':'year'})
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+            result_df = round_up_floats(result_df)
             columns_to_convert = ['RUNS', 'HUNDREDS', 'FIFTIES', 'THIRTIES', 'HIGHEST SCORE']
 
                # Fill NaN values with 0
@@ -494,6 +501,7 @@ if sidebar_option == "Player Profile":
                 float_cols = result_df.select_dtypes(include=['float']).columns
                 result_df[float_cols] = result_df[float_cols].round(2)
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+            result_df = round_up_floats(result_df)
             columns_to_convert = ['RUNS', 'HUNDREDS', 'FIFTIES', 'THIRTIES', 'HIGHEST SCORE']
 
                # Fill NaN values with 0
