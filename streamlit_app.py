@@ -14,140 +14,83 @@ ldf = pd.read_csv("Dataset/squads.csv",low_memory=False)  # Load squads.csv for 
 idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']] = idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']].astype(int)
 pdf = pdf.drop_duplicates(subset=['match_id', 'ball'], keep='first')
 
+def cumulator(temp_df):
+    # First, remove duplicates based on match_id and ball within the same match
+    print(f"Before removing duplicates based on 'match_id' and 'ball': {temp_df.shape}")
+    temp_df = temp_df.drop_duplicates(subset=['match_id', 'ball'], keep='first')
+    print(f"After removing duplicates based on 'match_id' and 'ball': {temp_df.shape}")
 
-def cumulator(df):
-  print(f"Before removing duplicates based on 'match_id' and 'ball': {df.shape}")
-  df = df.drop_duplicates(subset=['match_id', 'ball'], keep='first')
+    # Ensure 'total_runs' exists
+    if 'total_runs' not in temp_df.columns:
+        raise KeyError("Column 'total_runs' does not exist in temp_df.")
     
-  print(f"After removing duplicates based on 'match_id' and 'ball': {temp_df.shape}")
-  import pandas as pd
-  import math as mt
-  import numpy as np
-  # Create new columns for counting runs
-  df['is_dot'] = df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
-  df['is_one'] = df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
-  df['is_two'] = df['batsman_runs'].apply(lambda x: 1 if x == 2 else 0)
-  df['is_three'] = df['batsman_runs'].apply(lambda x: 1 if x == 3 else 0)
-  df['is_four'] = df['batsman_runs'].apply(lambda x: 1 if x == 4 else 0)
-  df['is_six'] = df['batsman_runs'].apply(lambda x: 1 if x == 6 else 0)
+    # Create new columns for counting runs
+    temp_df['is_dot'] = temp_df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
+    temp_df['is_one'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
+    temp_df['is_two'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 2 else 0)
+    temp_df['is_three'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 3 else 0)
+    temp_df['is_four'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 4 else 0)
+    temp_df['is_six'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 6 else 0)
 
-  # Calculate runs, balls faced, innings, and dismissals
-  runs = df.groupby(['batsman'])['batsman_runs'].sum().reset_index().rename(columns={'batsman_runs': 'runs'})
-  balls = df.groupby(['batsman'])['ball'].count().reset_index()
-  inn = df.groupby(['batsman'])['match_id'].apply(lambda x: len(list(np.unique(x)))).reset_index().rename(columns={'match_id': 'innings'})
-  matches = df.groupby(['batsman'])['match_id'].nunique().reset_index().rename(columns={'match_id': 'matches'})
-  dis = df.groupby(['batsman'])['player_dismissed'].count().reset_index().rename(columns={'player_dismissed': 'dismissals'})
-  sixes = df.groupby(['batsman'])['is_six'].sum().reset_index().rename(columns={'is_six': 'sixes'})
-  fours = df.groupby(['batsman'])['is_four'].sum().reset_index().rename(columns={'is_four': 'fours'})
-  dots = df.groupby(['batsman'])['is_dot'].sum().reset_index().rename(columns={'is_dot': 'dots'})
-  ones = df.groupby(['batsman'])['is_one'].sum().reset_index().rename(columns={'is_one': 'ones'})
-  twos = df.groupby(['batsman'])['is_two'].sum().reset_index().rename(columns={'is_two': 'twos'})
-  threes = df.groupby(['batsman'])['is_three'].sum().reset_index().rename(columns={'is_three': 'threes'})
-  bat_team = df.groupby(['batsman'])['batting_team'].unique().reset_index()
+    # Calculate runs, balls faced, innings, dismissals, etc.
+    runs = temp_df.groupby(['batsman'])['batsman_runs'].sum().reset_index().rename(columns={'batsman_runs': 'runs'})
+    balls = temp_df.groupby(['batsman'])['ball'].count().reset_index()
+    inn = temp_df.groupby(['batsman'])['match_id'].apply(lambda x: len(list(np.unique(x)))).reset_index().rename(columns={'match_id': 'innings'})
+    matches = temp_df.groupby(['batsman'])['match_id'].nunique().reset_index().rename(columns={'match_id': 'matches'})
+    dis = temp_df.groupby(['batsman'])['player_dismissed'].count().reset_index().rename(columns={'player_dismissed': 'dismissals'})
+    sixes = temp_df.groupby(['batsman'])['is_six'].sum().reset_index().rename(columns={'is_six': 'sixes'})
+    fours = temp_df.groupby(['batsman'])['is_four'].sum().reset_index().rename(columns={'is_four': 'fours'})
+    dots = temp_df.groupby(['batsman'])['is_dot'].sum().reset_index().rename(columns={'is_dot': 'dots'})
+    ones = temp_df.groupby(['batsman'])['is_one'].sum().reset_index().rename(columns={'is_one': 'ones'})
+    twos = temp_df.groupby(['batsman'])['is_two'].sum().reset_index().rename(columns={'is_two': 'twos'})
+    threes = temp_df.groupby(['batsman'])['is_three'].sum().reset_index().rename(columns={'is_three': 'threes'})
+    bat_team = temp_df.groupby(['batsman'])['batting_team'].unique().reset_index()
+    print(1)
+    matches = temp_df.groupby(['batsman'])['match_id'].nunique().reset_index(name='matches')
+    print(0)
 
-  # Convert the array of countries to a string without brackets
-  bat_team['batting_team'] = bat_team['batting_team'].apply(lambda x: ', '.join(x)).str.replace('[', '').str.replace(']', '')
+    # Convert the array of countries to a string without brackets
+    bat_team['batting_team'] = bat_team['batting_team'].apply(lambda x: ', '.join(x)).str.replace('[', '').str.replace(']', '')
 
-  match_runs = df.groupby(['batsman', 'match_id'])['batsman_runs'].sum().reset_index()
+    match_runs = temp_df.groupby(['batsman', 'match_id'])['batsman_runs'].sum().reset_index()
 
-  # Count 100s, 50s, and 30s
-  hundreds = match_runs[match_runs['batsman_runs'] >= 100].groupby('batsman').size().reset_index(name='hundreds')
-  fifties = match_runs[(match_runs['batsman_runs'] >= 50) & (match_runs['batsman_runs'] < 100)].groupby('batsman').size().reset_index(name='fifties')
-  thirties = match_runs[(match_runs['batsman_runs'] >= 30) & (match_runs['batsman_runs'] < 50)].groupby('batsman').size().reset_index(name='thirties')
+    # Count 100s, 50s, and 30s
+    hundreds = match_runs[match_runs['batsman_runs'] >= 100].groupby('batsman').size().reset_index(name='hundreds')
+    fifties = match_runs[(match_runs['batsman_runs'] >= 50) & (match_runs['batsman_runs'] < 100)].groupby('batsman').size().reset_index(name='fifties')
+    thirties = match_runs[(match_runs['batsman_runs'] >= 30) & (match_runs['batsman_runs'] < 50)].groupby('batsman').size().reset_index(name='thirties')
 
-  # Calculate the highest score for each batsman
-  highest_scores = match_runs.groupby('batsman')['batsman_runs'].max().reset_index(name='highest_score')
+    # Calculate the highest score for each batsman
+    highest_scores = match_runs.groupby('batsman')['batsman_runs'].max().reset_index().rename(columns={'batsman_runs': 'highest_score'})
 
-  # Fill NaNs with 0 for counts in case a batsman has none
-  hundreds['hundreds'] = hundreds['hundreds'].fillna(0)
-  fifties['fifties'] = fifties['fifties'].fillna(0)
-  thirties['thirties'] = thirties['thirties'].fillna(0)
+    # Merge all the calculated metrics into a single DataFrame
+    summary_df = runs.merge(balls, on='batsman', how='left')
+    summary_df = summary_df.merge(inn, on='batsman', how='left')
+    summary_df = summary_df.merge(matches, on='batsman', how='left')
+    summary_df = summary_df.merge(dis, on='batsman', how='left')
+    summary_df = summary_df.merge(sixes, on='batsman', how='left')
+    summary_df = summary_df.merge(fours, on='batsman', how='left')
+    summary_df = summary_df.merge(dots, on='batsman', how='left')
+    summary_df = summary_df.merge(ones, on='batsman', how='left')
+    summary_df = summary_df.merge(twos, on='batsman', how='left')
+    summary_df = summary_df.merge(threes, on='batsman', how='left')
+    summary_df = summary_df.merge(bat_team, on='batsman', how='left')
+    summary_df = summary_df.merge(hundreds, on='batsman', how='left')
+    summary_df = summary_df.merge(fifties, on='batsman', how='left')
+    summary_df = summary_df.merge(thirties, on='batsman', how='left')
+    summary_df = summary_df.merge(highest_scores, on='batsman', how='left')
+    summary_df = summary_df.merge(matches, on='batsman', how='left')
 
-  # Merge all stats into a single DataFrame
-  bat_rec = (
-      inn.merge(runs, on='batsman')
-      .merge(bat_team, on='batsman')
-      .merge(balls, on='batsman')
-      .merge(dis, on='batsman')
-      .merge(sixes, on='batsman')
-      .merge(fours, on='batsman')
-      .merge(dots, on='batsman')
-      .merge(ones, on='batsman')
-      .merge(twos, on='batsman')
-      .merge(threes, on='batsman')
-      .merge(hundreds, on='batsman', how='left').fillna(0)
-      .merge(fifties, on='batsman', how='left').fillna(0)
-      .merge(thirties, on='batsman', how='left').fillna(0)
-      .merge(highest_scores, on='batsman', how='left').fillna(0)
-  )
-  # Ensure to count matches as well
-  matches = df.groupby('batsman')['match_id'].nunique().reset_index(name='matches')
-
-  # Merging matches data
-  bat_rec = bat_rec.merge(matches, on='batsman', how='left')
-
-  # Reset index for the final DataFrame
-  bat_rec.reset_index(inplace=True, drop=True)
-  # Ensure to count matches as well
-  matches = df.groupby('batsman')['match_id'].nunique().reset_index(name='matches')
-
-  # Merging matches data
-  bat_rec = bat_rec.merge(matches, on='batsman', how='left')
-
-  # Reset index for the final DataFrame
-  bat_rec.reset_index(inplace=True, drop=True)
+    debut_year = temp_df.groupby('batsman')['season'].min().reset_index()
+    final_year = temp_df.groupby('batsman')['season'].max().reset_index()
+    debut_year.rename(columns={'season': 'debut_year'}, inplace=True)
+    final_year.rename(columns={'season': 'final_year'}, inplace=True)
+    summary_df = summary_df.merge(debut_year, on='batsman').merge(final_year, on='batsman')
 
 
+    # Merging matches data
+    summary_df = summary_df.merge(matches, on='batsman', how='left')
 
-  # Calculating additional columns
-  def bpd(balls, dis):
-      return balls if dis == 0 else balls / dis
-
-  def bpb(balls, bdry):
-      return balls if bdry == 0 else balls / bdry
-
-  def avg(runs, dis, inn):
-      return runs / inn if dis == 0 else runs / dis
-
-  def DP(balls, dots):
-      return (dots / balls) * 100
-
-  bat_rec['SR'] = bat_rec.apply(lambda x: (x['runs'] / x['ball']) * 100, axis=1)
-  bat_rec['BPD'] = bat_rec.apply(lambda x: bpd(x['ball'], x['dismissals']), axis=1)
-  bat_rec['BPB'] = bat_rec.apply(lambda x: bpb(x['ball'], (x['fours'] + x['sixes'])), axis=1)
-  bat_rec['nbdry_sr'] = bat_rec.apply(lambda x: (
-      (x['dots'] * 0 + x['ones'] * 1 + x['twos'] * 2 + x['threes'] * 3) /
-      (x['dots'] + x['ones'] + x['twos'] + x['threes']) * 100)
-      if (x['dots'] + x['ones'] + x['twos'] + x['threes']) > 0 else 0,
-      axis=1
-  )
-  bat_rec['AVG'] = bat_rec.apply(lambda x: avg(x['runs'], x['dismissals'], x['innings']), axis=1)
-  bat_rec['dot_percentage'] = (bat_rec['dots'] / bat_rec['ball']) * 100
-
-  # Adding career span based on 'season' column
-  debut_year = df.groupby('batsman')['season'].min().reset_index()
-  final_year = df.groupby('batsman')['season'].max().reset_index()
-  debut_year.rename(columns={'season': 'debut_year'}, inplace=True)
-  final_year.rename(columns={'season': 'final_year'}, inplace=True)
-
-  # Merging career span into bat_rec DataFrame
-  bat_rec = bat_rec.merge(debut_year, on='batsman').merge(final_year, on='batsman')
-  bat_rec['hundreds'] = bat_rec['hundreds'].fillna(0).astype(int)
-    
-    # Replace NaN values with 0 and convert to int for 'fifties'
-  bat_rec['fifties'] = bat_rec['fifties'].fillna(0).astype(int)
-
-    # Replace NaN values with 0 and convert to int for 'thirties'
-  bat_rec['thirties'] = bat_rec['thirties'].fillna(0).astype(int)
-
-    # Replace NaN values with 0 and convert to int for 'highest_score'
-  bat_rec['highest_score'] = bat_rec['highest_score'].fillna(0).astype(int)
-  bat_rec['runs'] = bat_rec['runs'].fillna(0).astype(int)  
-
-
-  # Reset index for the final DataFrame
-  bat_rec.reset_index(inplace=True, drop=True)
-  return bat_rec
+    return summary_df
 
 
 # Preprocess the debut column to extract the year
@@ -463,8 +406,8 @@ if sidebar_option == "Player Profile":
                                  'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
             for country in allowed_countries:
                 temp_df = pdf[pdf['batsman'] == player_name]
-                # print(temp_df.match_id.unique())
-                # print(temp_df.head(20))
+                print(temp_df.match_id.unique())
+                print(temp_df.head(20))
                 temp_df = temp_df[(temp_df['country'] == country)]
                 temp_df = cumulator(temp_df)
                 temp_df['country']=country.upper()
@@ -479,18 +422,20 @@ if sidebar_option == "Player Profile":
                     result_df = temp_df
                     i=i+1
                 else:
-                    result_df = pd.concat([result_df, temp_df], ignore_index=True)
+                    result_df = result_df.reset_index(drop=True)
+                    temp_df = temp_df.reset_index(drop=True)
+                    result_df = pd.concat([result_df, temp_df])
                     
                 result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','final_year','matches'])
-                # # Round off the remaining float columns to 2 decimal places
-                # float_cols = result_df.select_dtypes(include=['float']).columns
-                # result_df[float_cols] = result_df[float_cols].round(2)
+                # Round off the remaining float columns to 2 decimal places
+                float_cols = result_df.select_dtypes(include=['float']).columns
+                result_df[float_cols] = result_df[float_cols].round(2)
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
             cols = result_df.columns.tolist()
             new_order = ['COUNTRY'] + [col for col in cols if col != 'COUNTRY']
             result_df = result_df[new_order]
-            # print(result_df)
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+          
 
             
 
