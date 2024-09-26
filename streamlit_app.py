@@ -133,7 +133,7 @@ def bcum(df):
     print(f"Before removing duplicates based on 'match_id' and 'ball': {df.shape}")
     df = df.drop_duplicates(subset=['match_id', 'ball'], keep='first')
     print(f"After removing duplicates based on 'match_id' and 'ball': {df.shape}")
-    df['total_runs']=df['batsman_runs']+df['extras']
+    # df['total_runs']=df['batsman_runs']+df['extras']
 
     # Define helper columns for various runs
     df['is_dot'] = df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
@@ -620,23 +620,45 @@ if sidebar_option == "Player Profile":
             st.markdown("### Bowling Statistics")
             st.table(player_stats.style.set_table_attributes("style='font-weight: bold;'"))  # Display the filtered DataFrame as a table
 
-            allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh', 
-                         'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
-    
-            # Calculating total runs and renaming relevant columns
             
+            allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh', 
+                                 'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
+            
+            # Checking if 'total_runs', 'batsman_runs', 'dismissal_kind', 'batsman', and 'over' are already in bpdf
+            if 'total_runs' not in bpdf.columns:
+                bpdf['total_runs'] = bpdf['runs_off_bat'] + bpdf['extras']  # Create total_runs column
+                
+                # Renaming necessary columns if they don't exist in the desired format
+                bpdf = bpdf.rename(columns={
+                    'runs_off_bat': 'batsman_runs', 
+                    'wicket_type': 'dismissal_kind', 
+                    'striker': 'batsman', 
+                    'innings': 'inning', 
+                    'bowler': 'bowler_name'
+                })
+                
+                # Drop rows where 'ball' is missing, if not already done
+                bpdf = bpdf.dropna(subset=['ball'])
+                
             # Convert the 'ball' column to numeric if it's not already
+            if not pd.api.types.is_numeric_dtype(bpdf['ball']):
+                bpdf['ball'] = pd.to_numeric(bpdf['ball'], errors='coerce')
+            
+            # Calculate 'over' by applying lambda function (check if the 'over' column is already present)
+            if 'over' not in bpdf.columns:
+                bpdf['over'] = bpdf['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
+        
             # Iterate over allowed countries for bowling analysis
             for country in allowed_countries:
-                temp_df = pdf[pdf['bowler'] == player_name]  # Filter data for selected bowler
+                temp_df = bpdf[bpdf['bowler'] == player_name]  # Filter data for the selected bowler
                 
                 # Check if the bowler has bowled against the current country
                 if not temp_df[temp_df['bowling_team'] == country].empty:
                     continue  # Skip if no data found for this country
                 
-                temp_df = temp_df[temp_df['batting_team'] == country]  # Filter for the country team faced
+                temp_df = temp_df[temp_df['batting_team'] == country]  # Filter for the opposition team
                 
-                # Apply the bowler cumulation function (bcum)
+                # Apply the bowler cumulative function (bcum)
                 temp_df = bcum(temp_df)
                 
                 # If the DataFrame is empty after applying `bcum`, skip this iteration
@@ -644,7 +666,7 @@ if sidebar_option == "Player Profile":
                     continue
                 
                 # Drop unwanted columns
-                # temp_df = temp_df.drop(columns=['final_year', 'bowler_name', 'bowling_team', 'debut_year', 'matches_x', 'matches_y'])
+                temp_df = temp_df.drop(columns=['final_year', 'bowler_name', 'bowling_team', 'debut_year', 'matches_x', 'matches_y'])
                 
                 # Round up float columns (assuming `round_up_floats()` is already defined)
                 temp_df = round_up_floats(temp_df)
@@ -666,8 +688,8 @@ if sidebar_option == "Player Profile":
                 
                 # Display the results for the current country
                 st.markdown(f"### vs **{country.upper()}**")
-                st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))
-                    
+                st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))  # Display table with bold headers
+                
 
             
 
