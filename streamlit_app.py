@@ -12,11 +12,11 @@ pdf = pd.read_csv("Dataset/up_com_wt20i.csv",low_memory=False)
 idf = pd.read_csv("Dataset/updated_wt20i.csv",low_memory=False)
 ldf = pd.read_csv("Dataset/squads.csv",low_memory=False)  # Load squads.csv for batting type
 idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']] = idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']].astype(int)
-
+pdf = pdf.drop_duplicates(subset=['match_id', 'ball'], keep='first')
 
 def cumulator(temp_df):  
     # print("Columns before cumulator:", temp_df.columns)
-    
+    temp_df = temp_df.drop_duplicates(subset=['match_id', 'ball'], keep='first')
     # Create new columns for counting runs
     if 'total_runs' not in temp_df.columns:
         raise KeyError("Column 'total_runs' does not exist in temp_df.")
