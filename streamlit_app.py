@@ -668,6 +668,9 @@ elif sidebar_option == "Matchup Analysis":
 
         # Rename columns for better presentation
         result_df = result_df.rename(columns={'match_id': 'MATCH ID'})
+        result_df=result_df.apply(standardize_season(last_year))
+        result_df = result_df.rename(columns={'final_year': 'year'})
+        
         result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
 
         # Display the results
@@ -722,7 +725,8 @@ elif sidebar_option == "Matchup Analysis":
             result_df[col] = result_df[col].fillna(0).astype(int)
     
         # Rename and format columns
-        result_df = result_df.rename(columns={'final_year': 'year'})
+        result_df=result_df.apply(standardize_season(last_year))
+        result_df = result_df.rename(columns={'final_year': 'year'})    
         result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
     
         # Display the results
