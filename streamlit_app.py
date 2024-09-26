@@ -19,12 +19,6 @@ def cumulator(temp_df):
     print(f"Before removing duplicates based on 'match_id' and 'ball': {temp_df.shape}")
     temp_df = temp_df.drop_duplicates(subset=['match_id', 'ball'], keep='first')
     print(f"After removing duplicates based on 'match_id' and 'ball': {temp_df.shape}")
-    # First, remove duplicates based on match_id and ball within the same match
-    print(f"Before removing duplicates based on 'match_id' and 'ball': {temp_df.shape}")
-    temp_df = temp_df.drop_duplicates(subset=['match_id', 'ball'], keep='first')
-    print(f"After removing duplicates based on 'match_id' and 'ball': {temp_df.shape}")
-
-
 
     # Ensure 'total_runs' exists
     if 'total_runs' not in temp_df.columns:
