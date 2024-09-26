@@ -449,13 +449,13 @@ if sidebar_option == "Player Profile":
             }
             
             # Creating a DataFrame to display venues and their corresponding countries
-            pdf['country'] = pdf['venue'].map(venue_country_map)
+           pdf['country'] = pdf['venue'].map(venue_country_map)
             i=0
             for country in allowed_countries:
                 temp_df = pdf[pdf['batsman'] == player_name]
                 temp_df = temp_df[(temp_df['country'] == country)]
                 temp_df = cumulator(temp_df)
-                temp_df['country']={country.upper()}
+                temp_df['country']=country.upper()
                 cols = temp_df.columns.tolist()
                 new_order = ['country'] + [col for col in cols if col != 'country']          
                 # Reindex the DataFrame with the new column order
