@@ -144,7 +144,7 @@ if sidebar_option == "Player Profile":
     player_info = idf[idf['batsman'] == player_name].iloc[0]
 
     # Check if the player exists in info_df
-    matching_rows = info_df[info_df['player_name'] == player_name]
+    matching_rows = info_df[info_df['Player_name'] == player_name]
 
     if not matching_rows.empty:
         # If there is a matching row, access the first one
