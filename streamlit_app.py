@@ -669,14 +669,14 @@ if sidebar_option == "Player Profile":
                 # temp_df = temp_df.drop(columns=['final_year', 'bowler_name', 'bowling_team', 'debut_year', 'matches_x', 'matches_y'])
                 
                 # Round up float columns (assuming `round_up_floats()` is already defined)
-                temp_df = round_up_floats(temp_df)
+                # temp_df = round_up_floats(temp_df)
                 
-                # Define columns to convert to integer type
-                columns_to_convert = ['runs', 'wickets', 'maidens', 'economy_rate', 'best_figures']
+                # # Define columns to convert to integer type
+                # columns_to_convert = ['runs', 'wickets', 'maidens', 'economy_rate', 'best_figures']
         
-                # Fill NaN values with 0 and convert specified columns to integers
-                temp_df[columns_to_convert] = temp_df[columns_to_convert].fillna(0)
-                temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
+                # # Fill NaN values with 0 and convert specified columns to integers
+                # temp_df[columns_to_convert] = temp_df[columns_to_convert].fillna(0)
+                # temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
                 
                 # Convert column names to uppercase and replace underscores with spaces
                 temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
