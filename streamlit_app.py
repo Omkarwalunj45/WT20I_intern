@@ -693,7 +693,7 @@ if sidebar_option == "Player Profile":
             
             # Display the final result_df
             result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
-            result_df.columns = [col.upper().replace('_', ' ') for col in player_stats.columns]
+            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
             st.markdown("### Opponentwise Performance")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
   
