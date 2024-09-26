@@ -136,12 +136,12 @@ def bcum(df):
     # df['total_runs']=df['batsman_runs']+df['extras']
 
     # Define helper columns for various runs
-    df['is_dot'] = df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
-    df['is_one'] = df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
-    df['is_two'] = df['batsman_runs'].apply(lambda x: 1 if x == 2 else 0)
-    df['is_three'] = df['batsman_runs'].apply(lambda x: 1 if x == 3 else 0)
-    df['is_four'] = df['batsman_runs'].apply(lambda x: 1 if x == 4 else 0)
-    df['is_six'] = df['batsman_runs'].apply(lambda x: 1 if x == 6 else 0)
+    df.loc[:, 'is_dot'] = df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
+    df.loc[:, 'is_one'] = df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
+    df.loc[:, 'is_two'] = df['batsman_runs'].apply(lambda x: 1 if x == 2 else 0)
+    df.loc[:, 'is_three'] = df['batsman_runs'].apply(lambda x: 1 if x == 3 else 0)
+    df.loc[:, 'is_four'] = df['batsman_runs'].apply(lambda x: 1 if x == 4 else 0)
+    df.loc[:, 'is_six'] = df['batsman_runs'].apply(lambda x: 1 if x == 6 else 0)
 
     # Create various aggregates
     runs = pd.DataFrame(df.groupby(['bowler'])['batsman_runs'].sum()).reset_index().rename(columns={'batsman_runs': 'runs'})
@@ -186,10 +186,11 @@ def bcum(df):
 
     # Calculate additional metrics
     bowl_rec['dot%'] = (bowl_rec['dots'] / bowl_rec['balls']) * 100
-    bowl_rec = bowl_rec[bowl_rec.innings >= 10]
-    bowl_rec['avg'] = bowl_rec['runs'] / bowl_rec['wkts']
-    bowl_rec['sr'] = bowl_rec['balls'] / bowl_rec['wkts']
-    bowl_rec['econ'] = (bowl_rec['runs'] * 6 / bowl_rec['balls'])
+
+    # Check for zeros before performing calculations
+    bowl_rec['avg'] = bowl_rec['runs'] / bowl_rec['wkts'].replace(0, np.nan)
+    bowl_rec['sr'] = bowl_rec['balls'] / bowl_rec['wkts'].replace(0, np.nan)
+    bowl_rec['econ'] = (bowl_rec['runs'] * 6 / bowl_rec['balls'].replace(0, np.nan))
 
     return bowl_rec
     
@@ -690,7 +691,7 @@ if sidebar_option == "Player Profile":
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)
             
             # Display the final result_df
-            st.markdown("### Combined Results")
+            st.markdown("### Opponentwise Performance")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
   
 
