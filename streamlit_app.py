@@ -712,7 +712,7 @@ if sidebar_option == "Player Profile":
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)  # Append subsequent data
             
             # Drop unnecessary columns
-            /result_df = result_df.drop(columns=['bowler', 'bowling_team', 'debut_year', 'matches_x', 'matches_y'])
+            # result_df = result_df.drop(columns=['bowler', 'bowling_team', 'debut_year', 'matches_x', 'matches_y'])
             
             # Round off float columns to 2 decimal places
             # float_cols = result_df.select_dtypes(include=['float']).columns
