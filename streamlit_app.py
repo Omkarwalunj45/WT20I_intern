@@ -463,7 +463,7 @@ if sidebar_option == "Player Profile":
              # If temp_df is empty after applying cumulator, skip to the next iteration
                 if len(temp_df) == 0:
                    continue  
-                elif i=0:
+                elif i==0:
                     result_df = temp_df
                     i=i+1
                 else:
