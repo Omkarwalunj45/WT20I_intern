@@ -177,11 +177,11 @@ def bcum(df):
     # Fill NaN values for bowlers with no 3W hauls or maiden overs
     bowl_rec['three_wicket_hauls'] = bowl_rec['three_wicket_hauls'].fillna(0)
     bowl_rec['maiden_overs'] = bowl_rec['maiden_overs'].fillna(0)
-    debut_year = temp_df.groupby('bowler')['season'].min().reset_index()
-    final_year = temp_df.groupby('bowler')['season'].max().reset_index()
+    debut_year = df.groupby('bowler')['season'].min().reset_index()
+    final_year = df.groupby('bowler')['season'].max().reset_index()
     debut_year.rename(columns={'season': 'debut_year'}, inplace=True)
     final_year.rename(columns={'season': 'final_year'}, inplace=True)
-    summary_df = summary_df.merge(debut_year, on='batsman').merge(final_year, on='batsman')
+    bowl_rec = bowl_rec.merge(debut_year, on='bowl_rec').merge(final_year, on='bowl_rec')
 
 
     # Calculate additional metrics
