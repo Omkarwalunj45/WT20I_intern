@@ -323,6 +323,43 @@ if sidebar_option == "Player Profile":
             result_df = result_df[new_order]
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
+            tdf = pdf[pdf['batsman'] == player_name]
+            temp_df=tdf[tdf.innings==1]
+            temp_df=cumulator(temp_df)
+            temp_df['inning']=1
+            cols = temp_df.columns.tolist()
+            new_order = ['inning'] + [col for col in cols if col != 'inning]          
+            # Reindex the DataFrame with the new column order
+            temp_df =temp_df[new_order] 
+            result_df = temp_df
+            temp_df=tdf[tdf.innings==2]
+            temp_df=cumulator(temp_df)
+            temp_df['inning']=1
+            cols = temp_df.columns.tolist()
+            new_order = ['inning'] + [col for col in cols if col != 'inning']          
+            # Reindex the DataFrame with the new column order
+            temp_df =temp_df[new_order] 
+            result_df = pd.concat([result_df, temp_df], ignore_index=True)
+            result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year'])
+            # Convert specific columns to integers
+            result_df['runs'] = result_df['runs'].astype(int)
+            result_df['hundreds'] =result_df['hundreds'].astype(int)
+            result_df['fifties'] = result_df['fifties'].astype(int)
+            result_df['thirties'] = result_df['thirties'].astype(int)
+            result_df['highest_score'] = result_df['highest_score'].astype(int)
+            # Round off the remaining float columns to 2 decimal places
+            float_cols = result_df.select_dtypes(include=['float']).columns
+            result_df[float_cols] = result_df[float_cols].round(2)
+            result_df=result_df.rename(columns={'final_year':'year'})
+            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+                    
+            # Display the results
+            st.markdown(f"### **Inningwise Performnce**")
+            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+            
+
+            
+
         elif option == "Bowling":
             # Similar logic can be added here for bowling statistics if needed
             st.write("Bowling statistics feature is not yet implemented.")
