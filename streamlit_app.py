@@ -676,6 +676,65 @@ elif sidebar_option == "Matchup Analysis":
 
         # Reindex the DataFrame with the new column order
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+    elif grouping_option == "Venue":
+    # Filter the DataFrame for the selected batsman and bowler
+    tdf = pdf[(pdf['batsman'] == batter_name) & (pdf['bowler'] == bowler_name)]
+
+    # Ensure tdf is a DataFrame and populate unique venue values
+    tdf = pd.DataFrame(tdf)
+    tdf['batsman_runs'] = tdf['batsman_runs'].astype(int)
+    tdf['total_runs'] = tdf['total_runs'].astype(int)
+
+    # Initialize an empty result DataFrame
+    result_df = pd.DataFrame()
+    i = 0
+
+    # Populate an array of unique venues
+    unique_venues = tdf['venue'].unique()
+    
+    for venue in unique_venues:
+        # Filter temp_df for the current venue
+        temp_df = tdf[tdf['venue'] == venue]
+
+        # Store the current venue in a variable
+        current_venue = venue
+
+        # Call the cumulator function
+        temp_df = cumulator(temp_df)
+
+        # Insert the current venue as the first column in temp_df
+        temp_df.insert(0, 'VENUE', current_venue)
+
+        # Concatenate results
+        if i == 0:
+            result_df = temp_df  # Initialize with the first result_df
+            i += 1
+        else:
+            result_df = pd.concat([result_df, temp_df], ignore_index=True)
+
+    # Drop unnecessary columns related to performance metrics
+    columns_to_drop = ['batsman', 'bowler', 'batting_team', 'debut_year', 'matches_x', 'matches_y', 'fifties', 'hundreds', 'thirties', 'highest_score', 'matches']
+    result_df = result_df.drop(columns=columns_to_drop, errors='ignore')
+
+    # Convert specific columns to integers and fill NaN values
+    columns_to_convert = ['runs', 'dismissals']
+    for col in columns_to_convert:
+        result_df[col] = result_df[col].fillna(0).astype(int)
+
+    # Rename and format columns
+    result_df = result_df.rename(columns={'final_year': 'year'})
+    result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+
+    # Display the results
+    st.markdown("### **Venuewise Performance**")
+    cols = result_df.columns.tolist()
+
+    # Specify the desired order with 'venue' first
+    new_order = ['VENUE'] + [col for col in cols if col != 'VENUE']
+                  
+    # Reindex the DataFrame with the new column order
+    result_df = result_df[new_order]
+    st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
 
 
