@@ -9,7 +9,7 @@ st.title('WT20I Performance Analysis Portal')
 
 # Load data
 pdf = pd.read_csv("Dataset/up_com_wt20i.csv",low_memory=False)
-# idf = pd.read_csv("Dataset/updated_wt20i.csv",low_memory=False)
+idf = pd.read_csv("Dataset/updated_wt20i.csv",low_memory=False)
 ldf = pd.read_csv("Dataset/squads.csv",low_memory=False)  # Load squads.csv for batting type
 # pdf = pdf.drop_duplicates(subset=['match_id', 'ball'], keep='first')
 
@@ -111,16 +111,7 @@ def cumulator(temp_df):
     summary_df = summary_df.merge(matches, on='batsman', how='left')
 
     return summary_df
-pdf['total_runs'] = pdf['runs_off_bat'] + pdf['extras']
-pdf = pdf.rename(columns={'runs_off_bat': 'batsman_runs', 'wicket_type': 'dismissal_kind', 'striker': 'batsman', 'innings': 'inning'})
-pdf = pdf.dropna(subset=['ball'])
- # Convert the 'ball' column to numeric if it's not already (optional but recommended)
-pdf['ball'] = pd.to_numeric(pdf['ball'], errors='coerce') 
- # Applying the lambda function to calculate the 'over'
-pdf['over'] = pdf['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
-idf = cumulator(pdf)
 
-# idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']] = idf[['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']].astype(int)
 # Preprocess the debut column to extract the year
 idf['debut_year'] = idf['debut_year'].str.split('/').str[0]  # Extract the year from "YYYY/YY"
 
