@@ -311,6 +311,13 @@ if sidebar_option == "Player Profile":
             temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
             result_df=result_df.rename(columns={'final_year':'year'})
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+            columns_to_convert = ['RUNS', 'HUNDREDS', 'FIFTIES', 'THIRTIES', 'HIGHEST SCORE']
+
+               # Fill NaN values with 0
+            result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+                
+               # Convert the specified columns to integer type
+            result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
                     
             # Display the results
             st.markdown(f"### **Yearwise Performnce**")
