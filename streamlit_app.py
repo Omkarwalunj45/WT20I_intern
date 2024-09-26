@@ -673,6 +673,9 @@ elif sidebar_option == "Matchup Analysis":
         
         
         result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+        result_df['LAST YEAR']=result_df['LAST YEAR'].apply(standardize_season)
+        
+        result_df = result_df.rename(columns={'FINAL YEAR': 'YEAR'})  
 
         # Display the results
         st.markdown("### **Matchwise Performance**")
@@ -730,6 +733,9 @@ elif sidebar_option == "Matchup Analysis":
         
         # result_df = result_df.rename(columns={'final_year': 'year'})    
         result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+        result_df['LAST YEAR']=result_df['LAST YEAR'].apply(standardize_season)
+        
+        result_df = result_df.rename(columns={'FINAL YEAR': 'YEAR'})   
     
         # Display the results
         st.markdown("### **Venuewise Performance**")
