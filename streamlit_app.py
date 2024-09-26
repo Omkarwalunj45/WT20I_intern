@@ -422,39 +422,44 @@ if sidebar_option == "Player Profile":
             
             # Creating a DataFrame to display venues and their corresponding countries
             pdf['country'] = pdf['venue'].map(venue_country_map)
+            allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh',
+                     'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
             i=0
-            allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh', 
-                                 'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
             for country in allowed_countries:
                 temp_df = pdf[pdf['batsman'] == player_name]
-                print(temp_df.match_id.unique())
-                print(temp_df.head(20))
+                # print(temp_df.match_id.unique())
+                # print(temp_df.head(20))
                 temp_df = temp_df[(temp_df['country'] == country)]
                 temp_df = cumulator(temp_df)
                 temp_df['country']=country.upper()
                 cols = temp_df.columns.tolist()
-                new_order = ['country'] + [col for col in cols if col != 'country']          
+                new_order = ['country'] + [col for col in cols if col != 'country']
                 # Reindex the DataFrame with the new column order
                 temp_df =temp_df[new_order]
+                # print(temp_df)
              # If temp_df is empty after applying cumulator, skip to the next iteration
                 if len(temp_df) == 0:
-                   continue  
+                   continue
                 elif i==0:
                     result_df = temp_df
                     i=i+1
                 else:
                     result_df = result_df.reset_index(drop=True)
                     temp_df = temp_df.reset_index(drop=True)
-                    result_df = pd.concat([result_df, temp_df])
+                    result_df = result_df.loc[:, ~result_df.columns.duplicated()]
+            
+                    result_df = pd.concat([result_df, temp_df],ignore_index=True)
                     
+            
                 result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','final_year','matches'])
-                # Round off the remaining float columns to 2 decimal places
-                float_cols = result_df.select_dtypes(include=['float']).columns
-                result_df[float_cols] = result_df[float_cols].round(2)
+                # # Round off the remaining float columns to 2 decimal places
+                # float_cols = result_df.select_dtypes(include=['float']).columns
+                # result_df[float_cols] = result_df[float_cols].round(2)
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
             cols = result_df.columns.tolist()
             new_order = ['COUNTRY'] + [col for col in cols if col != 'COUNTRY']
             result_df = result_df[new_order]
+            result_df = result_df.loc[:, ~result_df.columns.duplicated()]
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
           
 
