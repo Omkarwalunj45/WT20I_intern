@@ -16,7 +16,12 @@ def round_up_floats(df, decimal_places=2):
     float_cols = df.select_dtypes(include=['float'])
     df[float_cols.columns] = np.ceil(float_cols * (10 ** decimal_places)) / (10 ** decimal_places)
     return df
-
+def standardize_season(season):
+    if '/' in season:  # Check if the season is in 'YYYY/YY' format
+          year = season.split('/')[0]  # Get the first part
+    else:
+          year = season  # Use as is if already in 'YYYY' format
+     return year.strip()  # Return the year stripped of whitespace
 # Define the columns related to runs
 columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_scores']
 ldf = pd.read_csv("Dataset/squads.csv",low_memory=False)  # Load squads.csv for batting type
