@@ -150,7 +150,7 @@ if sidebar_option == "Player Profile":
         # If there is a matching row, access the first one
         p_info = matching_rows.iloc[0]
     else:
-        st.write(f"No player found with the name '{player_name}'")
+        # st.write(f"No player found with the name '{player_name}'")
         p_info = None  # Set a fallback
 
     # Tabs for "Overview", "Career Statistics", and "Current Form"
