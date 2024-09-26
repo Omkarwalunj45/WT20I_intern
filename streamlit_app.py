@@ -562,6 +562,64 @@ elif sidebar_option == "Matchup Analysis":
     # Dropdown for grouping options
     grouping_option = st.selectbox("Group By", ["Year", "Match", "Venue", "Inning"])
 
-    # You can add more logic below to process the selected batter, bowler, and grouping option
-    # For example, filtering the pdf_data based on the selected batter and bowler
+    if grouping_option == "Year":
+        tdf = pdf[(pdf['batsman'] == batter_name) & (pdf['bowler'] == bowler_name)]
+
+        def standardize_season(season):
+            if '/' in season:  # Check if the season is in 'YYYY/YY' format
+                year = season.split('/')[0]  # Get the first part
+            else:
+                year = season  # Use as is if already in 'YYYY' format
+            return year.strip()  # Return the year stripped of whitespace
+
+        tdf['season'] = tdf['season'].apply(standardize_season)
+
+        # Populate an array of unique seasons
+        unique_seasons = tdf['season'].unique()
+        
+        # Optional: Convert to a sorted list (if needed)
+        unique_seasons = sorted(set(unique_seasons))
+
+        # Ensure tdf is a DataFrame
+        tdf = pd.DataFrame(tdf)
+        tdf['batsman_runs'] = tdf['batsman_runs'].astype(int)
+        tdf['total_runs'] = tdf['total_runs'].astype(int)
+
+        # Initialize an empty result DataFrame
+        result_df = pd.DataFrame()
+        i=0
+        # Run a for loop and pass temp_df to a cumulative function
+        for season in unique_seasons:
+            temp_df = tdf[tdf['season'] == season]
+            temp_df = cumulator(temp_df)
+
+            if i==0:
+                    result_df = temp_df  # Initialize with the first result_df
+                    i=1+i
+            else:
+                    result_df = pd.concat([result_df, temp_df], ignore_index=True)
+        # Drop unnecessary columns related to performance metrics
+        columns_to_drop = ['batsman', 'bowler', 'batting_team', 'debut_year', 'matches_x', 'matches_y', 'fifties', 'hundreds', 'thirties', 'highest_score']
+        result_df = result_df.drop(columns=columns_to_drop, errors='ignore')
+
+        # Convert specific columns to integers and fill NaN values
+        columns_to_convert = ['runs','dismissals']
+        for col in columns_to_convert:
+            result_df[col] = result_df[col].fillna(0).astype(int)
+
+        result_df = result_df.rename(columns={'final_year': 'year'})
+        result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+
+        # Display the results
+        st.markdown("### **Yearwise Performance**")
+        cols = result_df.columns.tolist()
+
+        # Specify the desired order with 'year' first
+        new_order = ['YEAR'] + [col for col in cols if col != 'YEAR']
+                  
+        # Reindex the DataFrame with the new column order
+        result_df = result_df[new_order]
+        st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+
+
 
