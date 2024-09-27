@@ -902,10 +902,10 @@ if sidebar_option == "Player Profile":
             columns_to_convert = ['RUNS','THREE WICKET HAULS', 'MAIDEN OVERS']
 
                # Fill NaN values with 0
-            player_stat[columns_to_convert] =  player_stat[columns_to_convert].fillna(0)
+            result_df[columns_to_convert] =  result_df[columns_to_convert].fillna(0)
                 
                # Convert the specified columns to integer type
-             player_stat[columns_to_convert] =  player_stat[columns_to_convert].astype(int)
+            result_df[columns_to_convert] =  result_df[columns_to_convert].astype(int)
             result_df=round_up_floats(result_df)
             
             # Display the results
@@ -944,10 +944,10 @@ if sidebar_option == "Player Profile":
             columns_to_convert = ['RUNS','THREE WICKET HAULS', 'MAIDEN OVERS']
 
                # Fill NaN values with 0
-            player_stat[columns_to_convert] =  player_stat[columns_to_convert].fillna(0)
+            result_df[columns_to_convert] =  result_df[columns_to_convert].fillna(0)
                 
                # Convert the specified columns to integer type
-             player_stat[columns_to_convert] =  player_stat[columns_to_convert].astype(int)
+            result_df[columns_to_convert] =  result_df[columns_to_convert].astype(int)
             result_df=round_up_floats(result_df)
             
             st.markdown(f"### **In Host Country**")
