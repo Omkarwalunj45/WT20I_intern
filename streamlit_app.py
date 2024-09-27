@@ -694,6 +694,13 @@ if sidebar_option == "Player Profile":
             # Display the final result_df
             result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+            columns_to_convert = ['THREE WICKET HAULS', 'MAIDEN OVERS']
+
+               # Fill NaN values with 0
+            result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+                
+               # Convert the specified columns to integer type
+            result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
             result_df=round_up_floats(result_df)
             st.markdown("### Opponentwise Performance")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
