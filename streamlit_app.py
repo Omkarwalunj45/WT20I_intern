@@ -13,6 +13,16 @@ idf = pd.read_csv("Dataset/lifesaver.csv",low_memory=False)
 info_df=pd.read_csv("Dataset/w_info_final.csv",low_memory=False)
 bpdf=pd.read_csv("Dataset/final_cum_wbowl.csv",low_memory=False)
 bidf=pd.read_csv("Dataset/lifesaver_bowl.csv",low_memory=False)
+['run out','retired hurt','obstructing the field']
+def is_bowlers_wkt(player_dismissed,dismissal_kind):
+  if type(player_dismissed)== str :
+    if dismissal_kind not in ['run out','retired hurt','obstructing the field']:
+      return 1
+    else :
+      return 0
+  else:
+    return 0
+bpdf['bowler_wkt']=bpdf.apply(lambda x: (is_bowlers_wkt(x['player_dismissed'],x['dismissal_kind'])),axis=1)
 def round_up_floats(df, decimal_places=2):
     # Round up only for float columns
     float_cols = df.select_dtypes(include=['float'])
@@ -24,6 +34,62 @@ def standardize_season(season):
     else:
           year = season  # Use as is if already in 'YYYY' format
     return year.strip()  # Return the year stripped of whitespace
+def get_current_form(bpdf, player_name):
+    # Filter for matches where the player batted or bowled
+    player_matches = bpdf[(bpdf['batsman'] == player_name) | (bpdf['bowler'] == player_name)]
+
+    # Get the last 10 unique match IDs
+    last_10_matches = player_matches['match_id'].drop_duplicates().sort_values(ascending=False).head(10)
+
+    # Prepare the result DataFrame
+    results = []
+
+    for match_id in last_10_matches:
+        # Get batting stats for this match
+        bat_match_data = bpdf[(bpdf['match_id'] == match_id) & (bpdf['batsman'] == player_name)]
+        
+        if not bat_match_data.empty:
+            runs = bat_match_data['batsman_runs'].sum()  # Sum runs if player batted multiple times
+            balls_faced = bat_match_data['ball'].count()  # Sum balls faced
+            SR = (runs / balls_faced) * 100 if balls_faced > 0 else 0.0
+            venue = bat_match_data['venue'].iloc[0]
+        else:
+            runs = 0
+            balls_faced = 0
+            SR = 0.0
+        
+        # Get bowling stats for this match
+        bowl_match_data = bpdf[(bpdf['match_id'] == match_id) & (bpdf['bowler'] == player_name)]
+        
+        if not bowl_match_data.empty:
+            balls_bowled = bowl_match_data['ball'].count()  # Sum balls bowled
+            runs_given = bowl_match_data['total_runs'].sum()  # Sum runs given
+            wickets = bowl_match_data['bowler_wkt'].sum()  # Sum wickets taken
+            econ = (runs_given / (balls_bowled / 6)) if balls_bowled > 0 else 0.0  # Calculate Econ
+            venue = bowl_match_data['venue'].iloc[0]
+        else:
+            balls_bowled = 0
+            runs_given = 0
+            wickets = 0
+            econ = 0.0
+        
+        # Get the venue for the match (assuming venue is consistent for a match)
+        # venue = bat_match_data['venue'].iloc[0] if not ((bat_match_data.empty)))  else "N/A"
+
+        # Append the formatted data
+        results.append({
+            "Match ID": match_id,
+            "Runs": runs,
+            "Balls Faced": balls_faced,
+            "SR": SR,
+            "Balls Bowled": balls_bowled,
+            "Runs Given": runs_given,
+            "Wickets": wickets,
+            "Econ": econ,
+            "Venue": venue,
+        })
+    
+    return pd.DataFrame(results)
 # Define the columns related to runs
 columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_scores']
 ldf = pd.read_csv("Dataset/squads.csv",low_memory=False)  # Load squads.csv for batting type
@@ -889,6 +955,20 @@ if sidebar_option == "Player Profile":
     with tab3:
         st.header("Current Form")
         # Add current form content here
+        current_form_df = get_current_form(bpdf,player_name)
+        if not current_form_df.empty:
+            current_form_df.columns = [col.upper() for col in current_form_df.columns]
+            st.table(current_form_df[['Match ID', 'Runs', 'Balls Faced', 'SR', 
+                                   'Balls Bowled','Runs Given','Wickets', 'Econ', 
+                                   'Venue', 'Season']])
+        else:
+            st.write("No recent matches found for this player.")
+        
+
+
+
+
+
 
 # If "Matchup Analysis" is selected
 elif sidebar_option == "Matchup Analysis":
