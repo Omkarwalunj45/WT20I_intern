@@ -356,8 +356,8 @@ venue_country_map = {
 idf['debut_year'] = idf['debut_year'].str.split('/').str[0]  # Extract the year from "YYYY/YY"
 
 # Convert the relevant columns to integers
-columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']
-idf[columns_to_convert] = idf[columns_to_convert].astype(int)
+# columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']
+# idf[columns_to_convert] = idf[columns_to_convert].astype(int)
 
 # Sidebar for selecting between "Player Profile" and "Matchup Analysis"
 sidebar_option = st.sidebar.radio(
