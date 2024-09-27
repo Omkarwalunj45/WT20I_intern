@@ -473,61 +473,7 @@ if sidebar_option == "Player Profile":
  
             st.markdown("### Opponentwise Performance")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
-  
-            # st.table(player_stats.style.set_table_attributes("style='font-weight: bold;'"))  # Display the filtered DataFrame as a table
-            # allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh', 
-            #          'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
-            # pdf['total_runs'] = pdf['runs_off_bat'] + pdf['extras']
-            # pdf = pdf.rename(columns={'runs_off_bat': 'batsman_runs', 'wicket_type': 'dismissal_kind', 'striker': 'batsman', 'innings': 'inning'})
-            # pdf = pdf.dropna(subset=['ball'])
-            # # Convert the 'ball' column to numeric if it's not already (optional but recommended)
-            # pdf['ball'] = pd.to_numeric(pdf['ball'], errors='coerce') 
-            # # Applying the lambda function to calculate the 'over'
-            # pdf['over'] = pdf['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
             
-            # for country in allowed_countries:
-            #    temp_df = pdf[pdf['batsman'] == player_name]
-            #    if not temp_df[temp_df['batting_team'] == country].empty:
-            #             continue
-            #    temp_df = temp_df[(temp_df['bowling_team'] == country)]
-            #    temp_df = cumulator(temp_df)
-                    
-            #         # If temp_df is empty after applying cumulator, skip to the next iteration
-            #    if len(temp_df) == 0:
-            #        continue  
-                    
-            #         # Drop the specified columns and modify the column names
-            #    temp_df = temp_df.drop(columns=['final_year', 'batsman', 'batting_team','debut_year','matches_x','matches_y'])
-            # #    # Convert specific columns to integers
-            # #    # Round off the remaining float columns to 2 decimal places
-            # #    float_cols = temp_df.select_dtypes(include=['float']).columns
-            # #    temp_df[float_cols] = temp_df[float_cols].round(2) 
-            #    temp_df = round_up_floats(temp_df) 
-            #    columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']
-
-            #    # Fill NaN values with 0
-            #    temp_df[columns_to_convert] = temp_df[columns_to_convert].fillna(0)
-                
-            #    # Convert the specified columns to integer type
-            #    temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
- 
-                
-            #    temp_df.columns = [col.upper().replace('_', ' ') for col in temp_df.columns]
-            #    cols = temp_df.columns.tolist()
-
-            #    # Specify the desired order with 'year' first
-            #    new_order = ['MATCHES'] + [col for col in cols if col != 'MATCHES']
-                         
-            #    # Reindex the DataFrame with the new column order
-            #    temp_df =temp_df[new_order]
- 
-                    
-            #         # Display the results
-            #    st.markdown(f"### vs **{country.upper()}**")
-               
-            #    # Display the table with bold font
-            #    st.table(temp_df.style.set_table_attributes("style='font-weight: bold;'"))
-
         
             tdf = pdf[pdf['batsman'] == player_name]
 
