@@ -98,7 +98,7 @@ ldf = pd.read_csv("Dataset/squads.csv",low_memory=False)  # Load squads.csv for 
 def cumulator(temp_df):
     # First, remove duplicates based on match_id and ball within the same match
     print(f"Before removing duplicates based on 'match_id' and 'ball': {temp_df.shape}")
-    temp_df = temp_df.drop_duplicates(subset=['match_id', 'ball'], keep='first')
+    temp_df = temp_df.drop_duplicates(subset=['match_id', 'ball','inning'], keep='first')
     print(f"After removing duplicates based on 'match_id' and 'ball': {temp_df.shape}")
 
     # Ensure 'total_runs' exists
@@ -197,7 +197,7 @@ def cumulator(temp_df):
 def bcum(df):
     # First, remove duplicates based on match_id and ball within the same match
     print(f"Before removing duplicates based on 'match_id' and 'ball': {df.shape}")
-    df = df.drop_duplicates(subset=['match_id', 'ball'], keep='first')
+    df = df.drop_duplicates(subset=['match_id', 'ball','inning'], keep='first')
     print(f"After removing duplicates based on 'match_id' and 'ball': {df.shape}")
     # df['total_runs']=df['batsman_runs']+df['extras']
 
