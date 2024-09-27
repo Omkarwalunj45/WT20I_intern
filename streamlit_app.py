@@ -725,7 +725,7 @@ if sidebar_option == "Player Profile":
             player_stat[columns_to_convert] =  player_stat[columns_to_convert].fillna(0)
                 
                # Convert the specified columns to integer type
-             player_stat[columns_to_convert] =  player_stat[columns_to_convert].astype(int)
+            player_stat[columns_to_convert] =  player_stat[columns_to_convert].astype(int)
                 
                 # Display the player's bowling statistics in a table format with bold headers
             player_stats = player_stats.drop(columns=['UNNAMED: 0','BOWLER'])
