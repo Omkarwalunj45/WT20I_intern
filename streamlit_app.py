@@ -453,16 +453,24 @@ if sidebar_option == "Player Profile":
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)
             
             # Display the final result_df
-            # result_df = result_df.drop(columns=['batsman','debut_year','final_year'])
-            # result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-            # columns_to_convert = ['HUNDREDS', 'FIFTIES','THIRTIES', 'RUNS''HIGHEST SCORE']
+            result_df = result_df.drop(columns=['matches_x','matches_y'.'batsman','debut_year','final_year'])
+            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+            columns_to_convert = ['HUNDREDS', 'FIFTIES','THIRTIES', 'RUNS''HIGHEST SCORE']
 
                # Fill NaN values with 0
-            # result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+            result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
                 
                # Convert the specified columns to integer type
-            # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
-            # result_df=round_up_floats(result_df)
+            result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+            result_df=round_up_floats(result_df)
+            cols = result_df.columns.tolist()
+
+            #    # Specify the desired order with 'year' first
+            new_order = ['MATCHES'] + [col for col in cols if col != 'MATCHES']
+                         
+            #    # Reindex the DataFrame with the new column order
+            result_df =result_df[new_order]
+ 
             st.markdown("### Opponentwise Performance")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
   
