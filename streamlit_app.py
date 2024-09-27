@@ -448,7 +448,7 @@ if sidebar_option == "Player Profile":
         # Display Career Averages based on selection
         if option == "Batting":
             # Create a temporary DataFrame and filter the player's row
-            temp_df = idf.drop(columns=['Unnamed: 0', 'final_year', 'matches_x', 'matches_y', 'surname', 'initial'])
+            # temp_df = idf.drop(columns=['Unnamed: 0', 'final_year', 'matches_x', 'matches_y', 'surname', 'initial'])
             player_stats = temp_df[temp_df['batsman'] == player_name]  # Filter for the selected player
 
             # Convert column names to uppercase and replace underscores with spaces
@@ -519,7 +519,7 @@ if sidebar_option == "Player Profile":
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)
             
             # Display the final result_df
-            result_df = result_df.drop(columns=['matches_x','matches_y','batsman','debut_year','final_year'])
+            # result_df = result_df.drop(columns=['matches_x','matches_y','batsman','debut_year','final_year'])
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
             columns_to_convert = ['HUNDREDS', 'FIFTIES','THIRTIES', 'RUNS','HIGHEST SCORE']
 
@@ -527,7 +527,7 @@ if sidebar_option == "Player Profile":
             result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
                 
                # Convert the specified columns to integer type
-            result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+            # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
             result_df=round_up_floats(result_df)
             cols = result_df.columns.tolist()
 
@@ -573,7 +573,7 @@ if sidebar_option == "Player Profile":
                     i=1+i
                 else:
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)
-                result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','matches_x','matches_y'])
+                # result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','matches_x','matches_y'])
                 # Convert specific columns to integers
                 # Round off the remaining float columns to 2 decimal places
                 float_cols = result_df.select_dtypes(include=['float']).columns
@@ -584,14 +584,14 @@ if sidebar_option == "Player Profile":
                 temp_df[columns_to_convert] = temp_df[columns_to_convert].fillna(0)
                 
                # Convert the specified columns to integer type
-                temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
+                # temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
             columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']
 
                # Fill NaN values with 0
             temp_df[columns_to_convert] = temp_df[columns_to_convert].fillna(0)
                 
                # Convert the specified columns to integer type
-            temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
+            # temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
             result_df=result_df.rename(columns={'final_year':'year'})
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
             result_df = round_up_floats(result_df)
@@ -631,7 +631,7 @@ if sidebar_option == "Player Profile":
             # Reindex the DataFrame with the new column order
             temp_df =temp_df[new_order] 
             result_df = pd.concat([result_df, temp_df], ignore_index=True)
-            result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','matches_x','matches_y','final_year'])
+            # result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','matches_x','matches_y','final_year'])
             # Convert specific columns to integers
             # Round off the remaining float columns to 2 decimal places
             float_cols = result_df.select_dtypes(include=['float']).columns
@@ -645,7 +645,7 @@ if sidebar_option == "Player Profile":
             result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
                 
                # Convert the specified columns to integer type
-            result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+            # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
                     
             # Display the results
             result_df = result_df.drop(columns=['MATCHES'])
@@ -684,7 +684,7 @@ if sidebar_option == "Player Profile":
                     result_df = pd.concat([result_df, temp_df],ignore_index=True)
                     
             
-                result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','final_year','matches_x','matches_y'])
+                # result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','final_year','matches_x','matches_y'])
                 # Round off the remaining float columns to 2 decimal places
                 float_cols = result_df.select_dtypes(include=['float']).columns
                 result_df[float_cols] = result_df[float_cols].round(2)
@@ -696,7 +696,7 @@ if sidebar_option == "Player Profile":
             result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
                 
                # Convert the specified columns to integer type
-            result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+            # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
             cols = result_df.columns.tolist()
             new_order = ['COUNTRY'] + [col for col in cols if col != 'COUNTRY']
             result_df = result_df[new_order]
