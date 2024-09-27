@@ -455,7 +455,7 @@ if sidebar_option == "Player Profile":
             # Display the final result_df
             result_df = result_df.drop(columns=['matches_x','matches_y','batsman','debut_year','final_year'])
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-            columns_to_convert = ['HUNDREDS', 'FIFTIES','THIRTIES', 'RUNS''HIGHEST SCORE']
+            columns_to_convert = ['HUNDREDS', 'FIFTIES','THIRTIES', 'RUNS','HIGHEST SCORE']
 
                # Fill NaN values with 0
             result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
