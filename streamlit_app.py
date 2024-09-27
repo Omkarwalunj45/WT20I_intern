@@ -734,30 +734,29 @@ if sidebar_option == "Player Profile":
                 else:
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)  # Append subsequent data
             
-            # Drop unnecessary columns
-            # result_df = result_df.drop(columns=['bowler','debut_year'])
-            
-            # Round off float columns to 2 decimal places
-            # float_cols = result_df.select_dtypes(include=['float']).columns
-            # result_df[float_cols] = result_df[float_cols].round(2)
-            
-            # Rename 'final_year' to 'year'
-            # result_df = result_df.rename(columns={'final_year': 'year'})
-            
-            # Convert column names to uppercase and replace underscores with spaces
+            result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
+            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+            columns_to_convert = ['THREE WICKET HAULS', 'MAIDEN OVERS']
+
+               # Fill NaN values with 0
+            result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+                
+               # Convert the specified columns to integer type
+            result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+            result_df=round_up_floats(result_df)
             # result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
             
             # No need to convert columns to integer (for bowling-specific data)
             
             # Display the results
             st.markdown(f"### **Yearwise Bowling Performance**")
-            # cols = result_df.columns.tolist()
+            cols = result_df.columns.tolist()
             
-            # # Specify the desired order with 'YEAR' first
-            # new_order = ['YEAR'] + [col for col in cols if col != 'YEAR']
+            # Specify the desired order with 'YEAR' first
+            new_order = ['YEAR'] + [col for col in cols if col != 'YEAR']
             
-            # # Reindex the DataFrame with the new column order
-            # result_df = result_df[new_order]
+            # Reindex the DataFrame with the new column order
+            result_df = result_df[new_order]
             
             # Display the table with bold headers
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
