@@ -456,6 +456,13 @@ if sidebar_option == "Player Profile":
             player_stats=round_up_floats(player_stats)
             # Display the player's statistics in a table format with bold headers
             st.markdown("### Batting Statistics")
+            columns_to_convert = ['RUNS','HUNDREDS', 'FIFTIES','THIRTIES', 'HIGHEST SCORE']
+
+               # Fill NaN values with 0
+            player_stats[columns_to_convert] = player_stats[columns_to_convert].fillna(0)
+                
+               # Convert the specified columns to integer type
+            player_stats[columns_to_convert] = player_stats[columns_to_convert].astype(int)
             st.table(player_stats.style.set_table_attributes("style='font-weight: bold;'"))
             
             allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh', 
