@@ -13,7 +13,6 @@ idf = pd.read_csv("Dataset/lifesaver.csv",low_memory=False)
 info_df=pd.read_csv("Dataset/w_info_final.csv",low_memory=False)
 bpdf=pd.read_csv("Dataset/final_cum_wbowl.csv",low_memory=False)
 bidf=pd.read_csv("Dataset/lifesaver_bowl.csv",low_memory=False)
-['run out','retired hurt','obstructing the field']
 def is_bowlers_wkt(player_dismissed,dismissal_kind):
   if type(player_dismissed)== str :
     if dismissal_kind not in ['run out','retired hurt','obstructing the field']:
