@@ -456,7 +456,7 @@ if sidebar_option == "Player Profile":
             player_stats=round_up_floats(player_stats)
             # Display the player's statistics in a table format with bold headers
             st.markdown("### Batting Statistics")
-             st.table(player_stats.style.set_table_attributes("style='font-weight: bold;'"))
+            st.table(player_stats.style.set_table_attributes("style='font-weight: bold;'"))
             
             allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh', 
                                  'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
