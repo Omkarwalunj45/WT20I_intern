@@ -957,9 +957,10 @@ if sidebar_option == "Player Profile":
         current_form_df = get_current_form(bpdf,player_name)
         if not current_form_df.empty:
             current_form_df.columns = [col.upper() for col in current_form_df.columns]
-            st.table(current_form_df[['Match ID', 'Runs', 'Balls Faced', 'SR', 
+            # st.table(current_form_df[['Match ID', 'Runs', 'Balls Faced', 'SR', 
                                    'Balls Bowled','Runs Given','Wickets', 'Econ', 
                                    'Venue']])
+            st.table(current_form_df.style.set_table_attributes("style='font-weight: bold;'"))
         else:
             st.write("No recent matches found for this player.")
         
