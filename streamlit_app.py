@@ -944,7 +944,7 @@ if sidebar_option == "Player Profile":
             columns_to_convert = ['THREE WICKET HAULS', 'MAIDEN OVERS']
 
                # Fill NaN values with 0
-            result_df[columns_to_convert] =  result_df[columns_to_convert].fillna(0)
+            # result_df[columns_to_convert] =  result_df[columns_to_convert].fillna(0)
                 
                # Convert the specified columns to integer type
             result_df[columns_to_convert] =  result_df[columns_to_convert].astype(int)
