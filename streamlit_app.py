@@ -8,7 +8,7 @@ st.set_page_config(page_title='WT20I Performance Analysis Portal', layout='wide'
 st.title('WT20I Performance Analysis Portal')
 
 
-# # Load data
+#Load data
 # pdf = pd.read_csv("Dataset/wt20i_compressed.csv",low_memory=False)
 # idf = pd.read_csv("Dataset/lifesaver_bat.csv",low_memory=False)
 # info_df=pd.read_csv("Dataset/w_info_final.csv",low_memory=False)
