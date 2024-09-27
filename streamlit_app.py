@@ -678,7 +678,7 @@ if sidebar_option == "Player Profile":
                 # Add the country column with the current country's value
                 temp_df['opponent'] = country.upper()
             
-                Reorder columns to make 'country' the first column
+                # Reorder columns to make 'country' the first column
                 cols = temp_df.columns.tolist()
                 new_order = ['opponent'] + [col for col in cols if col != 'opponent']
                 temp_df = temp_df[new_order]
