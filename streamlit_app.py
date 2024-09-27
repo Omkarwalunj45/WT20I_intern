@@ -466,7 +466,7 @@ if sidebar_option == "Player Profile":
             cols = result_df.columns.tolist()
 
             #    # Specify the desired order with 'year' first
-            new_order = [['OPPONENT']+['MATCHES']] + [col for col in cols if col != [['MATCHES'],['OPPONENT']]]
+            new_order = ['OPPONENT'+'MATCHES'] + [col for col in cols if col != ['MATCHES','OPPONENT']]
                          
             #    # Reindex the DataFrame with the new column order
             result_df =result_df[new_order]
