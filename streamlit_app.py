@@ -941,13 +941,13 @@ if sidebar_option == "Player Profile":
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)
             
             result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
-            columns_to_convert = ['THREE WICKET HAULS', 'MAIDEN OVERS']
+            # columns_to_convert = ['THREE WICKET HAULS', 'MAIDEN OVERS']
 
                # Fill NaN values with 0
             # result_df[columns_to_convert] =  result_df[columns_to_convert].fillna(0)
                 
                # Convert the specified columns to integer type
-            result_df[columns_to_convert] =  result_df[columns_to_convert].astype(int)
+            # result_df[columns_to_convert] =  result_df[columns_to_convert].astype(int)
             result_df=round_up_floats(result_df)
             
             st.markdown(f"### **In Host Country**")
