@@ -793,20 +793,16 @@ if sidebar_option == "Player Profile":
             result_df = pd.concat([result_df, temp_df], ignore_index=True)
             
             # Drop unnecessary columns
-            # result_df = result_df.drop(columns=['bowler', 'bowling_team', 'debut_year', 'matches_x', 'matches_y', 'final_year'])
-            
-            # # Round off float columns to 2 decimal places
-            # float_cols = result_df.select_dtypes(include=['float']).columns
-            # result_df[float_cols] = result_df[float_cols].round(2)
-            
-            # Rename 'final_year' to 'year' if it exists
-            result_df = result_df.rename(columns={'final_year': 'year'})
-            
-            # Convert column names to uppercase and replace underscores with spaces
+            result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-            
-            # Drop unnecessary columns
-            # result_df = result_df.drop(columns=['MATCHES'])
+            columns_to_convert = ['THREE WICKET HAULS', 'MAIDEN OVERS']
+
+               # Fill NaN values with 0
+            result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+                
+               # Convert the specified columns to integer type
+            result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+            result_df=round_up_floats(result_df)
             
             # Display the results
             st.markdown(f"### **Inningwise Bowling Performance**")
