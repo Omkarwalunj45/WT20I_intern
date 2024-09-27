@@ -584,7 +584,8 @@ if sidebar_option == "Player Profile":
             # Display the results
             result_df = result_df.drop(columns=['MATCHES'])
             st.markdown(f"### **Inningwise Performnce**")
-            st.table(result_df.reset_index(drop=True).style.set_table_attributes("style='font-weight: bold;'"))
+            result_df=resut_df.reset_index(drop=True)
+            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
             
             # Creating a DataFrame to display venues and their corresponding countries
