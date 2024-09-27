@@ -719,7 +719,7 @@ if sidebar_option == "Player Profile":
                 
                 # Function to round float values if necessary (assuming round_up_floats exists)
             player_stats = round_up_floats(player_stats)
-            columns_to_convert = ['RUNS','THREE WICKET HAULS', 'MAIDEN OVERS']
+            columns_to_convert = ['THREE WICKET HAULS', 'MAIDEN OVERS']
 
             #    # Fill NaN values with 0
             # player_stat[columns_to_convert] =  player_stat[columns_to_convert].fillna(0)
