@@ -836,18 +836,16 @@ if sidebar_option == "Player Profile":
             
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)
             
-                # result_df = result_df.drop(columns=['bowler', 'bowling_team', 'debut_year', 'final_year', 'matches_x', 'matches_y'])
-                
-                # # Round off the remaining float columns to 2 decimal places
-                # float_cols = result_df.select_dtypes(include=['float']).columns
-                # result_df[float_cols] = result_df[float_cols].round(2)
-            
+            result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-            result_df = round_up_floats(result_df)
-            # cols = result_df.columns.tolist()
-            # new_order = ['COUNTRY'] + [col for col in cols if col != 'COUNTRY']
-            # result_df = result_df[new_order]
-            # result_df = result_df.drop(columns=['MATCHES'])  # Drop matches if not needed
+            columns_to_convert = ['THREE WICKET HAULS', 'MAIDEN OVERS']
+
+               # Fill NaN values with 0
+            result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+                
+               # Convert the specified columns to integer type
+            result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+            result_df=round_up_floats(result_df)
             
             st.markdown(f"### **In Host Country**")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
