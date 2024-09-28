@@ -1344,7 +1344,7 @@ elif sidebar_option == "Strength vs Weakness":
         new_order = ['BOWLING_STYLE', 'INNINGS'] + [col for col in cols if col not in ['INNINGS', 'BOWLING_STYLE']]
 
         # Reindex the DataFrame with the new column order
-        result_df = result_df[new_order]
+        # result_df = result_df[new_order]
 
         st.markdown("### Performance Against Bowling Styles")
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
