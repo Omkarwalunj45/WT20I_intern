@@ -1328,7 +1328,7 @@ elif sidebar_option == "Strength vs Weakness":
                 result_df = pd.concat([result_df, temp_df], ignore_index=True)
         
         # Display the final result_df
-        result_df = result_df.drop(columns=['matches_x', 'matches_y', 'batsman', 'debut_year', 'final_year','hundreds','fifties','thirties','highest_score'])
+        result_df = result_df.drop(columns=['matches_x', 'matches_y', 'batsman', 'debut_year', 'final_year','hundreds','fifties','thirties','highest_score','batting_team','matches'])
         result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
         columns_to_convert = ['RUNS']
 
@@ -1341,10 +1341,10 @@ elif sidebar_option == "Strength vs Weakness":
         cols = result_df.columns.tolist()
 
         # Specify the desired order with 'bowling_style' first
-        new_order = ['BOWLING_STYLE', 'INNINGS'] + [col for col in cols if col not in ['INNINGS', 'BOWLING_STYLE']]
+        new_order = ['BOWLING STYLE', 'INNINGS'] + [col for col in cols if col not in ['BOWLING STYLE','INNINGS',]]
 
         # Reindex the DataFrame with the new column order
-        # result_df = result_df[new_order]
+        result_df = result_df[new_order]
 
         st.markdown("### Performance Against Bowling Styles")
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
