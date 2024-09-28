@@ -1438,7 +1438,7 @@ elif sidebar_option == "Strength vs Weakness":
         pdf['phase'] = pdf['over'].apply(categorize_phase)
         
         # Streamlit header
-        st.header("Phase-wise Strength and Weakness Analysis")
+        # st.header("Phase-wise Strength and Weakness Analysis")
         
         # DataFrame to hold results
         result_df = pd.DataFrame()
