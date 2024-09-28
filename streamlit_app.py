@@ -106,12 +106,12 @@ def cumulator(temp_df):
         raise KeyError("Column 'total_runs' does not exist in temp_df.")
     
     # Create new columns for counting runs
-    temp_df['is_dot'] = temp_df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
-    temp_df['is_one'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
-    temp_df['is_two'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 2 else 0)
-    temp_df['is_three'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 3 else 0)
-    temp_df['is_four'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 4 else 0)
-    temp_df['is_six'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 6 else 0)
+    # temp_df['is_dot'] = temp_df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
+    # temp_df['is_one'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
+    # temp_df['is_two'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 2 else 0)
+    # temp_df['is_three'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 3 else 0)
+    # temp_df['is_four'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 4 else 0)
+    # temp_df['is_six'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 6 else 0)
 
     # Calculate runs, balls faced, innings, dismissals, etc.
     runs = temp_df.groupby(['batsman'])['batsman_runs'].sum().reset_index().rename(columns={'batsman_runs': 'runs'})
@@ -126,6 +126,7 @@ def cumulator(temp_df):
     twos = temp_df.groupby(['batsman'])['is_two'].sum().reset_index().rename(columns={'is_two': 'twos'})
     threes = temp_df.groupby(['batsman'])['is_three'].sum().reset_index().rename(columns={'is_three': 'threes'})
     bat_team = temp_df.groupby(['batsman'])['batting_team'].unique().reset_index()
+    fpi = pd.DataFrame(df.groupby(['batsman'])['bat_fantasy_pts'].sum()).reset_index().rename(columns={'bat_fantasy_pts': 'fantasy_points'})
     print(1)
     matches = temp_df.groupby(['batsman'])['match_id'].nunique().reset_index(name='matches')
     print(0)
@@ -160,6 +161,7 @@ def cumulator(temp_df):
     summary_df = summary_df.merge(thirties, on='batsman', how='left')
     summary_df = summary_df.merge(highest_scores, on='batsman', how='left')
     summary_df = summary_df.merge(matches, on='batsman', how='left')
+    summary_df = summary_df.merge(fpi, on='batsman', how='left')
           # Calculating additional columns
     def bpd(balls, dis):
       return balls if dis == 0 else balls / dis
@@ -180,6 +182,7 @@ def cumulator(temp_df):
     summary_df['nbdry_sr'] = summary_df.apply(lambda x: ((x['dots'] * 0 + x['ones'] * 1 + x['twos'] * 2 + x['threes'] * 3) /(x['dots'] + x['ones'] + x['twos'] + x['threes']) * 100) if (x['dots'] + x['ones'] + x['twos'] + x['threes']) > 0 else 0,axis=1)
     summary_df['AVG'] =summary_df.apply(lambda x: avg(x['runs'], x['dismissals'], x['innings']), axis=1)
     summary_df['dot_percentage'] = (summary_df['dots'] / summary_df['ball']) * 100
+    summary_df['fantasy_points_per_match'] = summary_df['fantasy_points'] / summary_df['innings'].replace(0, np.nan)
 
 
     debut_year = temp_df.groupby('batsman')['season'].min().reset_index()
@@ -202,12 +205,12 @@ def bcum(df):
     # df['total_runs']=df['batsman_runs']+df['extras']
 
     # Define helper columns for various runs
-    df.loc[:, 'is_dot'] = df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
-    df.loc[:, 'is_one'] = df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
-    df.loc[:, 'is_two'] = df['batsman_runs'].apply(lambda x: 1 if x == 2 else 0)
-    df.loc[:, 'is_three'] = df['batsman_runs'].apply(lambda x: 1 if x == 3 else 0)
-    df.loc[:, 'is_four'] = df['batsman_runs'].apply(lambda x: 1 if x == 4 else 0)
-    df.loc[:, 'is_six'] = df['batsman_runs'].apply(lambda x: 1 if x == 6 else 0)
+    # df.loc[:, 'is_dot'] = df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
+    # df.loc[:, 'is_one'] = df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
+    # df.loc[:, 'is_two'] = df['batsman_runs'].apply(lambda x: 1 if x == 2 else 0)
+    # df.loc[:, 'is_three'] = df['batsman_runs'].apply(lambda x: 1 if x == 3 else 0)
+    # df.loc[:, 'is_four'] = df['batsman_runs'].apply(lambda x: 1 if x == 4 else 0)
+    # df.loc[:, 'is_six'] = df['batsman_runs'].apply(lambda x: 1 if x == 6 else 0)
 
     # Create various aggregates
     runs = pd.DataFrame(df.groupby(['bowler'])['batsman_runs'].sum()).reset_index().rename(columns={'batsman_runs': 'runs'})
@@ -220,6 +223,7 @@ def bcum(df):
     threes = pd.DataFrame(df.groupby(['bowler'])['is_three'].sum()).reset_index().rename(columns={'is_three': 'threes'})
     fours = pd.DataFrame(df.groupby(['bowler'])['is_four'].sum()).reset_index().rename(columns={'is_four': 'fours'})
     sixes = pd.DataFrame(df.groupby(['bowler'])['is_six'].sum()).reset_index().rename(columns={'is_six': 'sixes'})
+    fpi = pd.DataFrame(df.groupby(['bowler'])['ball_fantasy_pts'].sum()).reset_index().rename(columns={'ball_fantasy_pts': 'fantasy_points'})
 
     # Calculate 3W or more hauls by bowler
     dismissals_count = df.groupby(['bowler', 'match_id'])['bowler_wkt'].sum()
@@ -238,7 +242,8 @@ def bcum(df):
                  .merge(fours, on='bowler')\
                  .merge(dots, on='bowler')\
                  .merge(three_wicket_hauls, on='bowler', how='left')\
-                 .merge(maiden_overs_count, on='bowler', how='left')
+                 .merge(maiden_overs_count, on='bowler', how='left')\
+                 .merge(fpi, on='bowler', how='left')
 
     # Fill NaN values for bowlers with no 3W hauls or maiden overs
     bowl_rec['three_wicket_hauls'] = bowl_rec['three_wicket_hauls'].fillna(0)
@@ -257,6 +262,7 @@ def bcum(df):
     bowl_rec['avg'] = bowl_rec['runs'] / bowl_rec['wkts'].replace(0, np.nan)
     bowl_rec['sr'] = bowl_rec['balls'] / bowl_rec['wkts'].replace(0, np.nan)
     bowl_rec['econ'] = (bowl_rec['runs'] * 6 / bowl_rec['balls'].replace(0, np.nan))
+    bowl_rec['fantasy_points_per_match'] = bowl_rec['fantasy_points'] / bowl_rec['innings'].replace(0, np.nan)
 
     return bowl_rec
     
