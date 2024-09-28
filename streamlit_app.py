@@ -107,12 +107,12 @@ def cumulator(temp_df):
         raise KeyError("Column 'total_runs' does not exist in temp_df.")
     
     # Create new columns for counting runs
-    # temp_df['is_dot'] = temp_df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
-    # temp_df['is_one'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
-    # temp_df['is_two'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 2 else 0)
-    # temp_df['is_three'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 3 else 0)
-    # temp_df['is_four'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 4 else 0)
-    # temp_df['is_six'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 6 else 0)
+    temp_df['is_dot'] = temp_df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
+    temp_df['is_one'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
+    temp_df['is_two'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 2 else 0)
+    temp_df['is_three'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 3 else 0)
+    temp_df['is_four'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 4 else 0)
+    temp_df['is_six'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 6 else 0)
 
     # Calculate runs, balls faced, innings, dismissals, etc.
     runs = temp_df.groupby(['batsman'])['batsman_runs'].sum().reset_index().rename(columns={'batsman_runs': 'runs'})
@@ -206,12 +206,12 @@ def bcum(df):
     # df['total_runs']=df['batsman_runs']+df['extras']
 
     # Define helper columns for various runs
-    # df.loc[:, 'is_dot'] = df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
-    # df.loc[:, 'is_one'] = df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
-    # df.loc[:, 'is_two'] = df['batsman_runs'].apply(lambda x: 1 if x == 2 else 0)
-    # df.loc[:, 'is_three'] = df['batsman_runs'].apply(lambda x: 1 if x == 3 else 0)
-    # df.loc[:, 'is_four'] = df['batsman_runs'].apply(lambda x: 1 if x == 4 else 0)
-    # df.loc[:, 'is_six'] = df['batsman_runs'].apply(lambda x: 1 if x == 6 else 0)
+    df.loc[:, 'is_dot'] = df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
+    df.loc[:, 'is_one'] = df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
+    df.loc[:, 'is_two'] = df['batsman_runs'].apply(lambda x: 1 if x == 2 else 0)
+    df.loc[:, 'is_three'] = df['batsman_runs'].apply(lambda x: 1 if x == 3 else 0)
+    df.loc[:, 'is_four'] = df['batsman_runs'].apply(lambda x: 1 if x == 4 else 0)
+    df.loc[:, 'is_six'] = df['batsman_runs'].apply(lambda x: 1 if x == 6 else 0)
 
     # Create various aggregates
     runs = pd.DataFrame(df.groupby(['bowler'])['batsman_runs'].sum()).reset_index().rename(columns={'batsman_runs': 'runs'})
