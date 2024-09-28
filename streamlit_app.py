@@ -1423,3 +1423,141 @@ elif sidebar_option == "Strength vs Weakness":
         st.markdown("### Strengths and Weaknesses")
         st.write(strong_message)
         st.write(weak_message)
+       
+
+        # Add a new column for the phase based on the over
+        def categorize_phase(over):
+            if over <= 6:
+                return 'Powerplay'
+            elif 6 < over < 16:
+                return 'Middle'
+            else:
+                return 'Death'
+        
+        # Assuming `pdf` contains a column 'over' with the over numbers
+        pdf['phase'] = pdf['over'].apply(categorize_phase)
+        
+        # Streamlit header
+        st.header("Phase-wise Strength and Weakness Analysis")
+        player_name = st.selectbox("Search for a player", idf['batsman'].unique())
+        
+        # DataFrame to hold results
+        result_df = pd.DataFrame()
+        i = 0
+        
+        # Phases to analyze
+        phases = ['Powerplay', 'Middle', 'Death']
+        
+        for phase in phases:
+            temp_df = pdf[pdf['batsman'] == player_name]  # Filter data for the selected batsman
+            
+            # Filter for the specific phase
+            temp_df = temp_df[temp_df['phase'] == phase]
+            
+            # Apply the cumulative function (assuming `cumulator` is defined)
+            temp_df = cumulator(temp_df)
+            
+            # If the DataFrame is empty after applying `cumulator`, skip this iteration
+            if temp_df.empty:
+                continue
+            
+            # Add the phase column
+            temp_df['phase'] = phase
+            
+            # Reorder columns to make 'phase' the first column
+            cols = temp_df.columns.tolist()
+            new_order = ['phase'] + [col for col in cols if col != 'phase']
+            temp_df = temp_df[new_order]
+            
+            # Concatenate results into result_df
+            if i == 0:
+                result_df = temp_df
+                i += 1
+            else:
+                result_df = pd.concat([result_df, temp_df], ignore_index=True)
+        
+        # Display the final result_df
+        result_df = result_df.drop(columns=['matches_x', 'matches_y', 'batsman', 'debut_year', 'final_year','hundreds','fifties','thirties','highest_score','batting_team','matches'])
+        result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+        columns_to_convert = ['RUNS']
+        
+        # Fill NaN values with 0
+        result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+        
+        # Convert the specified columns to integer type
+        result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+        result_df = round_up_floats(result_df)
+        cols = result_df.columns.tolist()
+        
+        # Specify the desired order with 'phase' first
+        new_order = ['PHASE', 'INNINGS'] + [col for col in cols if col not in ['PHASE','INNINGS']]
+        result_df = result_df[new_order]
+        
+        st.markdown("### Performance in Different Phases")
+        st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+        
+        # Set thresholds for strengths and weaknesses
+        strength_thresholds = {
+            'SR': 125,               # Threshold for Strike Rate
+            'AVG': 30,               # Threshold for Average
+            'DOT PERCENTAGE': 25,    # Threshold for Dot Percentage
+            'BPB': 5,                # Threshold for Boundary Percentage Batsman
+            'BPD': 20                # Threshold for Boundary Percentage Delivery
+        }
+        
+        weakness_thresholds = {
+            'SR': 90,                # Threshold for Strike Rate
+            'AVG': 15,               # Threshold for Average
+            'DOT PERCENTAGE': 40,    # Threshold for Dot Percentage
+            'BPB': 7,                # Threshold for Boundary Percentage Batsman
+            'BPD': 15                # Threshold for Boundary Percentage Delivery
+        }
+        
+        # Initialize lists to hold strengths and weaknesses
+        strong_against = []
+        weak_against = []
+        
+        # Check each phase's stats against the thresholds
+        for index, row in result_df.iterrows():
+            strong_count = 0
+            weak_count = 0
+            if row['INNINGS'] >= 3:
+                # Evaluate strengths
+                if row['SR'] >= strength_thresholds['SR']:
+                    strong_count += 1
+                if row['AVG'] >= strength_thresholds['AVG']:
+                    strong_count += 1
+                if row['DOT PERCENTAGE'] <= strength_thresholds['DOT PERCENTAGE']:
+                    strong_count += 1
+                if row['BPB'] <= strength_thresholds['BPB']:
+                    strong_count += 1
+                if row['BPD'] >= strength_thresholds['BPD']:
+                    strong_count += 1
+                
+                # Evaluate weaknesses
+                if row['SR'] <= weakness_thresholds['SR']:
+                    weak_count += 1
+                if row['AVG'] <= weakness_thresholds['AVG']:
+                    weak_count += 1
+                if row['DOT PERCENTAGE'] >= weakness_thresholds['DOT PERCENTAGE']:
+                    weak_count += 1
+                if row['BPB'] >= weakness_thresholds['BPB']:
+                    weak_count += 1
+                if row['BPD'] <= weakness_thresholds['BPD']:
+                    weak_count += 1
+                
+                # Determine strong/weak based on counts
+                if strong_count >= 3:
+                    strong_against.append(row['PHASE'])
+                if weak_count >= 3:
+                    weak_against.append(row['PHASE'])
+                
+        # Format the output message
+        strong_message = f"{player_name} is strong against: {', '.join(strong_against) if strong_against else 'no clear strengths in any phase.'}."
+        weak_message = f"{player_name} is weak against: {', '.join(weak_against) if weak_against else 'no clear weaknesses in any phase.'}."
+        
+        # Display strengths and weaknesses messages
+        st.markdown("### Strengths and Weaknesses")
+        st.write(strong_message)
+        st.write(weak_message)
+
