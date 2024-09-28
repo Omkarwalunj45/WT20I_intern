@@ -1348,14 +1348,7 @@ elif sidebar_option == "Strength vs Weakness":
 
         st.markdown("### Performance Against Bowling Styles")
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
-        # After displaying the result_df table
-        st.markdown("### Performance Against Bowling Styles")
-        st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
-        
-       # After displaying the result_df table
-        st.markdown("### Performance Against Bowling Styles")
-        st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
-        
+       #  
         # Set thresholds for strengths and weaknesses for Women's T20Is
         strength_thresholds = {
             'SR': 125,               # Threshold for Strike Rate
