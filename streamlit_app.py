@@ -1286,7 +1286,7 @@ elif sidebar_option == "Strength vs Weakness":
     option = st.selectbox("Select Role", ("Batting", "Bowling"))
     
     if option == "Batting":
-        st.subheader("Batsman vs Bowling Style Analysis")
+        # st.subheader("Batsman vs Bowling Style Analysis")
         
         allowed_bowling_styles = [
             'Right-arm medium fast', 'Right arm medium fast', 
