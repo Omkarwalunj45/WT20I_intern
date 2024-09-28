@@ -1404,17 +1404,17 @@ elif sidebar_option == "Strength vs Weakness":
                 strong_against.append(row['BOWLING STYLE'])
             if weak_count >= 3:
                 weak_against.append(row['BOWLING STYLE'])
-        
-        # Format the output message
-        if strong_against:
-            strong_message = f"{player_name} is strong against: {', '.join(strong_against)}."
-        else:
-            strong_message = f"{player_name} has no clear strengths against any bowling style."
-        
-        if weak_against:
-            weak_message = f"{player_name} is weak against: {', '.join(weak_against)}."
-        else:
-            weak_message = f"{player_name} has no clear weaknesses against any bowling style."
+            if row['INNINGS']>=5:
+            # Format the output message
+                if strong_against:
+                    strong_message = f"{player_name} is strong against: {', '.join(strong_against)}."
+                else:
+                    strong_message = f"{player_name} has no clear strengths against any bowling style."
+                
+                if weak_against:
+                    weak_message = f"{player_name} is weak against: {', '.join(weak_against)}."
+                else:
+                    weak_message = f"{player_name} has no clear weaknesses against any bowling style."
         
         # Display strengths and weaknesses messages
         st.markdown("### Strengths and Weaknesses")
