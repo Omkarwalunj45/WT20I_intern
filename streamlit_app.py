@@ -997,9 +997,12 @@ if sidebar_option == "Player Profile":
 elif sidebar_option == "Matchup Analysis":
     
     st.header("Matchup Analysis")
+    
     # Filter unique batters and bowlers from the DataFrame
     unique_batters = pdf['batsman'].unique()  # Adjust the column name as per your PDF data structure
     unique_bowlers = pdf['bowler'].unique()    # Adjust the column name as per your PDF data structure
+    unique_batters=unique_batters[(unique_batters.batsman)!='0']
+    unique_bowlers=unique_bowlers[(unique_bowlers.bowlers)!='0']
 
     # Search box for Batters
     batter_name = st.selectbox("Select a Batter", unique_batters)
