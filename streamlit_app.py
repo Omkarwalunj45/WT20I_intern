@@ -1401,9 +1401,9 @@ elif sidebar_option == "Strength vs Weakness":
         
             # Determine strong/weak based on counts
             if strong_count >= 3:
-                strong_against.append(row['BOWLING_STYLE'])
+                strong_against.append(row['BOWLING STYLE'])
             if weak_count >= 3:
-                weak_against.append(row['BOWLING_STYLE'])
+                weak_against.append(row['BOWLING STYLE'])
         
         # Format the output message
         if strong_against:
