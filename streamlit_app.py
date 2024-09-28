@@ -1552,8 +1552,8 @@ elif sidebar_option == "Strength vs Weakness":
                     weak_against.append(row['PHASE'])
                 
         # Format the output message
-        strong_message = f"{player_name} is strong against: {', '.join(strong_against) if strong_against else 'no clear strengths in any phase.'}."
-        weak_message = f"{player_name} is weak against: {', '.join(weak_against) if weak_against else 'no clear weaknesses in any phase.'}."
+        strong_message = f"{player_name} is strong in: {', '.join(strong_against) if strong_against else 'no clear strengths in any phase.'}."
+        weak_message = f"{player_name} is weak int: {', '.join(weak_against) if weak_against else 'no clear weaknesses in any phase.'}."
         
         # Display strengths and weaknesses messages
         st.markdown("### Strengths and Weaknesses")
