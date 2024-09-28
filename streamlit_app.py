@@ -547,10 +547,10 @@ if sidebar_option == "Player Profile":
             cols = result_df.columns.tolist()
 
             #    # Specify the desired order with 'year' first
-            new_order = ['OPPONENT', 'MATCHES'] + [col for col in cols if col not in ['MATCHES', 'OPPONENT']]
+            # new_order = ['OPPONENT', 'MATCHES'] + [col for col in cols if col not in ['MATCHES', 'OPPONENT']]
                          
-            #    # Reindex the DataFrame with the new column order
-            result_df =result_df[new_order]
+            # #    # Reindex the DataFrame with the new column order
+            # result_df =result_df[new_order]
  
             st.markdown("### Opponentwise Performance")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
@@ -620,13 +620,13 @@ if sidebar_option == "Player Profile":
                     
             # Display the results
             st.markdown(f"### **Yearwise Performnce**")
-            cols = result_df.columns.tolist()
+            # cols = result_df.columns.tolist()
 
-            # Specify the desired order with 'year' first
-            new_order = ['YEAR'] + [col for col in cols if col != 'YEAR']
+            # # Specify the desired order with 'year' first
+            # new_order = ['YEAR'] + [col for col in cols if col != 'YEAR']
                      
-            # Reindex the DataFrame with the new column order
-            result_df = result_df[new_order]
+            # # Reindex the DataFrame with the new column order
+            # result_df = result_df[new_order]
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
             tdf = pdf[pdf['batsman'] == player_name]
