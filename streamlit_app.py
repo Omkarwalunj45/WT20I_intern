@@ -1374,7 +1374,7 @@ elif sidebar_option == "Strength vs Weakness":
         for index, row in result_df.iterrows():
             strong_count = 0
             weak_count = 0
-            if row['INNINGS']>=5:
+            if row['INNINGS']>=3:
                 # Evaluate strengths
                 if row['SR'] >= strength_thresholds['SR']:
                     strong_count += 1
