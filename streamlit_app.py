@@ -443,283 +443,283 @@ if sidebar_option == "Player Profile":
             else:
                 st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)
 
-    with tab2:
-        st.header("Career Statistics")
+    # with tab2:
+    #     st.header("Career Statistics")
 
-        # Dropdown for Batting or Bowling selection
-        option = st.selectbox("Select Career Stat Type", ("Batting", "Bowling"))
+    #     # Dropdown for Batting or Bowling selection
+    #     option = st.selectbox("Select Career Stat Type", ("Batting", "Bowling"))
 
-        # Show Career Averages based on the dropdown
-        st.subheader("Career Performance")
+    #     # Show Career Averages based on the dropdown
+    #     st.subheader("Career Performance")
 
-        # Display Career Averages based on selection
-        if option == "Batting":
-            # Create a temporary DataFrame and filter the player's row
-            temp_df = idf.drop(columns=['Unnamed: 0', 'final_year', 'matches_x', 'matches_y'])
-            player_stats = temp_df[temp_df['batsman'] == player_name]  # Filter for the selected player
+    #     # Display Career Averages based on selection
+    #     if option == "Batting":
+    #         # Create a temporary DataFrame and filter the player's row
+    #         temp_df = idf.drop(columns=['Unnamed: 0', 'final_year', 'matches_x', 'matches_y'])
+    #         player_stats = temp_df[temp_df['batsman'] == player_name]  # Filter for the selected player
 
-            # Convert column names to uppercase and replace underscores with spaces
-            player_stats.columns = [col.upper().replace('_', ' ') for col in player_stats.columns]
-            player_stats=round_up_floats(player_stats)
-            # Display the player's statistics in a table format with bold headers
-            st.markdown("### Batting Statistics")
-            columns_to_convert = ['RUNS','HUNDREDS', 'FIFTIES','THIRTIES', 'HIGHEST SCORE']
+    #         # Convert column names to uppercase and replace underscores with spaces
+    #         player_stats.columns = [col.upper().replace('_', ' ') for col in player_stats.columns]
+    #         player_stats=round_up_floats(player_stats)
+    #         # Display the player's statistics in a table format with bold headers
+    #         st.markdown("### Batting Statistics")
+    #         columns_to_convert = ['RUNS','HUNDREDS', 'FIFTIES','THIRTIES', 'HIGHEST SCORE']
 
-               # Fill NaN values with 0
-            player_stats[columns_to_convert] = player_stats[columns_to_convert].fillna(0)
+    #            # Fill NaN values with 0
+    #         player_stats[columns_to_convert] = player_stats[columns_to_convert].fillna(0)
                 
-               # Convert the specified columns to integer type
-            player_stats[columns_to_convert] = player_stats[columns_to_convert].astype(int)
-            st.table(player_stats.style.set_table_attributes("style='font-weight: bold;'"))
+    #            # Convert the specified columns to integer type
+    #         player_stats[columns_to_convert] = player_stats[columns_to_convert].astype(int)
+    #         st.table(player_stats.style.set_table_attributes("style='font-weight: bold;'"))
             
-            allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh', 
-                                 'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
+    #         allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh', 
+    #                              'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
             
-            # Initializing an empty DataFrame for results and a counter
-            result_df = pd.DataFrame()
-            i = 0
+    #         # Initializing an empty DataFrame for results and a counter
+    #         result_df = pd.DataFrame()
+    #         i = 0
             
-            # Checking if 'total_runs', 'batsman_runs', 'dismissal_kind', 'batsman', and 'over' are already in bpdf
-            if 'total_runs' not in pdf.columns:
-                pdf['total_runs'] = pdf['runs_off_bat'] + pdf['extras']  # Create total_runs column
+    #         # Checking if 'total_runs', 'batsman_runs', 'dismissal_kind', 'batsman', and 'over' are already in bpdf
+    #         if 'total_runs' not in pdf.columns:
+    #             pdf['total_runs'] = pdf['runs_off_bat'] + pdf['extras']  # Create total_runs column
             
-                # Renaming necessary columns if they don't exist in the desired format
-                pdf = pdf.rename(columns={
-                    'runs_off_bat': 'batsman_runs', 
-                    'wicket_type': 'dismissal_kind', 
-                    'striker': 'batsman', 
-                    'innings': 'inning', 
-                    'bowler': 'bowler_name'
-                })
+    #             # Renaming necessary columns if they don't exist in the desired format
+    #             pdf = pdf.rename(columns={
+    #                 'runs_off_bat': 'batsman_runs', 
+    #                 'wicket_type': 'dismissal_kind', 
+    #                 'striker': 'batsman', 
+    #                 'innings': 'inning', 
+    #                 'bowler': 'bowler_name'
+    #             })
             
-                # Drop rows where 'ball' is missing, if not already done
-                pdf = pdf.dropna(subset=['ball'])
+    #             # Drop rows where 'ball' is missing, if not already done
+    #             pdf = pdf.dropna(subset=['ball'])
             
-            # Convert the 'ball' column to numeric if it's not already
-            if not pd.api.types.is_numeric_dtype(pdf['ball']):
-                pdf['ball'] = pd.to_numeric(pdf['ball'], errors='coerce')
+    #         # Convert the 'ball' column to numeric if it's not already
+    #         if not pd.api.types.is_numeric_dtype(pdf['ball']):
+    #             pdf['ball'] = pd.to_numeric(pdf['ball'], errors='coerce')
             
-            # Calculate 'over' by applying lambda function (check if the 'over' column is already present)
-            if 'over' not in pdf.columns:
-                pdf['over'] = pdf['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
+    #         # Calculate 'over' by applying lambda function (check if the 'over' column is already present)
+    #         if 'over' not in pdf.columns:
+    #             pdf['over'] = pdf['ball'].apply(lambda x: mt.floor(x) + 1 if pd.notnull(x) else None)
             
-            # Iterate over allowed countries for batting analysis
-            for country in allowed_countries:
-                temp_df = pdf[pdf['batsman'] == player_name]  # Filter data for the selected batsman
+    #         # Iterate over allowed countries for batting analysis
+    #         for country in allowed_countries:
+    #             temp_df = pdf[pdf['batsman'] == player_name]  # Filter data for the selected batsman
                 
-                # Filter for the specific country
-                temp_df = temp_df[temp_df['bowling_team'] == country]
+    #             # Filter for the specific country
+    #             temp_df = temp_df[temp_df['bowling_team'] == country]
             
-                # Apply the cumulative function (bcum)
-                temp_df = cumulator(temp_df)
+    #             # Apply the cumulative function (bcum)
+    #             temp_df = cumulator(temp_df)
             
-                # If the DataFrame is empty after applying `bcum`, skip this iteration
-                if temp_df.empty:
-                    continue
+    #             # If the DataFrame is empty after applying `bcum`, skip this iteration
+    #             if temp_df.empty:
+    #                 continue
             
-                # Add the country column with the current country's value
-                temp_df['opponent'] = country.upper()
+    #             # Add the country column with the current country's value
+    #             temp_df['opponent'] = country.upper()
             
-                # Reorder columns to make 'country' the first column
-                cols = temp_df.columns.tolist()
-                new_order = ['opponent'] + [col for col in cols if col != 'opponent']
-                temp_df = temp_df[new_order]
+    #             # Reorder columns to make 'country' the first column
+    #             cols = temp_df.columns.tolist()
+    #             new_order = ['opponent'] + [col for col in cols if col != 'opponent']
+    #             temp_df = temp_df[new_order]
                 
             
-                # Concatenate results into result_df
-                if i == 0:
-                    result_df = temp_df
-                    i += 1
-                else:
-                    result_df = pd.concat([result_df, temp_df], ignore_index=True)
+    #             # Concatenate results into result_df
+    #             if i == 0:
+    #                 result_df = temp_df
+    #                 i += 1
+    #             else:
+    #                 result_df = pd.concat([result_df, temp_df], ignore_index=True)
             
-            # Display the final result_df
-            # result_df = result_df.drop(columns=['matches_x','matches_y','batsman','debut_year','final_year'])
-            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-            # columns_to_convert = ['HUNDREDS', 'FIFTIES','THIRTIES', 'RUNS','HIGHEST SCORE']
+    #         # Display the final result_df
+    #         # result_df = result_df.drop(columns=['matches_x','matches_y','batsman','debut_year','final_year'])
+    #         result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+    #         # columns_to_convert = ['HUNDREDS', 'FIFTIES','THIRTIES', 'RUNS','HIGHEST SCORE']
 
-            #    # Fill NaN values with 0
-            # result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+    #         #    # Fill NaN values with 0
+    #         # result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
                 
-            #    # Convert the specified columns to integer type
-            # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
-            result_df=round_up_floats(result_df)
-            cols = result_df.columns.tolist()
+    #         #    # Convert the specified columns to integer type
+    #         # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+    #         result_df=round_up_floats(result_df)
+    #         cols = result_df.columns.tolist()
 
-            #    # Specify the desired order with 'year' first
-            # new_order = ['OPPONENT', 'MATCHES'] + [col for col in cols if col not in ['MATCHES', 'OPPONENT']]
+    #         #    # Specify the desired order with 'year' first
+    #         # new_order = ['OPPONENT', 'MATCHES'] + [col for col in cols if col not in ['MATCHES', 'OPPONENT']]
                          
-            # #    # Reindex the DataFrame with the new column order
-            # result_df =result_df[new_order]
+    #         # #    # Reindex the DataFrame with the new column order
+    #         # result_df =result_df[new_order]
  
-            st.markdown("### Opponentwise Performance")
-            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+    #         st.markdown("### Opponentwise Performance")
+    #         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
             
         
-            tdf = pdf[pdf['batsman'] == player_name]
+    #         tdf = pdf[pdf['batsman'] == player_name]
 
-            def standardize_season(season):
-                if '/' in season:  # Check if the season is in 'YYYY/YY' format
-                    year = season.split('/')[0]  # Get the first part
-                else:
-                    year = season  # Use as is if already in 'YYYY' format
-                return year.strip()  # Return the year stripped of whitespace
-            tdf['season'] =tdf['season'].apply(standardize_season)
+    #         def standardize_season(season):
+    #             if '/' in season:  # Check if the season is in 'YYYY/YY' format
+    #                 year = season.split('/')[0]  # Get the first part
+    #             else:
+    #                 year = season  # Use as is if already in 'YYYY' format
+    #             return year.strip()  # Return the year stripped of whitespace
+    #         tdf['season'] =tdf['season'].apply(standardize_season)
             
-            # Populate an array of unique seasons
-            unique_seasons = tdf['season'].unique()
+    #         # Populate an array of unique seasons
+    #         unique_seasons = tdf['season'].unique()
             
-            # Optional: Convert to a sorted list (if needed)
-            unique_seasons = sorted(set(unique_seasons))
-            # print(unique_seasons)
-            tdf=pd.DataFrame(tdf)
-            # print(temp_df.head(50))
-            tdf['batsman_runs'] = tdf['batsman_runs'].astype(int)
-            tdf['total_runs'] = tdf['total_runs'].astype(int)
-            # Run a for loop and pass temp_df to a cumulative function
-            i=0
-            for season in unique_seasons:
-                print(i)
-                temp_df = tdf[(tdf['season'] == season)]
-                print(temp_df.head())
-                temp_df = cumulator(temp_df)
-                if i==0:
-                    result_df = temp_df  # Initialize with the first result_df
-                    i=1+i
-                else:
-                    result_df = pd.concat([result_df, temp_df], ignore_index=True)
-                # result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','matches_x','matches_y'])
-                # Convert specific columns to integers
-                # Round off the remaining float columns to 2 decimal places
-                float_cols = result_df.select_dtypes(include=['float']).columns
-                result_df[float_cols] = result_df[float_cols].round(2)
-                columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']
+    #         # Optional: Convert to a sorted list (if needed)
+    #         unique_seasons = sorted(set(unique_seasons))
+    #         # print(unique_seasons)
+    #         tdf=pd.DataFrame(tdf)
+    #         # print(temp_df.head(50))
+    #         tdf['batsman_runs'] = tdf['batsman_runs'].astype(int)
+    #         tdf['total_runs'] = tdf['total_runs'].astype(int)
+    #         # Run a for loop and pass temp_df to a cumulative function
+    #         i=0
+    #         for season in unique_seasons:
+    #             print(i)
+    #             temp_df = tdf[(tdf['season'] == season)]
+    #             print(temp_df.head())
+    #             temp_df = cumulator(temp_df)
+    #             if i==0:
+    #                 result_df = temp_df  # Initialize with the first result_df
+    #                 i=1+i
+    #             else:
+    #                 result_df = pd.concat([result_df, temp_df], ignore_index=True)
+    #             # result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','matches_x','matches_y'])
+    #             # Convert specific columns to integers
+    #             # Round off the remaining float columns to 2 decimal places
+    #             float_cols = result_df.select_dtypes(include=['float']).columns
+    #             result_df[float_cols] = result_df[float_cols].round(2)
+    #             columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']
 
-               # Fill NaN values with 0
-            #     temp_df[columns_to_convert] = temp_df[columns_to_convert].fillna(0)
+    #            # Fill NaN values with 0
+    #         #     temp_df[columns_to_convert] = temp_df[columns_to_convert].fillna(0)
                 
-            #    # Convert the specified columns to integer type
-            #     temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
-            # columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']
+    #         #    # Convert the specified columns to integer type
+    #         #     temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
+    #         # columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']
 
-               # Fill NaN values with 0
-            # temp_df[columns_to_convert] = temp_df[columns_to_convert].fillna(0)
+    #            # Fill NaN values with 0
+    #         # temp_df[columns_to_convert] = temp_df[columns_to_convert].fillna(0)
                 
-               # Convert the specified columns to integer type
-            # temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
-            result_df=result_df.rename(columns={'final_year':'year'})
-            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-            result_df = round_up_floats(result_df)
-            columns_to_convert = ['RUNS', 'HUNDREDS', 'FIFTIES', 'THIRTIES', 'HIGHEST SCORE']
+    #            # Convert the specified columns to integer type
+    #         # temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
+    #         result_df=result_df.rename(columns={'final_year':'year'})
+    #         result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+    #         result_df = round_up_floats(result_df)
+    #         columns_to_convert = ['RUNS', 'HUNDREDS', 'FIFTIES', 'THIRTIES', 'HIGHEST SCORE']
 
-               # Fill NaN values with 0
-            # result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+    #            # Fill NaN values with 0
+    #         # result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
                 
-               # Convert the specified columns to integer type
-            # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+    #            # Convert the specified columns to integer type
+    #         # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
                     
-            # Display the results
-            st.markdown(f"### **Yearwise Performnce**")
-            # cols = result_df.columns.tolist()
+    #         # Display the results
+    #         st.markdown(f"### **Yearwise Performnce**")
+    #         # cols = result_df.columns.tolist()
 
-            # # Specify the desired order with 'year' first
-            # new_order = ['YEAR'] + [col for col in cols if col != 'YEAR']
+    #         # # Specify the desired order with 'year' first
+    #         # new_order = ['YEAR'] + [col for col in cols if col != 'YEAR']
                      
-            # # Reindex the DataFrame with the new column order
-            # result_df = result_df[new_order]
-            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+    #         # # Reindex the DataFrame with the new column order
+    #         # result_df = result_df[new_order]
+    #         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
-            tdf = pdf[pdf['batsman'] == player_name]
-            temp_df=tdf[(tdf['inning']==1)]
-            temp_df=cumulator(temp_df)
-            temp_df['inning']=1
-            cols = temp_df.columns.tolist()
-            new_order = ['inning'] + [col for col in cols if col != 'inning']          
-            # Reindex the DataFrame with the new column order
-            temp_df =temp_df[new_order] 
-            result_df = temp_df
-            temp_df=tdf[(tdf['inning']==2)]
-            temp_df=cumulator(temp_df)
-            temp_df['inning']=2
-            cols = temp_df.columns.tolist()
-            new_order = ['inning'] + [col for col in cols if col != 'inning']          
-            # Reindex the DataFrame with the new column order
-            temp_df =temp_df[new_order] 
-            result_df = pd.concat([result_df, temp_df], ignore_index=True)
-            # result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','matches_x','matches_y','final_year'])
-            # Convert specific columns to integers
-            # Round off the remaining float columns to 2 decimal places
-            float_cols = result_df.select_dtypes(include=['float']).columns
-            result_df[float_cols] = result_df[float_cols].round(2)
+    #         tdf = pdf[pdf['batsman'] == player_name]
+    #         temp_df=tdf[(tdf['inning']==1)]
+    #         temp_df=cumulator(temp_df)
+    #         temp_df['inning']=1
+    #         cols = temp_df.columns.tolist()
+    #         new_order = ['inning'] + [col for col in cols if col != 'inning']          
+    #         # Reindex the DataFrame with the new column order
+    #         temp_df =temp_df[new_order] 
+    #         result_df = temp_df
+    #         temp_df=tdf[(tdf['inning']==2)]
+    #         temp_df=cumulator(temp_df)
+    #         temp_df['inning']=2
+    #         cols = temp_df.columns.tolist()
+    #         new_order = ['inning'] + [col for col in cols if col != 'inning']          
+    #         # Reindex the DataFrame with the new column order
+    #         temp_df =temp_df[new_order] 
+    #         result_df = pd.concat([result_df, temp_df], ignore_index=True)
+    #         # result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','matches_x','matches_y','final_year'])
+    #         # Convert specific columns to integers
+    #         # Round off the remaining float columns to 2 decimal places
+    #         float_cols = result_df.select_dtypes(include=['float']).columns
+    #         result_df[float_cols] = result_df[float_cols].round(2)
             
-            result_df=result_df.rename(columns={'final_year':'year'})
-            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-            columns_to_convert = ['RUNS', 'HUNDREDS', 'FIFTIES', 'THIRTIES', 'HIGHEST SCORE']
+    #         result_df=result_df.rename(columns={'final_year':'year'})
+    #         result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+    #         columns_to_convert = ['RUNS', 'HUNDREDS', 'FIFTIES', 'THIRTIES', 'HIGHEST SCORE']
 
-               # Fill NaN values with 0
-            # result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+    #            # Fill NaN values with 0
+    #         # result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
                 
-            #    # Convert the specified columns to integer type
-            # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+    #         #    # Convert the specified columns to integer type
+    #         # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
                     
-            # Display the results
-            result_df = result_df.drop(columns=['MATCHES'])
-            st.markdown(f"### **Inningwise Performnce**")
-            st.table(result_df.reset_index(drop=True).style.set_table_attributes("style='font-weight: bold;'"))
+    #         # Display the results
+    #         result_df = result_df.drop(columns=['MATCHES'])
+    #         st.markdown(f"### **Inningwise Performnce**")
+    #         st.table(result_df.reset_index(drop=True).style.set_table_attributes("style='font-weight: bold;'"))
 
             
-            # Creating a DataFrame to display venues and their corresponding countries
-            pdf['country'] = pdf['venue'].map(venue_country_map)
-            allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh',
-                     'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
-            i=0
-            for country in allowed_countries:
-                temp_df = pdf[pdf['batsman'] == player_name]
-                # print(temp_df.match_id.unique())
-                # print(temp_df.head(20))
-                temp_df = temp_df[(temp_df['country'] == country)]
-                temp_df = cumulator(temp_df)
-                temp_df['country']=country.upper()
-                cols = temp_df.columns.tolist()
-                new_order = ['country'] + [col for col in cols if col != 'country']
-                # Reindex the DataFrame with the new column order
-                temp_df =temp_df[new_order]
-                # print(temp_df)
-             # If temp_df is empty after applying cumulator, skip to the next iteration
-                if len(temp_df) == 0:
-                   continue
-                elif i==0:
-                    result_df = temp_df
-                    i=i+1
-                else:
-                    result_df = result_df.reset_index(drop=True)
-                    temp_df = temp_df.reset_index(drop=True)
-                    result_df = result_df.loc[:, ~result_df.columns.duplicated()]
+    #         # Creating a DataFrame to display venues and their corresponding countries
+    #         pdf['country'] = pdf['venue'].map(venue_country_map)
+    #         allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh',
+    #                  'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
+    #         i=0
+    #         for country in allowed_countries:
+    #             temp_df = pdf[pdf['batsman'] == player_name]
+    #             # print(temp_df.match_id.unique())
+    #             # print(temp_df.head(20))
+    #             temp_df = temp_df[(temp_df['country'] == country)]
+    #             temp_df = cumulator(temp_df)
+    #             temp_df['country']=country.upper()
+    #             cols = temp_df.columns.tolist()
+    #             new_order = ['country'] + [col for col in cols if col != 'country']
+    #             # Reindex the DataFrame with the new column order
+    #             temp_df =temp_df[new_order]
+    #             # print(temp_df)
+    #          # If temp_df is empty after applying cumulator, skip to the next iteration
+    #             if len(temp_df) == 0:
+    #                continue
+    #             elif i==0:
+    #                 result_df = temp_df
+    #                 i=i+1
+    #             else:
+    #                 result_df = result_df.reset_index(drop=True)
+    #                 temp_df = temp_df.reset_index(drop=True)
+    #                 result_df = result_df.loc[:, ~result_df.columns.duplicated()]
             
-                    result_df = pd.concat([result_df, temp_df],ignore_index=True)
+    #                 result_df = pd.concat([result_df, temp_df],ignore_index=True)
                     
             
-                # result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','final_year','matches_x','matches_y'])
-                # Round off the remaining float columns to 2 decimal places
-                float_cols = result_df.select_dtypes(include=['float']).columns
-                result_df[float_cols] = result_df[float_cols].round(2)
-            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-            result_df = round_up_floats(result_df)
-            # columns_to_convert = ['RUNS', 'HUNDREDS', 'FIFTIES', 'THIRTIES', 'HIGHEST SCORE']
+    #             # result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','final_year','matches_x','matches_y'])
+    #             # Round off the remaining float columns to 2 decimal places
+    #             float_cols = result_df.select_dtypes(include=['float']).columns
+    #             result_df[float_cols] = result_df[float_cols].round(2)
+    #         result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+    #         result_df = round_up_floats(result_df)
+    #         # columns_to_convert = ['RUNS', 'HUNDREDS', 'FIFTIES', 'THIRTIES', 'HIGHEST SCORE']
 
-            #    # Fill NaN values with 0
-            # result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+    #         #    # Fill NaN values with 0
+    #         # result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
                 
-            #    # Convert the specified columns to integer type
-            # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
-            cols = result_df.columns.tolist()
-            if 'COUNTRY' in cols:
-                new_order = ['COUNTRY'] + [col for col in cols if col != 'COUNTRY']
-                result_df = result_df[new_order]
-            # result_df = result_df.loc[:, ~result_df.columns.duplicated()]
-                result_df = result_df.drop(columns=['MATCHES'])
-            st.markdown(f"### **In Host Country**")
-            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+    #         #    # Convert the specified columns to integer type
+    #         # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+    #         cols = result_df.columns.tolist()
+    #         if 'COUNTRY' in cols:
+    #             new_order = ['COUNTRY'] + [col for col in cols if col != 'COUNTRY']
+    #             result_df = result_df[new_order]
+    #         # result_df = result_df.loc[:, ~result_df.columns.duplicated()]
+    #             result_df = result_df.drop(columns=['MATCHES'])
+    #         st.markdown(f"### **In Host Country**")
+    #         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
               
 
 #         elif option == "Bowling":
