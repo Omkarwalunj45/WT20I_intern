@@ -706,8 +706,9 @@ if sidebar_option == "Player Profile":
                # Convert the specified columns to integer type
             result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
             cols = result_df.columns.tolist()
-            new_order = ['COUNTRY'] + [col for col in cols if col != 'COUNTRY']
-            result_df = result_df[new_order]
+            if 'COUNTRY' in cols:
+                new_order = ['COUNTRY'] + [col for col in cols if col != 'COUNTRY']
+                result_df = result_df[new_order]
             # result_df = result_df.loc[:, ~result_df.columns.duplicated()]
             result_df = result_df.drop(columns=['MATCHES'])
             st.markdown(f"### **In Host Country**")
