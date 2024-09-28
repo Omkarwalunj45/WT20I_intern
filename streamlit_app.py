@@ -1374,48 +1374,51 @@ elif sidebar_option == "Strength vs Weakness":
         for index, row in result_df.iterrows():
             strong_count = 0
             weak_count = 0
-            
-            # Evaluate strengths
-            if row['SR'] >= strength_thresholds['SR']:
-                strong_count += 1
-            if row['AVG'] >= strength_thresholds['AVG']:
-                strong_count += 1
-            if row['DOT PERCENTAGE'] <= strength_thresholds['DOT PERCENTAGE']:
-                strong_count += 1
-            if row['BPB'] <= strength_thresholds['BPB']:
-                strong_count += 1
-            if row['BPD'] >= strength_thresholds['BPD']:
-                strong_count += 1
-        
-            # Evaluate weaknesses
-            if row['SR'] <= weakness_thresholds['SR']:
-                weak_count += 1
-            if row['AVG'] <= weakness_thresholds['AVG']:
-                weak_count += 1
-            if row['DOT PERCENTAGE'] >= weakness_thresholds['DOT PERCENTAGE']:
-                weak_count += 1
-            if row['BPB'] >= weakness_thresholds['BPB']:
-                weak_count += 1
-            if row['BPD'] <= weakness_thresholds['BPD']:
-                weak_count += 1
-        
-            # Determine strong/weak based on counts
-            if strong_count >= 3:
-                strong_against.append(row['BOWLING STYLE'])
-            if weak_count >= 3:
-                weak_against.append(row['BOWLING STYLE'])
             if row['INNINGS']>=5:
-            # Format the output message
-                if strong_against:
-                    strong_message = f"{player_name} is strong against: {', '.join(strong_against)}."
-                else:
-                    strong_message = f"{player_name} has no clear strengths against any bowling style."
+                # Evaluate strengths
+                if row['SR'] >= strength_thresholds['SR']:
+                    strong_count += 1
+                if row['AVG'] >= strength_thresholds['AVG']:
+                    strong_count += 1
+                if row['DOT PERCENTAGE'] <= strength_thresholds['DOT PERCENTAGE']:
+                    strong_count += 1
+                if row['BPB'] <= strength_thresholds['BPB']:
+                    strong_count += 1
+                if row['BPD'] >= strength_thresholds['BPD']:
+                    strong_count += 1
+            
+                # Evaluate weaknesses
+                if row['SR'] <= weakness_thresholds['SR']:
+                    weak_count += 1
+                if row['AVG'] <= weakness_thresholds['AVG']:
+                    weak_count += 1
+                if row['DOT PERCENTAGE'] >= weakness_thresholds['DOT PERCENTAGE']:
+                    weak_count += 1
+                if row['BPB'] >= weakness_thresholds['BPB']:
+                    weak_count += 1
+                if row['BPD'] <= weakness_thresholds['BPD']:
+                    weak_count += 1
+            
+                # Determine strong/weak based on counts
+                if strong_count >= 3:
+                    strong_against.append(row['BOWLING STYLE'])
+                if weak_count >= 3:
+                    weak_against.append(row['BOWLING STYLE'])
                 
-                if weak_against:
-                    weak_message = f"{player_name} is weak against: {', '.join(weak_against)}."
+                # Format the output message
+                if strong_against:
+                      strong_message = f"{player_name} is strong against: {', '.join(strong_against)}."
                 else:
-                    weak_message = f"{player_name} has no clear weaknesses against any bowling style."
-        
+                      strong_message = f"{player_name} has no clear strengths against any bowling style."
+                    
+                if weak_against:
+                      weak_message = f"{player_name} is weak against: {', '.join(weak_against)}."
+                else:
+                      weak_message = f"{player_name} has no clear weaknesses against any bowling style."
+
+      
+            else:
+                continue
         # Display strengths and weaknesses messages
         st.markdown("### Strengths and Weaknesses")
         st.write(strong_message)
