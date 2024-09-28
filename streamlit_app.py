@@ -365,6 +365,33 @@ idf['debut_year'] = idf['debut_year'].str.split('/').str[0]  # Extract the year 
 # Convert the relevant columns to integers
 # columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']
 # idf[columns_to_convert] = idf[columns_to_convert].astype(int)
+pdf.rename(columns={'batting Style': 'batting_style','bowling Style': 'bowling_style'}, inplace=True)
+bowling_style_mapping = {
+    'Righ-arm medium fast ': 'Right-arm medium fast',
+    'Right arm Medium fast': 'Right-arm medium fast',
+    'Right-arm Medium fast': 'Right-arm medium fast',
+    'Right-arm medium fast': 'Right-arm medium fast',
+    'Right-arm Offbreak': 'Right-arm off-break',
+    'Right-arm fast seam': 'Right-arm fast',
+    'Right arm fast': 'Right-arm fast',
+    'Right-arm fast': 'Right-arm fast',
+    'Right-arm fast-medium/Off-spin': 'Right-arm fast-medium',
+    'Right-arm off-break, Legbreak': 'Right-arm off-break and Legbreak',
+    'Right-Arm Off Spin': 'Right-arm off-break',
+    'Legbreak Googly': 'Right-arm leg-spin',  # Updated mapping
+    'Righ-arm leg-spin': 'Right-arm leg-spin',
+    'Left arm Medium': 'Left-arm medium',
+    'Left-arm orthodox': 'Slow left-arm orthodox',
+    'Left arm wrist spin': 'Left-arm wrist spin',
+    'Right-arm off break': 'Right-arm off-break',
+    'Righ-arm medium': 'Right-arm medium fast',  # Mapping to Right-arm medium fast
+    'Right arm medium fast': 'Right-arm medium fast',  # Mapping to Right-arm medium fast
+    'Right arm Medium': 'Right-arm medium fast',  # Mapping to Right-arm medium fast
+}
+
+# Apply the mapping to the 'bowling_style' column in the PDF dataframe
+pdf['bowling_style'] = pdf['bowling_style'].replace(bowling_style_mapping)
+
 
 # Sidebar for selecting between "Player Profile" and "Matchup Analysis"
 sidebar_option = st.sidebar.radio(
@@ -1250,6 +1277,77 @@ elif sidebar_option == "Matchup Analysis":
         st.markdown("### **Innings Performance**")
         result_df=result_df[['INNING'] + ['YEAR'] + [col for col in result_df.columns if col not in ['INNING','YEAR']]]
         st.table(result_df.style.set_table_attributes("style='fsont-weight: bold;'"))
+      
+elif sidebar_option == "Strength vs Weakness":
+    st.header("Strength and Weakness Analysis")
+    player_name = st.selectbox("Search for a player", idf['batsman'].unique())
+    
+    # Dropdown for Batting or Bowling selection
+    option = st.selectbox("Select Role", ("Batting", "Bowling"))
+    
+    if option == "Batting":
+        st.subheader("Batsman vs Bowling Style Analysis")
+        
+        allowed_bowling_styles = [
+            'Right-arm medium fast', 'Right arm medium fast', 
+            'Right-arm off-break', 'Right-arm fast', 
+            'Right-arm fast-medium', 'Right-arm off-break and Legbreak',
+            'Right-arm leg-spin', 'Left-arm medium',
+            'Slow left-arm orthodox', 'Left-arm wrist spin'
+        ]
+        
+        result_df = pd.DataFrame()
+        i = 0
+        
+        for bowling_style in allowed_bowling_styles:
+            temp_df = pdf[pdf['batsman'] == player_name]  # Filter data for the selected batsman
+            
+            # Filter for the specific bowling style
+            temp_df = temp_df[temp_df['bowling_style'] == bowling_style]
+            
+            # Apply the cumulative function (bcum)
+            temp_df = cumulator(temp_df)
+            
+            # If the DataFrame is empty after applying `bcum`, skip this iteration
+            if temp_df.empty:
+                continue
+            
+            # Add the bowling style column
+            temp_df['bowling_style'] = bowling_style
+            
+            # Reorder columns to make 'bowling_style' the first column
+            cols = temp_df.columns.tolist()
+            new_order = ['bowling_style'] + [col for col in cols if col != 'bowling_style']
+            temp_df = temp_df[new_order]
+            
+            # Concatenate results into result_df
+            if i == 0:
+                result_df = temp_df
+                i += 1
+            else:
+                result_df = pd.concat([result_df, temp_df], ignore_index=True)
+        
+        # Display the final result_df
+        result_df = result_df.drop(columns=['matches_x', 'matches_y', 'batsman', 'debut_year', 'final_year','hundreds','fifties','thirties','highest_score'])
+        result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+        columns_to_convert = ['RUNS']
+
+        # Fill NaN values with 0
+        result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+
+        # Convert the specified columns to integer type
+        result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+        result_df = round_up_floats(result_df)
+        cols = result_df.columns.tolist()
+
+        # Specify the desired order with 'bowling_style' first
+        new_order = ['BOWLING_STYLE', 'MATCHES'] + [col for col in cols if col not in ['MATCHES', 'BOWLING_STYLE']]
+
+        # Reindex the DataFrame with the new column order
+        result_df = result_df[new_order]
+
+        st.markdown("### Performance Against Bowling Styles")
+        st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
         
     
