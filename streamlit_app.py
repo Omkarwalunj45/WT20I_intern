@@ -14,6 +14,7 @@ idf = pd.read_csv("Dataset/lifesaver_bat.csv",low_memory=False)
 info_df=pd.read_csv("Dataset/player_info_k.csv",low_memory=False)
 bpdf=pd.read_csv("Dataset/fantasy_dataset_WT20I.csv",low_memory=False)
 bidf=pd.read_csv("Dataset/lifesaver_bowl.csv",low_memory=False)
+info_df.rename(columns={'Player':'Player_name'})
 def is_bowlers_wkt(player_dismissed,dismissal_kind):
   if type(player_dismissed)== str :
     if dismissal_kind not in ['run out','retired hurt','obstructing the field']:
@@ -411,7 +412,7 @@ if sidebar_option == "Player Profile":
         with col3:
             st.markdown("AGE:")
             if p_info is not None:
-                st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{p_info['age']}</span>", unsafe_allow_html=True)
+                st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{p_info['Age']}</span>", unsafe_allow_html=True)
             else:
                 st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)
 
@@ -421,24 +422,24 @@ if sidebar_option == "Player Profile":
         with col4:
             st.markdown("BATTING STYLE:")
             if p_info is not None:
-                st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{p_info['batting_style'].upper()}</span>", unsafe_allow_html=True)
+                st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{p_info['Batting Style'].upper()}</span>", unsafe_allow_html=True)
             else:
                 st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)
 
         with col5:
             st.markdown("BOWLING STYLE:")
             if p_info is not None:
-                if p_info['bowling_style'] == 'Wicketkeeper':
+                if p_info['Bowling Style'] == 'N/A':
                     st.markdown("<span style='font-size: 20px; font-weight: bold;'>NONE</span>", unsafe_allow_html=True)
                 else:
-                    st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{p_info['bowling_style'].upper()}</span>", unsafe_allow_html=True)
+                    st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{p_info['Bowling Style'].upper()}</span>", unsafe_allow_html=True)
             else:
                 st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)
 
         with col6:
             st.markdown("PLAYING ROLE:")
             if p_info is not None:
-                st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{p_info['role'].upper()}</span>", unsafe_allow_html=True)
+                st.markdown(f"<span style='font-size: 20px; font-weight: bold;'>{p_info['Role'].upper()}</span>", unsafe_allow_html=True)
             else:
                 st.markdown("<span style='font-size: 20px; font-weight: bold;'>N/A</span>", unsafe_allow_html=True)
 
