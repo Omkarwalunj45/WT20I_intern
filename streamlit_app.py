@@ -1341,7 +1341,7 @@ elif sidebar_option == "Strength vs Weakness":
         cols = result_df.columns.tolist()
 
         # Specify the desired order with 'bowling_style' first
-        new_order = ['BOWLING_STYLE', 'MATCHES'] + [col for col in cols if col not in ['MATCHES', 'BOWLING_STYLE']]
+        new_order = ['BOWLING_STYLE', 'INNINGS'] + [col for col in cols if col not in ['INNINGS', 'BOWLING_STYLE']]
 
         # Reindex the DataFrame with the new column order
         result_df = result_df[new_order]
