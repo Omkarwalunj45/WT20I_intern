@@ -1439,7 +1439,6 @@ elif sidebar_option == "Strength vs Weakness":
         
         # Streamlit header
         st.header("Phase-wise Strength and Weakness Analysis")
-        player_name = st.selectbox("Search for a player", idf['batsman'].unique())
         
         # DataFrame to hold results
         result_df = pd.DataFrame()
