@@ -127,7 +127,7 @@ def cumulator(temp_df):
     twos = temp_df.groupby(['batsman'])['is_two'].sum().reset_index().rename(columns={'is_two': 'twos'})
     threes = temp_df.groupby(['batsman'])['is_three'].sum().reset_index().rename(columns={'is_three': 'threes'})
     bat_team = temp_df.groupby(['batsman'])['batting_team'].unique().reset_index()
-    fpi = pd.DataFrame(df.groupby(['batsman'])['bat_fantasy_pts'].sum()).reset_index().rename(columns={'bat_fantasy_pts': 'fantasy_points'})
+    fpi = pd.DataFrame(temp_df.groupby(['batsman'])['bat_fantasy_pts'].sum()).reset_index().rename(columns={'bat_fantasy_pts': 'fantasy_points'})
     print(1)
     matches = temp_df.groupby(['batsman'])['match_id'].nunique().reset_index(name='matches')
     print(0)
