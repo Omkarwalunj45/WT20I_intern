@@ -536,13 +536,13 @@ if sidebar_option == "Player Profile":
             # Display the final result_df
             # result_df = result_df.drop(columns=['matches_x','matches_y','batsman','debut_year','final_year'])
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-            columns_to_convert = ['HUNDREDS', 'FIFTIES','THIRTIES', 'RUNS','HIGHEST SCORE']
+            # columns_to_convert = ['HUNDREDS', 'FIFTIES','THIRTIES', 'RUNS','HIGHEST SCORE']
 
-               # Fill NaN values with 0
-            result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+            #    # Fill NaN values with 0
+            # result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
                 
-               # Convert the specified columns to integer type
-            result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+            #    # Convert the specified columns to integer type
+            # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
             result_df=round_up_floats(result_df)
             cols = result_df.columns.tolist()
 
@@ -596,11 +596,11 @@ if sidebar_option == "Player Profile":
                 columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']
 
                # Fill NaN values with 0
-                temp_df[columns_to_convert] = temp_df[columns_to_convert].fillna(0)
+            #     temp_df[columns_to_convert] = temp_df[columns_to_convert].fillna(0)
                 
-               # Convert the specified columns to integer type
-                temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
-            columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']
+            #    # Convert the specified columns to integer type
+            #     temp_df[columns_to_convert] = temp_df[columns_to_convert].astype(int)
+            # columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']
 
                # Fill NaN values with 0
             temp_df[columns_to_convert] = temp_df[columns_to_convert].fillna(0)
@@ -657,10 +657,10 @@ if sidebar_option == "Player Profile":
             columns_to_convert = ['RUNS', 'HUNDREDS', 'FIFTIES', 'THIRTIES', 'HIGHEST SCORE']
 
                # Fill NaN values with 0
-            result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+            # result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
                 
-               # Convert the specified columns to integer type
-            result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+            #    # Convert the specified columns to integer type
+            # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
                     
             # Display the results
             result_df = result_df.drop(columns=['MATCHES'])
@@ -705,13 +705,13 @@ if sidebar_option == "Player Profile":
                 result_df[float_cols] = result_df[float_cols].round(2)
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
             result_df = round_up_floats(result_df)
-            columns_to_convert = ['RUNS', 'HUNDREDS', 'FIFTIES', 'THIRTIES', 'HIGHEST SCORE']
+            # columns_to_convert = ['RUNS', 'HUNDREDS', 'FIFTIES', 'THIRTIES', 'HIGHEST SCORE']
 
-               # Fill NaN values with 0
-            result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+            #    # Fill NaN values with 0
+            # result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
                 
-               # Convert the specified columns to integer type
-            result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+            #    # Convert the specified columns to integer type
+            # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
             cols = result_df.columns.tolist()
             if 'COUNTRY' in cols:
                 new_order = ['COUNTRY'] + [col for col in cols if col != 'COUNTRY']
