@@ -1641,22 +1641,11 @@ elif sidebar_option == "Strength vs Weakness":
           
           # Sort the dismissal kinds by count
           dismissal_counts = dismissal_counts.sort_values(by='count', ascending=True)
-          
-          # Plotting the horizontal bar chart
-          plt.figure(figsize=(10, 6))
-          plt.bar(dismissal_counts['dismissal_kind'], dismissal_counts['count'], color='skyblue')
-          plt.xlabel('Dismissal Type')
-          plt.ylabel('Number of Dismissals')
-          plt.title(f'Number of Dismissals by Dismissal Type for {player_name}')
-          plt.grid(axis='x', linestyle='--', alpha=0.7)
-          plt.tight_layout()
-          
-          # Display the plot in Streamlit
-          st.pyplot(plt)
+          dismissal_counts['dismissal_kind'] = dismissal_counts['dismissal_kind'].str.upper()
           plt.figure(figsize=(10, 6))
           plt.barh(dismissal_counts['dismissal_kind'], dismissal_counts['count'], color='skyblue')
-          plt.xlabel('Dismissal Type')
-          plt.ylabel('Number of Dismissals')
+          plt.xlabel('Number of Dismissals')
+          plt.ylabel('Dismissal Type')
           plt.title(f'Number of Dismissals by Dismissal Type for {player_name}')
           plt.grid(axis='x', linestyle='--', alpha=0.7)
           plt.tight_layout()
