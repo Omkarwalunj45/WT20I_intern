@@ -993,11 +993,11 @@ if sidebar_option == "Player Profile":
             cols = current_form_df.columns.tolist()
             new_order = ['MATCH ID','DATE'] + [col for col in cols if col != ['MATCH ID','DATE']]          
             current_form_df = current_form_df[new_order] 
-            columns_to_convert = ['MATCH ID']
-            # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
-            # current_form_df=current_form_df.sort_values('MATCH ID',ascending=False)
-            # st.table(current_form_df[['Match ID', 'Runs', 'Balls Faced', 'SR','Balls Bowled','Runs Given','Wickets', 'Econ','Venue']])
             current_form_df = current_form_df.loc[:, ~current_form_df.columns.duplicated()]
+            # Assuming the date column is named 'date' in MM/DD/YYYY format
+            current_form_df['DATE'] = pd.to_datetime(current_form_df['DATE'], format='%m/%d/%Y')
+            current_form_df = current_form_df.sort_values(by='date', ascending=False)
+            current_form_df = current_form_df.reset_index(drop=True)
             st.table(current_form_df.style.set_table_attributes("style='font-weight: bold;'"))
         else:
             st.write("No recent matches found for this player.")
