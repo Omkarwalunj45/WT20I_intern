@@ -139,7 +139,7 @@ def show_innings_scorecard(inning_data, title):
     bowling_data['bowl_sr'] = bowling_data['bowl_sr'].replace([float('inf'), float('nan')], 0)
     
     # Select and rename columns for the bowling scorecard
-    bowling_data = bowling_data[['bowler', 'Overs', 'total_runs', 'is_wkt', 'wides', 'noballs', 'econ', 'bowl_sr']]
+    bowling_data = bowling_data[['bowler_full_name', 'Overs', 'total_runs', 'is_wkt', 'wides', 'noballs', 'econ', 'bowl_sr']]
     bowling_data.columns = ['Bowler', 'O', 'R', 'W', 'WD', 'NB', 'Econ', 'SR']
     bowling_data = bowling_data[(bowling_data.Bowler) != '0']
     
