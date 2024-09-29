@@ -1087,29 +1087,33 @@ if sidebar_option == "Player Profile":
             current_form_df = current_form_df.reset_index(drop=True)
             current_form_df['DATE'] = current_form_df['DATE'].dt.strftime('%m/%d/%Y')
     
-            # Create clickable links for MATCH ID
-            current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(lambda x: f'<a href="#" onclick="showMatchDetails(\'{x}\'); return false;" style="color: blue; text-decoration: underline;">{x}</a>')
+            # Function to create a clickable link
+            def make_clickable(match_id):
+                return f'<a href="#" onclick="showMatchDetails(\'{match_id}\'); return false;" style="color: blue; text-decoration: underline;">{match_id}</a>'
+    
+            # Apply the function to the MATCH ID column
+            current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(make_clickable)
     
             # Convert DataFrame to HTML
-            html_table = current_form_df.to_html(escape=False, index=False)
+            html = current_form_df.to_html(escape=False, index=False)
     
-            # Add custom JavaScript function
-            js_code = """
+            # Wrap the table in a div with scrolling and add necessary JavaScript
+            html = f"""
+            <div style="overflow-x: auto;">
+                {html}
+            </div>
             <script>
-            function showMatchDetails(matchId) {
-                const event = new CustomEvent('showMatchDetails', { detail: matchId });
+            function showMatchDetails(matchId) {{
+                const event = new CustomEvent('showMatchDetails', {{ detail: matchId }});
                 window.dispatchEvent(event);
-            }
+            }}
             </script>
             """
     
-            # Combine HTML table and JavaScript
-            html_content = f"{js_code}<div style='overflow-x: auto;'>{html_table}</div>"
+            # Display the table
+            st.markdown(html, unsafe_allow_html=True)
     
-            # Display the table with clickable MATCH ID
-            st.markdown(html_content, unsafe_allow_html=True)
-    
-            # Handle the custom event in Streamlit
+            # Handle the custom event
             result = st.empty()
             st.markdown("""
             <script>
