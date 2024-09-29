@@ -43,8 +43,19 @@ def show_match_details(match_id):
 
         # Show the scorecard for each innings
         if not innings_1.empty:
+            total_runs_1 = innings_1['total_runs'].sum()
+            total_balls_1 = innings_1['ball'].count()
+            overs_1 = total_balls_1 // 6
+            balls_1 = total_balls_1 % 6
+            st.write(f"{innings_1['batting_team'].iloc[0]} Innings: {total_runs_1}/{innings_1['is_wkt'].sum()} ({overs_1}.{balls_1} ov)")
+
             show_innings_scorecard(innings_1, f"Innings 1: {batting_team_1} Women")
         if not innings_2.empty:
+            total_runs_2 = innings_2['total_runs'].sum()
+            total_balls_2 = innings_2['ball'].count()
+            overs_2 = total_balls_2 // 6
+            balls_2 = total_balls_2 % 6
+            st.write(f"{innings_2['batting_team'].iloc[0]} Innings: {total_runs_2}/{innings_2['is_wkt'].sum()} ({overs_2}.{balls_2} ov)")
             show_innings_scorecard(innings_2, f"Innings 2: {batting_team_2} Women")
     else:
         st.write("No match details found.")
