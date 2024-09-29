@@ -1039,6 +1039,7 @@ if sidebar_option == "Player Profile":
         
         if not current_form_df.empty:
             current_form_df.columns = [col.upper() for col in current_form_df.columns]
+            current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(lambda x: f"[{x}](#{x})")
             cols = current_form_df.columns.tolist()
             new_order = ['MATCH ID', 'DATE'] + [col for col in cols if col not in ['MATCH ID', 'DATE']]
             current_form_df = current_form_df[new_order]
@@ -1050,8 +1051,6 @@ if sidebar_option == "Player Profile":
             current_form_df = current_form_df.reset_index(drop=True)
             current_form_df['DATE'] = current_form_df['DATE'].dt.strftime('%m/%d/%Y')
             
-            # Create clickable links for 'MATCH ID'
-            current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(lambda x: f"[{x}](#{x})")
             
             # Display the table with clickable MATCH IDs
             st.markdown(current_form_df.to_html(escape=False), unsafe_allow_html=True)
