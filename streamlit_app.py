@@ -57,16 +57,29 @@ def show_innings_scorecard(inning_data, title):
         'ball': 'count',
         'is_four': 'sum',
         'is_six': 'sum',
+        'is_wkt': 'sum',
+        'bowler_wkt': 'first',  # Get the bowler's name if the batsman is out
+        'dismissal_kind': 'first'  # Get the dismissal kind if applicable
     }).reset_index()
     
     # Calculate strike rate
     batting_data['batter_sr'] = (batting_data['batsman_runs'] / batting_data['ball']) * 100
     
+    # Create Wicket and Dismissal Kind columns
+    batting_data['Wicket'] = batting_data.apply(
+        lambda row: row['bowler_wkt'] if row['is_wkt'] == 1 else "Not Out", axis=1
+    )
+    batting_data['Dismissal Kind'] = batting_data.apply(
+        lambda row: row['dismissal_kind'] if row['is_wkt'] == 1 else "-", axis=1
+    )
+    
     # Rename columns for the batting scorecard
-    batting_data.columns = ['Batsman', 'R', 'B', '4s', '6s', 'SR']
+    batting_data.columns = ['Batsman', 'R', 'B', '4s', '6s', 'Wickets', 'Bowler', 'Dismissal Kind', 'SR']
+    
+    # Filter out batsmen who have not scored
+    batting_data = batting_data[(batting_data.Batsman) != '0']
     
     # Display batting scorecard
-    batting_data=batting_data[(batting_data.Batsman)!='0']
     st.table(batting_data)
     
     # Bowling scorecard
@@ -92,7 +105,7 @@ def show_innings_scorecard(inning_data, title):
     # Select and rename columns for the bowling scorecard
     bowling_data = bowling_data[['bowler', 'Overs', 'total_runs', 'is_wkt', 'wides', 'noballs', 'econ', 'bowl_sr']]
     bowling_data.columns = ['Bowler', 'O', 'R', 'W', 'WD', 'NB', 'Econ', 'SR']
-    bowling_data=bowling_data[(bowling_data.Bowler)!='0']
+    bowling_data = bowling_data[(bowling_data.Bowler) != '0']
     
     # Display bowling scorecard
     st.table(bowling_data)
