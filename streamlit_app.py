@@ -1400,7 +1400,7 @@ elif sidebar_option == "Strength vs Weakness":
                   continue
           
           # Display strengths and weaknesses messages
-          st.markdown("#####Strengths and Weaknesses Against Bowling Types")
+          st.markdown("##### Strengths and Weaknesses Against Bowling Types")
           st.write(strong_message)
           st.write(weak_message)
 
@@ -1626,7 +1626,7 @@ elif sidebar_option == "Strength vs Weakness":
           weak_message = f"{player_name} is weak int: {', '.join(weak_against) if weak_against else 'no clear weaknesses in any phase.'}."
           
           # Display strengths and weaknesses messages
-          st.markdown("#####Strengths and Weaknesses")
+          st.markdown("##### Strengths and Weaknesses")
           st.write(strong_message)
           st.write(weak_message)
     if option == "Bowling":
@@ -1818,7 +1818,7 @@ elif sidebar_option == "Strength vs Weakness":
         weak_message = f"{player_name} is weak during: {', '.join(weak_against)}." if weak_against else f"{player_name} has no clear weaknesses in any phase."
         
         # Display strengths and weaknesses messages
-        st.markdown("#####Strengths and Weaknesses Across Phases")
+        st.markdown("##### Strengths and Weaknesses Across Phases")
         st.write(strong_message)
         st.write(weak_message)
 
