@@ -1846,6 +1846,32 @@ elif sidebar_option == "Strength vs Weakness":
         st.write(strong_message)
         st.write(weak_message)
 
+        # Filter for the selected bowler's data
+        bowler_data = pdf[pdf['bowler'] == player_name]
+        
+        # Filter only the rows where the bowler has taken a wicket
+        bowler_wickets = bowler_data[bowler_data['bowler_wkt'] == 1]
+        
+        # Group by dismissal_kind and count the number of dismissals
+        bowler_dismissal_counts = bowler_wickets.groupby('dismissal_kind').size().reset_index(name='count')
+        
+        # Sort the dismissal kinds by count
+        bowler_dismissal_counts = bowler_dismissal_counts.sort_values(by='count', ascending=True)
+        bowler_dismissal_counts['dismissal_kind'] = bowler_dismissal_counts['dismissal_kind'].str.upper()
+        
+        # Plotting the horizontal bar chart for bowler's wickets by dismissal kind
+        plt.figure(figsize=(10, 6))
+        plt.barh(bowler_dismissal_counts['dismissal_kind'], bowler_dismissal_counts['count'], color='lightgreen')
+        plt.xlabel('Number of Wickets',fontsize=14)
+        plt.ylabel('Dismissal Type',fontsize=14)
+        plt.title(f'Number of Wickets by Dismissal Type for {player_name}',fontsize=18)
+        plt.grid(axis='x', linestyle='--', alpha=0.7)
+        plt.tight_layout()
+        
+        # Display the plot in Streamlit
+        st.pyplot(plt)
+
+
       
     
       
