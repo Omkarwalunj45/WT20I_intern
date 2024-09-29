@@ -1709,7 +1709,7 @@ elif sidebar_option == "Strength vs Weakness":
                     strong_count += 1
                 if row['AVG'] <= strength_thresholds['AVG']:
                     strong_count += 1
-                if row['DOT%'] >= strength_thresholds['DOT PERCENTAGE']:
+                if row['DOT%'] >= strength_thresholds['DOT%']:
                     strong_count += 1
                 if row['BPB'] >= strength_thresholds['BPB']:
                     strong_count += 1
@@ -1721,7 +1721,7 @@ elif sidebar_option == "Strength vs Weakness":
                     weak_count += 1
                 if row['AVG'] >= weakness_thresholds['AVG']:
                     weak_count += 1
-                if row['DOT%'] <= weakness_thresholds['DOT PERCENTAGE']:
+                if row['DOT%'] <= weakness_thresholds['DOT%']:
                     weak_count += 1
                 if row['BPB'] <= weakness_thresholds['BPB']:
                     weak_count += 1
