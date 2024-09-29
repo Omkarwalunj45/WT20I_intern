@@ -993,6 +993,7 @@ if sidebar_option == "Player Profile":
             cols = current_form_df.columns.tolist()
             new_order = ['MATCH ID','DATE'] + [col for col in cols if col != ['MATCH ID','DATE']]          
             current_form_df = current_form_df[new_order] 
+            current_form_df=current_form_df.sort_values('MATCH ID',ascending=False)
             # st.table(current_form_df[['Match ID', 'Runs', 'Balls Faced', 'SR','Balls Bowled','Runs Given','Wickets', 'Econ','Venue']])
             current_form_df = current_form_df.loc[:, ~current_form_df.columns.duplicated()]
             st.table(current_form_df.style.set_table_attributes("style='font-weight: bold;'"))
