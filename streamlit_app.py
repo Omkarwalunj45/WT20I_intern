@@ -1686,7 +1686,8 @@ elif sidebar_option == "Strength vs Weakness":
       new_order = ['BATTING STYLE', 'INNINGS'] + [col for col in cols if col not in ['BATTING STYLE', 'INNINGS']]
       
       # Reindex the DataFrame with the new column order
-      result_df = result_df[new_order]
+      # result_df = result_df[new_order]
+      
       
       # Display the final table
       st.markdown("### Performance Against Batting Styles (Left-hand bat vs Right-hand bat)")
