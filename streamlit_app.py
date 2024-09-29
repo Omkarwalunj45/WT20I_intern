@@ -89,7 +89,7 @@ def show_innings_scorecard(inning_data, title):
     batting_data.columns = ['Batsman', 'R', 'B', '4s', '6s', 'Wicket', 'Dismissal Kind', 'SR']
     
     # Filter out batsmen with 0 runs
-    batting_data = batting_data[batting_data['R'] > 0]
+    batting_data = batting_data[batting_data['Batsman'] != '0']
     st.table(batting_data)
 
     
