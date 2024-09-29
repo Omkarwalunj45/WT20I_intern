@@ -1633,4 +1633,132 @@ elif sidebar_option == "Strength vs Weakness":
           st.markdown("### Strengths and Weaknesses")
           st.write(strong_message)
           st.write(weak_message)
+      
+    if option == "Bowling":
+      # st.subheader("Bowler vs Batting Style Analysis")
+      allowed_batting_styles = {
+          'left_hand_bat': 'Left-hand bat',
+          'right_hand_bat': 'Right-hand bat'
+      }
+  
+      result_df = pd.DataFrame()
+      i = 0
+  
+      # Loop over left-hand and right-hand batting styles
+      for bat_kind, bat_style in allowed_batting_styles.items():
+          temp_df = pdf[pdf['bowler'] == player_name]  # Filter data for the selected bowler
+          
+          # Filter for the specific batting style
+          temp_df = temp_df[temp_df['batting_style'] == bat_style]
+          
+          # Apply the cumulative function (bcum)
+          temp_df = cumulator(temp_df)
+          
+          # If the DataFrame is empty after applying bcum, skip this iteration
+          if temp_df.empty:
+              continue
+          
+          # Add the bat_kind column
+          temp_df['bat_kind'] = bat_kind
+          
+          # Reorder columns to make 'bat_kind' the first column
+          cols = temp_df.columns.tolist()
+          new_order = ['bat_kind'] + [col for col in cols if col != 'bat_kind']
+          temp_df = temp_df[new_order]
+          
+          # Concatenate results into result_df
+          if i == 0:
+              result_df = temp_df
+              i += 1
+          else:
+              result_df = pd.concat([result_df, temp_df], ignore_index=True)
+  
+      # Drop unwanted columns from the result DataFrame
+      result_df = result_df.drop(columns=['matches_x', 'matches_y', 'bowler', 'debut_year', 'final_year', 'wickets', 'best_bowling', 'bowling_team', 'matches'])
+      result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+      columns_to_convert = ['WICKETS']
+  
+      # Fill NaN values with 0
+      result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+      
+      # Convert the specified columns to integer type
+      result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+      result_df = round_up_floats(result_df)
+  
+      # Specify the desired order with 'bat_kind' first
+      cols = result_df.columns.tolist()
+      new_order = ['BAT KIND', 'INNINGS'] + [col for col in cols if col not in ['BAT KIND', 'INNINGS']]
+      
+      # Reindex the DataFrame with the new column order
+      result_df = result_df[new_order]
+      
+      # Display the final table
+      st.markdown("### Performance Against Batting Styles (Left-hand bat vs Right-hand bat)")
+      st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+  
+      # Set thresholds for strengths and weaknesses for Women's T20Is (Bowling performance)
+      strength_thresholds = {
+          'SR': 30,               # Strike Rate (balls per wicket)
+          'AVG': 20,              # Average (runs per wicket)
+          'DOT PERCENTAGE': 50,   # Dot ball percentage
+          'BPB': 8,               # Balls per boundary
+          'BPD': 20               # Balls per dismissal
+      }
+  
+      weakness_thresholds = {
+          'SR': 45,               # Strike Rate (balls per wicket)
+          'AVG': 30,              # Average (runs per wicket)
+          'DOT PERCENTAGE': 40,   # Dot ball percentage
+          'BPB': 6,               # Balls per boundary
+          'BPD': 15               # Balls per dismissal
+      }
+  
+      # Initialize lists to hold strengths and weaknesses
+      strong_against = []
+      weak_against = []
+  
+      # Check each batting style's stats against the thresholds
+      for index, row in result_df.iterrows():
+          strong_count = 0
+          weak_count = 0
+          if row['INNINGS'] >= 3:
+              # Evaluate strengths
+              if row['SR'] <= strength_thresholds['SR']:
+                  strong_count += 1
+              if row['AVG'] <= strength_thresholds['AVG']:
+                  strong_count += 1
+              if row['DOT PERCENTAGE'] >= strength_thresholds['DOT PERCENTAGE']:
+                  strong_count += 1
+              if row['BPB'] >= strength_thresholds['BPB']:
+                  strong_count += 1
+              if row['BPD'] >= strength_thresholds['BPD']:
+                  strong_count += 1
+              
+              # Evaluate weaknesses
+              if row['SR'] >= weakness_thresholds['SR']:
+                  weak_count += 1
+              if row['AVG'] >= weakness_thresholds['AVG']:
+                  weak_count += 1
+              if row['DOT PERCENTAGE'] <= weakness_thresholds['DOT PERCENTAGE']:
+                  weak_count += 1
+              if row['BPB'] <= weakness_thresholds['BPB']:
+                  weak_count += 1
+              if row['BPD'] <= weakness_thresholds['BPD']:
+                  weak_count += 1
+              
+              # Determine strong/weak based on counts
+              if strong_count >= 3:
+                  strong_against.append(row['BAT KIND'])
+              if weak_count >= 3:
+                  weak_against.append(row['BAT KIND'])
+              
+      # Format the output message
+      strong_message = f"{player_name} is strong against: {', '.join(strong_against)}." if strong_against else f"{player_name} has no clear strengths against any batting style."
+      weak_message = f"{player_name} is weak against: {', '.join(weak_against)}." if weak_against else f"{player_name} has no clear weaknesses against any batting style."
+  
+      # Display strengths and weaknesses messages
+      st.markdown("### Strengths and Weaknesses Against Batting Styles")
+      st.write(strong_message)
+      st.write(weak_message)
+  
   
