@@ -1041,7 +1041,7 @@ if sidebar_option == "Player Profile":
             current_form_df.columns = [col.upper() for col in current_form_df.columns]
             
             # Create clickable links for MATCH ID without brackets
-            current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(lambda x: f"<a href='#{x}'>{x}</a>")
+            # current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(lambda x: f"<a href='#{x}'>{x}</a>")
             
             # Rearranging columns
             cols = current_form_df.columns.tolist()
