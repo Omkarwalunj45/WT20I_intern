@@ -58,6 +58,11 @@ def get_current_form(bpdf, player_name):
     for date in last_10_matches:
         # Get batting stats for this match
         bat_match_data = bpdf[(bpdf['start_date'] == date) & (bpdf['batsman'] == player_name)]
+        match_id = None
+        venue = None
+        opp = None
+        fan_pts_bat = 0
+        fan_pts_bowl = 0
         
         if not bat_match_data.empty:
             runs = bat_match_data['batsman_runs'].sum() 
