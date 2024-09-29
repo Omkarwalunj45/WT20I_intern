@@ -217,7 +217,7 @@ def bcum(df):
     # Calculate 3W or more hauls by bowler
     dismissals_count = df.groupby(['bowler', 'match_id'])['bowler_wkt'].sum()
     three_wicket_hauls = dismissals_count[dismissals_count >= 3].groupby('bowler').count().reset_index().rename(columns={'bowler_wkt': 'three_wicket_hauls'})
-    bbi = dismissals_count.groupby('bowler')['bowler_wkt'].max().reset_index().rename(columns={'bowler_wkt': 'bbi'})
+    bbi = dismissals_count.groupby('bowler')['dismissal_count'].max().reset_index().rename(columns={'dismissal_count': 'bbi'})
     
     # Identify maiden overs (group by match and over, check if total_runs == 0)
     df['over'] = df['ball'].apply(lambda x: int(x))  # Assuming ball represents the ball within an over
