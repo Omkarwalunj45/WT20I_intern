@@ -1020,8 +1020,29 @@ if sidebar_option == "Player Profile":
             current_form_df = current_form_df.reset_index(drop=True)
             current_form_df['DATE'] = current_form_df['DATE'].dt.strftime('%m/%d/%Y')
             st.table(current_form_df.style.set_table_attributes("style='font-weight: bold;'"))
+            # Create a clickable link for MATCH ID
+            current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(
+                lambda x: f"[{x}](#{x})"
+            )
+            
+            # Display the table with clickable MATCH ID links
+            st.markdown(current_form_df.to_html(escape=False), unsafe_allow_html=True)
+    
+            # Add logic to handle clicks on MATCH ID links
+            match_ids = current_form_df['MATCH ID'].str.extract(r'\[(.*?)\]')[0].tolist()
+            selected_match_id = st.selectbox("Select a Match ID for details:", match_ids)
+            
+            # Filter original dataset based on selected MATCH ID
+            if selected_match_id:
+                filtered_data = bpdf[bpdf['match_id'] == selected_match_id]
+                if not filtered_data.empty:
+                    st.subheader("Filtered Match Data")
+                    st.dataframe(filtered_data)
+                else:
+                    st.write("No data found for the selected Match ID.")
         else:
             st.write("No recent matches found for this player.")
+        
 
 # If "Matchup Analysis" is selected
 elif sidebar_option == "Matchup Analysis":
