@@ -1061,7 +1061,7 @@ if sidebar_option == "Player Profile":
             # Handling clicks on MATCH ID links
             for match_id in current_form_df['MATCH ID']:
                 if st.button(f'View Match {match_id}'):
-                    match_data = bpdf[bpdf['match_id'] == match_id]
+                    show_match_details(match_id)
                     if not match_data.empty:
                         st.write(match_data)  # Display the match data
                     else:
