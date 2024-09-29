@@ -1125,7 +1125,6 @@ if sidebar_option == "Player Profile":
     
         else:
             st.write("No recent matches found for this player.")
-    
         
     #     # Add a section for navigation to go back to Current Form
     #     if 'current_view' not in st.session_state:
