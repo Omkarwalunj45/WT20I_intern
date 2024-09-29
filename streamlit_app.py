@@ -1033,55 +1033,55 @@ if sidebar_option == "Player Profile":
             
     #     else:
     #         st.write("No recent matches found for this player.")
-with tab3:
-    st.header("Current Form")
-    current_form_df = get_current_form(bpdf, player_name)
-    
-    if not current_form_df.empty:
-        current_form_df.columns = [col.upper() for col in current_form_df.columns]
+    with tab3:
+        st.header("Current Form")
+        current_form_df = get_current_form(bpdf, player_name)
         
-        # Create clickable links for MATCH ID without brackets
-        current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(lambda x: f"<a href='#{x}'>{x}</a>")
+        if not current_form_df.empty:
+            current_form_df.columns = [col.upper() for col in current_form_df.columns]
+            
+            # Create clickable links for MATCH ID without brackets
+            current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(lambda x: f"<a href='#{x}'>{x}</a>")
+            
+            # Rearranging columns
+            cols = current_form_df.columns.tolist()
+            new_order = ['MATCH ID', 'DATE'] + [col for col in cols if col not in ['MATCH ID', 'DATE']]
+            current_form_df = current_form_df[new_order]
+            current_form_df = current_form_df.loc[:, ~current_form_df.columns.duplicated()]
+    
+            # Formatting the date
+            current_form_df['DATE'] = pd.to_datetime(current_form_df['DATE'], format='%m/%d/%Y')
+            current_form_df = current_form_df.sort_values(by='DATE', ascending=False)
+            current_form_df = current_form_df.reset_index(drop=True)
+            current_form_df['DATE'] = current_form_df['DATE'].dt.strftime('%m/%d/%Y')
+    
+            # Displaying the table with clickable MATCH ID
+            st.markdown(current_form_df.to_html(escape=False), unsafe_allow_html=True)
+            
+            # Handling clicks on MATCH ID links
+            for match_id in current_form_df['MATCH ID']:
+                if st.button(f'View Match {match_id}'):
+                    match_data = bpdf[bpdf['MATCH_ID'] == match_id]
+                    if not match_data.empty:
+                        st.write(match_data)  # Display the match data
+                    else:
+                        st.write("No data available for this match.")
+        else:
+            st.write("No recent matches found for this player.")
+    
         
-        # Rearranging columns
-        cols = current_form_df.columns.tolist()
-        new_order = ['MATCH ID', 'DATE'] + [col for col in cols if col not in ['MATCH ID', 'DATE']]
-        current_form_df = current_form_df[new_order]
-        current_form_df = current_form_df.loc[:, ~current_form_df.columns.duplicated()]
-
-        # Formatting the date
-        current_form_df['DATE'] = pd.to_datetime(current_form_df['DATE'], format='%m/%d/%Y')
-        current_form_df = current_form_df.sort_values(by='DATE', ascending=False)
-        current_form_df = current_form_df.reset_index(drop=True)
-        current_form_df['DATE'] = current_form_df['DATE'].dt.strftime('%m/%d/%Y')
-
-        # Displaying the table with clickable MATCH ID
-        st.markdown(current_form_df.to_html(escape=False), unsafe_allow_html=True)
+        # Add a section for navigation to go back to Current Form
+        if 'current_view' not in st.session_state:
+            st.session_state.current_view = 'current_form'
         
-        # Handling clicks on MATCH ID links
-        for match_id in current_form_df['MATCH ID']:
-            if st.button(f'View Match {match_id}'):
-                match_data = bpdf[bpdf['MATCH_ID'] == match_id]
-                if not match_data.empty:
-                    st.write(match_data)  # Display the match data
-                else:
-                    st.write("No data available for this match.")
-    else:
-        st.write("No recent matches found for this player.")
-
-    
-    # Add a section for navigation to go back to Current Form
-    if 'current_view' not in st.session_state:
-        st.session_state.current_view = 'current_form'
-    
-    # Rendering Match Details view if selected
-    if st.session_state.current_view == 'match_details':
-        selected_match_id = st.session_state.selected_match_id  # Use this to keep track of the selected match ID
-        show_match_details(selected_match_id)
-    
-        # Button to go back to Current Form
-        if st.button("Back to Current Form"):
-            st.session_state.current_view = 'current_form'    
+        # Rendering Match Details view if selected
+        if st.session_state.current_view == 'match_details':
+            selected_match_id = st.session_state.selected_match_id  # Use this to keep track of the selected match ID
+            show_match_details(selected_match_id)
+        
+            # Button to go back to Current Form
+            if st.button("Back to Current Form"):
+                st.session_state.current_view = 'current_form'    
 
 # If "Matchup Analysis" is selected
 elif sidebar_option == "Matchup Analysis":
