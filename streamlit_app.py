@@ -995,6 +995,7 @@ if sidebar_option == "Player Profile":
             new_order = ['MATCH ID','YEAR'] + [col for col in cols if col != ['MATCH ID','YEAR']]          
             current_form_df = current_form_df[new_order] 
             # st.table(current_form_df[['Match ID', 'Runs', 'Balls Faced', 'SR','Balls Bowled','Runs Given','Wickets', 'Econ','Venue']])
+            current_form_df = current_form_df.loc[:, ~current_form_df.columns.duplicated()]
             st.table(current_form_df.style.set_table_attributes("style='font-weight: bold;'"))
         else:
             st.write("No recent matches found for this player.")
