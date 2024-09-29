@@ -72,7 +72,7 @@ def get_current_form(bpdf, player_name):
             runs = 0
             balls_faced = 0
             SR = 0.0
-            fan_pts_bat = 0.0
+            fan_pts_bat = 0
         
         # Get bowling stats for this match
         bowl_match_data = bpdf[(bpdf['start_date'] == date) & (bpdf['bowler'] == player_name)]
@@ -92,7 +92,7 @@ def get_current_form(bpdf, player_name):
             runs_given = 0
             wickets = 0
             econ = 0.0
-            fan_pts_bowl = 0.0
+            fan_pts_bowl = 0
         results.append({
             "Date" : date,
             "Match ID": match_id,
