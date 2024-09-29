@@ -1436,8 +1436,8 @@ elif sidebar_option == "Strength vs Weakness":
               'Slow left-arm orthodox', 'Left-arm wrist spin'
               ]
               
-              result_df = pd.DataFrame()
-              i = 0
+          result_df = pd.DataFrame()
+          i = 0
               
           for bowling_style in allowed_bowling_styles:
               temp_df = pdf[pdf['batsman'] == player_name]  # Filter data for the selected batsman
