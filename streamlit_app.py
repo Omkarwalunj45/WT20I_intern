@@ -106,6 +106,11 @@ def show_innings_scorecard(inning_data, title):
             else:
                 batting_data.at[index, 'Wicket'] = "-"  # No bowler responsible, could be run out, etc.
                 batting_data.at[index, 'Dismissal Kind'] = wicket_info['dismissal_kind'].iloc[0]  # Dismissal kind
+        wicket_info = dismissed_data.iloc[-1]
+        if ((wicket_info['dismissal_kind'] == 'retired')|(wicket_info['dismissal_kind'] == 'retired')) :
+            batting_data.at[index, 'Wicket'] = "-" 
+            batting_data.at[index, 'Dismissal Kind'] = wicket_info['dismissal_kind'].iloc[0] 
+            
     
     # Calculate strike rate
     batting_data['batter_sr'] = (batting_data['batsman_runs'] / batting_data['ball']) * 100
