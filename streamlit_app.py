@@ -48,16 +48,21 @@ def show_innings_scorecard(inning_data, title):
     # Batting scorecard
     st.write(f"## {title} - Batting")
     batting_data = inning_data.groupby(['batsman']).agg({
-        'batter_runs': 'sum',
-        'balls_faced': 'sum',
+        'batsman_runs': 'sum',
+        'ball': 'count',
         'is_four': 'sum',
         'is_six': 'sum',
-        'batter_sr': 'mean'
     }).reset_index()
-
+    
+    # Calculate strike rate
+    batting_data['batter_sr'] = (batting_data['batsman_runs'] / batting_data['ball']) * 100
+    
+    # Rename columns for the batting scorecard
     batting_data.columns = ['Batsman', 'R', 'B', '4s', '6s', 'SR']
+    
+    # Display batting scorecard
     st.table(batting_data)
-
+    
     # Bowling scorecard
     st.write(f"## {title} - Bowling")
     bowling_data = inning_data.groupby(['bowler']).agg({
@@ -67,11 +72,24 @@ def show_innings_scorecard(inning_data, title):
         'wides': 'sum',
         'noballs': 'sum'
     }).reset_index()
-
+    
+    # Calculate overs bowled (converting balls to overs)
     bowling_data['Overs'] = (bowling_data['ball'] // 6).astype(str) + "." + (bowling_data['ball'] % 6).astype(str)
-    bowling_data = bowling_data[['bowler', 'Overs', 'total_runs', 'is_wkt', 'wides', 'noballs']]
-    bowling_data.columns = ['Bowler', 'O', 'R', 'W', 'WD', 'NB']
+    
+    # Calculate economy rate (total runs / overs)
+    bowling_data['econ'] = bowling_data['total_runs'] / (bowling_data['ball'] / 6)
+    
+    # Calculate bowling strike rate (balls per wicket, avoid division by zero)
+    bowling_data['bowl_sr'] = bowling_data['ball'] / bowling_data['is_wkt']
+    bowling_data['bowl_sr'] = bowling_data['bowl_sr'].replace([float('inf'), float('nan')], 0)
+    
+    # Select and rename columns for the bowling scorecard
+    bowling_data = bowling_data[['bowler', 'Overs', 'total_runs', 'is_wkt', 'wides', 'noballs', 'econ', 'bowl_sr']]
+    bowling_data.columns = ['Bowler', 'O', 'R', 'W', 'WD', 'NB', 'Econ', 'SR']
+    
+    # Display bowling scorecard
     st.table(bowling_data)
+
 
 def categorize_phase(over):
               if over <= 6:
