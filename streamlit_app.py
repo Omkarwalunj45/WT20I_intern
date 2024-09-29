@@ -996,7 +996,7 @@ if sidebar_option == "Player Profile":
             current_form_df = current_form_df.loc[:, ~current_form_df.columns.duplicated()]
             # Assuming the date column is named 'date' in MM/DD/YYYY format
             current_form_df['DATE'] = pd.to_datetime(current_form_df['DATE'], format='%m/%d/%Y')
-            current_form_df = current_form_df.sort_values(by='date', ascending=False)
+            current_form_df = current_form_df.sort_values(by='DATE', ascending=False)
             current_form_df = current_form_df.reset_index(drop=True)
             st.table(current_form_df.style.set_table_attributes("style='font-weight: bold;'"))
         else:
