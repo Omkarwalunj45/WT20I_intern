@@ -1366,6 +1366,15 @@ elif sidebar_option == "Matchup Analysis":
         result_df=result_df.sort_values('YEAR',ascending=True)
         result_df=result_df[['MATCH ID'] + ['YEAR'] + [col for col in result_df.columns if col not in ['MATCH ID','YEAR']]]
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+        # # Displaying the table with clickable MATCH ID
+        # st.markdown(current_form_df.to_html(escape=False), unsafe_allow_html=True)
+        # Handling clicks on MATCH ID links
+        for match_id in result_df['MATCH ID']:
+             if st.button(f'View Match {match_id}'):
+                  show_match_details(match_id)
+             else:
+                  st.write("No recent matches found for this player.")
+                 
     elif grouping_option == "Venue":
         # Filter the DataFrame for the selected batsman and bowler
         tdf = pdf[(pdf['batsman'] == batter_name) & (pdf['bowler'] == bowler_name)]
