@@ -6,8 +6,6 @@ import numpy as np
 # Page settings
 st.set_page_config(page_title='WT20I Performance Analysis Portal', layout='wide')
 st.title('WT20I Performance Analysis Portal')
-
-
 # Load data
 pdf = pd.read_csv("Dataset/THEFINALMASTER.csv",low_memory=False)
 idf = pd.read_csv("Dataset/lifesaver_bat.csv",low_memory=False)
@@ -75,11 +73,6 @@ def get_current_form(bpdf, player_name):
             runs_given = 0
             wickets = 0
             econ = 0.0
-        
-        # Get the venue for the match (assuming venue is consistent for a match)
-        # venue = bat_match_data['venue'].iloc[0] if not ((bat_match_data.empty)))  else "N/A"
-
-        # Append the formatted data
         results.append({
             "Match ID": match_id,
             "Runs": runs,
@@ -348,10 +341,6 @@ venue_country_map = {
 
 # Preprocess the debut column to extract the year
 idf['debut_year'] = idf['debut_year'].str.split('/').str[0]  # Extract the year from "YYYY/YY"
-
-# Convert the relevant columns to integers
-# columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_score']
-# idf[columns_to_convert] = idf[columns_to_convert].astype(int)
 pdf.rename(columns={'batting Style': 'batting_style','bowling Style': 'bowling_style'}, inplace=True)
 bowling_style_mapping = {
     'Righ-arm medium fast ': 'Right-arm medium fast',
@@ -760,9 +749,6 @@ if sidebar_option == "Player Profile":
             player_stats = player_stats.drop(columns=['UNNAMED: 0','BOWLER'])
             st.markdown("### Bowling Statistics")
             st.table(player_stats.style.set_table_attributes("style='font-weight: bold;'"))  # Display the filtered DataFrame as a table
-
-
-            
             allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh', 
                                  'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
             
@@ -1120,10 +1106,6 @@ elif sidebar_option == "Matchup Analysis":
                 i = 1 + i
             else:
                 result_df = pd.concat([result_df, temp_df], ignore_index=True)
-
-        # Drop unnecessary columns related to performance metrics
-        # result_df['last_year']=result_df['last_year'].apply(standardize_season)
-        # result_df = result_df.rename(columns={'final_year': 'year'})
         columns_to_drop = ['batsman', 'bowler', 'batting_team', 'debut_year', 'matches_x', 'matches_y', 
                            'fifties', 'hundreds', 'thirties', 'highest_score', 'season','matches']
         result_df = result_df.drop(columns=columns_to_drop, errors='ignore')
@@ -1194,11 +1176,6 @@ elif sidebar_option == "Matchup Analysis":
         columns_to_convert = ['runs', 'dismissals']
         for col in columns_to_convert:
             result_df[col] = result_df[col].fillna(0).astype(int)
-    
-        # Rename and format columns
-        # result_df['last_year']=result_df['last_year'].apply(standardize_season)
-        
-        # result_df = result_df.rename(columns={'final_year': 'year'})    
         result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
         result_df['FINAL YEAR']=result_df['FINAL YEAR'].apply(standardize_season)
         
@@ -1480,25 +1457,7 @@ elif sidebar_option == "Strength vs Weakness":
   
           st.markdown("### Performance Against Bowling Styles")
           st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
-         #  
-          # # Set thresholds for strengths and weaknesses for Women's T20Is
-          # strength_thresholds = {
-          #     'SR': 125,               # Threshold for Strike Rate
-          #     'AVG': 30,               # Threshold for Average
-          #     'DOT PERCENTAGE': 25,    # Threshold for Dot Percentage
-          #     'BPB': 5,               # Threshold for Boundary Percentage Batsman
-          #     'BPD': 20                # Threshold for Boundary Percentage Delivery
-          # }
-          
-          # weakness_thresholds = {
-          #     'SR': 90,                # Threshold for Strike Rate
-          #     'AVG': 15,               # Threshold for Average
-          #     'DOT PERCENTAGE': 40,    # Threshold for Dot Percentage
-          #     'BPB': 7,                # Threshold for Boundary Percentage Batsman
-          #     'BPD': 15                # Threshold for Boundary Percentage Delivery
-          # }
-          
-          # Initialize lists to hold strengths and weaknesses
+        
           strong_against = []
           weak_against = []
           
@@ -1627,24 +1586,7 @@ elif sidebar_option == "Strength vs Weakness":
           st.markdown("### Performance in Different Phases")
           st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
           
-          # # Set thresholds for strengths and weaknesses
-          # strength_thresholds = {
-          #     'SR': 125,               # Threshold for Strike Rate
-          #     'AVG': 30,               # Threshold for Average
-          #     'DOT PERCENTAGE': 25,    # Threshold for Dot Percentage
-          #     'BPB': 5,                # Threshold for Boundary Percentage Batsman
-          #     'BPD': 20                # Threshold for Boundary Percentage Delivery
-          # }
           
-          # weakness_thresholds = {
-          #     'SR': 90,                # Threshold for Strike Rate
-          #     'AVG': 15,               # Threshold for Average
-          #     'DOT PERCENTAGE': 40,    # Threshold for Dot Percentage
-          #     'BPB': 7,                # Threshold for Boundary Percentage Batsman
-          #     'BPD': 15                # Threshold for Boundary Percentage Delivery
-          # }
-          
-          # Initialize lists to hold strengths and weaknesses
           strong_against = []
           weak_against = []
           
