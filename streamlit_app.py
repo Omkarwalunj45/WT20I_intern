@@ -75,7 +75,7 @@ def show_match_details(match_id):
 
 def show_innings_scorecard(inning_data, title):
     # Batting scorecard
-    # st.write(f"## {title} - Batting")
+    st.write("Batting")
     batting_data = inning_data.groupby(['batsman']).agg({
         'batsman_runs': 'sum',
         'ball': 'count',
@@ -118,7 +118,7 @@ def show_innings_scorecard(inning_data, title):
 
     
     # Bowling scorecard
-    # st.write(f"## {title} - Bowling")
+    st.write("Bowling")
     bowling_data = inning_data.groupby(['bowler']).agg({
         'ball': 'count',
         'total_runs': 'sum',
