@@ -1720,7 +1720,7 @@ elif sidebar_option == "Strength vs Weakness":
                     weak_count += 1
                 if row['BPB'] <= weakness_thresholds['BPB']:
                     weak_count += 1
-                if row['BPD'] ?= weakness_thresholds['BPD']:
+                if row['BPD'] >= weakness_thresholds['BPD']:
                     weak_count += 1
                 
                 # Determine strong/weak based on counts
