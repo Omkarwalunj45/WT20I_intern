@@ -83,35 +83,42 @@ def show_innings_scorecard(inning_data, title):
         'is_four': 'sum',
         'is_six': 'sum'
     }).reset_index()
-    
     # Initialize Wicket and Dismissal Kind columns
-    batting_data['Wicket'] = "Not Out"  # Default value
-    batting_data['Dismissal Kind'] = "-"  # Default value
+    batting_data['Wicket'] = "Not Out"  # Default value if no dismissal
+    batting_data['Dismissal Kind'] = "-"  # Default value if no dismissal
     
-    # Populate Wicket and Dismissal Kind based on inning_data
+    # Iterate through each batsman to populate Wicket and Dismissal Kind based on inning_data
     for index, row in batting_data.iterrows():
-        batsman = row['batter_full_name']
-        # Get the data from inning_data where the batsman has been dismissed
-        dismissed_data = inning_data[inning_data['batter_full_name'] == batsman]
+        batsman = row['Batsman']
+        
+        # Get data where this batsman was dismissed
+        dismissed_data = inning_data[(inning_data['batter_full_name'] == batsman) & (inning_data['is_wkt'] == 1)]
         
         # Check if the batsman was dismissed
-        if not dismissed_data[dismissed_data['is_wkt'] == 1].empty:
-            # Get the bowler's name and dismissal kind
-            wicket_info = dismissed_data[dismissed_data['is_wkt'] == 1]
+        if not dismissed_data.empty:
+            # Grab the first occurrence where the batsman was dismissed (could be bowled, caught, run out, etc.)
+            dismissal_event = dismissed_data.iloc[0]
             
-            # If bowler_wkt is 1, the dismissal is due to the bowler
-            if wicket_info['bowler_wkt'].iloc[0] == 1:
-                batting_data.at[index, 'Wicket'] = wicket_info['bowler_full_name'].iloc[0]  # Bowler's name
-                batting_data.at[index, 'Dismissal Kind'] = wicket_info['dismissal_kind'].iloc[0]  # Dismissal kind
+            # Check if the dismissal was due to the bowler
+            if dismissal_event['bowler_wkt'] == 1:
+                # Bowler took the wicket, populate with bowler's name and dismissal kind
+                batting_data.at[index, 'Wicket'] = dismissal_event['bowler_full_name']
+                batting_data.at[index, 'Dismissal Kind'] = dismissal_event['dismissal_kind']
             else:
-                batting_data.at[index, 'Wicket'] = "-"  # No bowler responsible, could be run out, etc.
-                wicket_info = dismissed_data[dismissed_data['is_wkt'] == 1]
-                batting_data.at[index, 'Dismissal Kind'] = wicket_info['dismissal_kind'].iloc[0]  # Dismissal kind
-        wicket_info = dismissed_data.iloc[-1]
-        if ((wicket_info['dismissal_kind'] == 'retired')|(wicket_info['dismissal_kind'] == 'retired')) :
-            batting_data.at[index, 'Wicket'] = "-" 
-            batting_data.at[index, 'Dismissal Kind'] = wicket_info['dismissal_kind'].iloc[0] 
-            
+                # If bowler_wkt is not 1, this could be a run-out or other non-bowler dismissal
+                batting_data.at[index, 'Wicket'] = "-"
+                batting_data.at[index, 'Dismissal Kind'] = dismissal_event['dismissal_kind']
+        
+        # Handle cases like retired hurt or retired out (use dismissal_kind)
+        retired_data = inning_data[(inning_data['batter_full_name'] == batsman) & (inning_data['dismissal_kind'].str.contains("retired", na=False))]
+        if not retired_data.empty:
+            # If the batsman retired, update the fields
+            retired_event = retired_data.iloc[-1]
+            batting_data.at[index, 'Wicket'] = "-"
+            batting_data.at[index, 'Dismissal Kind'] = retired_event['dismissal_kind']
+    
+    # Now, the `Wicket` and `Dismissal Kind` columns should reflect the correct information
+
     
     # Calculate strike rate
     batting_data['batter_sr'] = (batting_data['batsman_runs'] / batting_data['ball']) * 100
