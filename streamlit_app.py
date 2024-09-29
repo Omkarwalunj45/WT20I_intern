@@ -1659,15 +1659,20 @@ elif sidebar_option == "Strength vs Weakness":
             result_df = pd.concat([result_df, temp_df], ignore_index=True)
     
         # Drop unwanted columns from the result DataFrame
-        # result_df = result_df.drop(columns=['matches_x', 'matches_y', 'bowler', 'debut_year', 'final_year', 'wickets', 'best_bowling', 'bowling_team', 'matches'])
+        result_df = result_df.drop(columns=[''bowler', 'debut_year', 'final_year'])
     
         # Standardize column names
         result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
         
         # Convert the relevant columns to integers and fill NaN values
-        # columns_to_convert = ['WICKETS']
-        # result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0).astype(int)
+        columns_to_convert = ['WKTS']
+        result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0).astype(int)
         result_df = round_up_floats(result_df)
+        cols = result_df.columns.tolist()
+          
+          # Specify the desired order with 'phase' first
+        new_order = ['BATTING STYLE'] + [col for col in cols if col not in 'BATTING STYLE']
+        result_df = result_df[new_order]
     
         # Display the final table
         st.markdown("### Cumulative Bowling Performance Against Batting Styles")
@@ -1677,7 +1682,7 @@ elif sidebar_option == "Strength vs Weakness":
         strength_thresholds = {
             'SR': 20,               # Strike Rate (balls per wicket)
             'AVG': 15,              # Average (runs per wicket)
-            'DOT PERCENTAGE': 50,   # Dot ball percentage
+            'DOT%': 50,   # Dot ball percentage
             'BPB': 8,               # Balls per boundary
             'BPD': 20               # Balls per dismissal
         }
@@ -1685,7 +1690,7 @@ elif sidebar_option == "Strength vs Weakness":
         weakness_thresholds = {
             'SR': 35,               # Strike Rate (balls per wicket)
             'AVG': 30,              # Average (runs per wicket)
-            'DOT PERCENTAGE': 40,   # Dot ball percentage
+            'DOT%': 40,   # Dot ball percentage
             'BPB': 5,               # Balls per boundary
             'BPD': 35               # Balls per dismissal
         }
@@ -1704,7 +1709,7 @@ elif sidebar_option == "Strength vs Weakness":
                     strong_count += 1
                 if row['AVG'] <= strength_thresholds['AVG']:
                     strong_count += 1
-                if row['DOT PERCENTAGE'] >= strength_thresholds['DOT PERCENTAGE']:
+                if row['DOT%'] >= strength_thresholds['DOT PERCENTAGE']:
                     strong_count += 1
                 if row['BPB'] >= strength_thresholds['BPB']:
                     strong_count += 1
@@ -1716,7 +1721,7 @@ elif sidebar_option == "Strength vs Weakness":
                     weak_count += 1
                 if row['AVG'] >= weakness_thresholds['AVG']:
                     weak_count += 1
-                if row['DOT PERCENTAGE'] <= weakness_thresholds['DOT PERCENTAGE']:
+                if row['DOT%'] <= weakness_thresholds['DOT PERCENTAGE']:
                     weak_count += 1
                 if row['BPB'] <= weakness_thresholds['BPB']:
                     weak_count += 1
