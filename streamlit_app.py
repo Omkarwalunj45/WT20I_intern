@@ -105,6 +105,7 @@ def show_innings_scorecard(inning_data, title):
                 batting_data.at[index, 'Dismissal Kind'] = wicket_info['dismissal_kind'].iloc[0]  # Dismissal kind
             else:
                 batting_data.at[index, 'Wicket'] = "-"  # No bowler responsible, could be run out, etc.
+                wicket_info = dismissed_data[dismissed_data['is_wkt'] == 1]
                 batting_data.at[index, 'Dismissal Kind'] = wicket_info['dismissal_kind'].iloc[0]  # Dismissal kind
         wicket_info = dismissed_data.iloc[-1]
         if ((wicket_info['dismissal_kind'] == 'retired')|(wicket_info['dismissal_kind'] == 'retired')) :
