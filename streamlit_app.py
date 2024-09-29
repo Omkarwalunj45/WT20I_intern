@@ -1003,25 +1003,25 @@ if sidebar_option == "Player Profile":
             st.markdown(f"### **In Host Country**")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
-#     with tab3:
-#         st.header("Current Form")
-#         # Add current form content here
-#         current_form_df = get_current_form(bpdf,player_name)
-#         if not current_form_df.empty:
-#             # current_form_df['Year'] =current_form_df['Year'].apply(standardize_season)
-#             current_form_df.columns = [col.upper() for col in current_form_df.columns]
-#             cols = current_form_df.columns.tolist()
-#             new_order = ['MATCH ID','DATE'] + [col for col in cols if col != ['MATCH ID','DATE']]          
-#             current_form_df = current_form_df[new_order] 
-#             current_form_df = current_form_df.loc[:, ~current_form_df.columns.duplicated()]
-#             # Assuming the date column is named 'date' in MM/DD/YYYY format
-#             current_form_df['DATE'] = pd.to_datetime(current_form_df['DATE'], format='%m/%d/%Y')
-#             current_form_df = current_form_df.sort_values(by='DATE', ascending=False)
-#             current_form_df = current_form_df.reset_index(drop=True)
-#             current_form_df['DATE'] = current_form_df['DATE'].dt.strftime('%m/%d/%Y')
-#             st.table(current_form_df.style.set_table_attributes("style='font-weight: bold;'"))
-#         else:
-#             st.write("No recent matches found for this player.")
+    with tab3:
+        st.header("Current Form")
+        # Add current form content here
+        current_form_df = get_current_form(bpdf,player_name)
+        if not current_form_df.empty:
+            # current_form_df['Year'] =current_form_df['Year'].apply(standardize_season)
+            current_form_df.columns = [col.upper() for col in current_form_df.columns]
+            cols = current_form_df.columns.tolist()
+            new_order = ['MATCH ID','DATE'] + [col for col in cols if col != ['MATCH ID','DATE']]          
+            current_form_df = current_form_df[new_order] 
+            current_form_df = current_form_df.loc[:, ~current_form_df.columns.duplicated()]
+            # Assuming the date column is named 'date' in MM/DD/YYYY format
+            current_form_df['DATE'] = pd.to_datetime(current_form_df['DATE'], format='%m/%d/%Y')
+            current_form_df = current_form_df.sort_values(by='DATE', ascending=False)
+            current_form_df = current_form_df.reset_index(drop=True)
+            current_form_df['DATE'] = current_form_df['DATE'].dt.strftime('%m/%d/%Y')
+            st.table(current_form_df.style.set_table_attributes("style='font-weight: bold;'"))
+        else:
+            st.write("No recent matches found for this player.")
 
 # If "Matchup Analysis" is selected
 elif sidebar_option == "Matchup Analysis":
