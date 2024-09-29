@@ -1628,7 +1628,7 @@ elif sidebar_option == "Strength vs Weakness":
                   
           # Format the output message
           strong_message = f"{player_name} is strong in: {', '.join(strong_against) if strong_against else 'no clear strengths in any phase.'}."
-          weak_message = f"{player_name} is weak int: {', '.join(weak_against) if weak_against else 'no clear weaknesses in any phase.'}."
+          weak_message = f"{player_name} is weak in: {', '.join(weak_against) if weak_against else 'no clear weaknesses in any phase.'}."
           
           # Display strengths and weaknesses messages
           st.markdown("##### Strengths and Weaknesses")
@@ -1652,7 +1652,8 @@ elif sidebar_option == "Strength vs Weakness":
           plt.tight_layout()
           
           # Display the plot in Streamlit
-          st.pyplot(plt)
+          # st.pyplot(plt)
+          plt.show()
       
     if option == "Bowling":
         # st.subheader("Bowler vs Batting Style Analysis")
