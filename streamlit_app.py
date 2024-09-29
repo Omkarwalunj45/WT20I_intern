@@ -1099,7 +1099,7 @@ if sidebar_option == "Player Profile":
             # If a match ID is selected, display the match details
             if 'selected_match_id' in st.session_state:
                 st.write(f"Showing details for Match ID: {st.session_state['selected_match_id']}")
-                match_data = bpdf[bpdf['MATCH_ID'] == int(st.session_state['selected_match_id'])]
+                match_data = bpdf[bpdf['match_id'] == int(st.session_state['selected_match_id'])]
     
                 if not match_data.empty:
                     st.write(match_data)  # Display the match data
