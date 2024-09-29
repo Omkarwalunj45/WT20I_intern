@@ -1068,7 +1068,7 @@ if sidebar_option == "Player Profile":
     #                 #     st.write("No data available for this match.")
     #     else:
     #         st.write("No recent matches found for this player.")
-   with tab3:
+    with tab3:
         st.header("Current Form")
         current_form_df = get_current_form(bpdf, player_name)
     
