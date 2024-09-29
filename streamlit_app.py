@@ -65,7 +65,7 @@ def get_current_form(bpdf, player_name):
             SR = (runs / balls_faced) * 100 if balls_faced > 0 else 0.0
             venue = bat_match_data['venue'].iloc[0]
             match_id = bat_match_data['match_id'].iloc[0]
-            date = bat_match_data[start_date'].iloc[0]
+            date = bat_match_data['start_date'].iloc[0]
         else:
             runs = 0
             balls_faced = 0
