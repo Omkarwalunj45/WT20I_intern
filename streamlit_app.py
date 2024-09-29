@@ -45,30 +45,32 @@ def standardize_season(season):
 def get_current_form(bpdf, player_name):
     # Filter for matches where the player batted or bowled
     player_matches = bpdf[(bpdf['batsman'] == player_name) | (bpdf['bowler'] == player_name)]
-
+    player_matches['start_date'] = pd.to_datetime(player_matches['start_date'], format='%m/%d/%Y')
+    player_matches = player_matches.sort_values(by='start_date', ascending=False)
+    
     # Get the last 10 unique match IDs
-    last_10_matches = player_matches['match_id'].drop_duplicates().sort_values(ascending=False).head(10)
+    last_10_matches = player_matches['start_date'].drop_duplicates().sort_values(ascending=False).head(10)
 
     # Prepare the result DataFrame
     results = []
 
-    for match_id in last_10_matches:
+    for date in last_10_matches:
         # Get batting stats for this match
-        bat_match_data = bpdf[(bpdf['match_id'] == match_id) & (bpdf['batsman'] == player_name)]
+        bat_match_data = bpdf[(bpdf['start_date'] == date) & (bpdf['batsman'] == player_name)]
         
         if not bat_match_data.empty:
             runs = bat_match_data['batsman_runs'].sum()  # Sum runs if player batted multiple times
             balls_faced = bat_match_data['ball'].count()  # Sum balls faced
             SR = (runs / balls_faced) * 100 if balls_faced > 0 else 0.0
             venue = bat_match_data['venue'].iloc[0]
-            start_date = bat_match_data['start_date'].iloc[0]
+            match_id = bat_match_data['match_id'].iloc[0]
         else:
             runs = 0
             balls_faced = 0
             SR = 0.0
         
         # Get bowling stats for this match
-        bowl_match_data = bpdf[(bpdf['match_id'] == match_id) & (bpdf['bowler'] == player_name)]
+        bowl_match_data = bpdf[(bpdf['start_date'] == date) & (bpdf['bowler'] == player_name)]
         
         if not bowl_match_data.empty:
             balls_bowled = bowl_match_data['ball'].count()  # Sum balls bowled
@@ -76,13 +78,14 @@ def get_current_form(bpdf, player_name):
             wickets = bowl_match_data['bowler_wkt'].sum()  # Sum wickets taken
             econ = (runs_given / (balls_bowled / 6)) if balls_bowled > 0 else 0.0  # Calculate Econ
             venue = bowl_match_data['venue'].iloc[0]
-            start_date = bowl_match_data['start_date'].iloc[0]
+            match_id = bowl_match_data['match_id'].iloc[0]
         else:
             balls_bowled = 0
             runs_given = 0
             wickets = 0
             econ = 0.0
         results.append({
+            "Date" : start_date,
             "Match ID": match_id,
             "Runs": runs,
             "Balls Faced": balls_faced,
