@@ -13,6 +13,14 @@ info_df=pd.read_csv("Dataset/player_info_k.csv",low_memory=False)
 bpdf=pd.read_csv("Dataset/THEFINALMASTER.csv",low_memory=False)
 bidf=pd.read_csv("Dataset/lifesaver_bowl.csv",low_memory=False)
 info_df=info_df.rename(columns={'Player':'Player_name'})
+def categorize_phase(over):
+              if over <= 6:
+                  return 'Powerplay'
+              elif 6 < over < 16:
+                  return 'Middle'
+              else:
+                  return 'Death'
+pdf['phase'] = pdf['over'].apply(categorize_phase)
 def is_bowlers_wkt(player_dismissed,dismissal_kind):
   if type(player_dismissed)== str :
     if dismissal_kind not in ['run out','retired hurt','obstructing the field']:
@@ -1514,19 +1522,7 @@ elif sidebar_option == "Strength vs Weakness":
           st.markdown("### Strengths and Weaknesses")
           st.write(strong_message)
           st.write(weak_message)
-         
-  
-          # Add a new column for the phase based on the over
-          def categorize_phase(over):
-              if over <= 6:
-                  return 'Powerplay'
-              elif 6 < over < 16:
-                  return 'Middle'
-              else:
-                  return 'Death'
-          
-          # Assuming `pdf` contains a column 'over' with the over numbers
-          pdf['phase'] = pdf['over'].apply(categorize_phase)
+
           
           # Streamlit header
           # st.header("Phase-wise Strength and Weakness Analysis")
@@ -1737,6 +1733,96 @@ elif sidebar_option == "Strength vs Weakness":
         st.markdown("### Strengths and Weaknesses Against Batting Styles")
         st.write(strong_message)
         st.write(weak_message)
+
+        # Define the match phases
+        allowed_phases = ['Powerplay', 'Middle', 'Death']  # Define the three phases
+        
+        result_df = pd.DataFrame()
+        
+        # Loop over each phase
+        for phase in allowed_phases:
+            temp_df = pdf[pdf['bowler'] == player_name]  # Filter data for the selected bowler
+            
+            # Filter for the specific phase
+            temp_df = temp_df[temp_df['phase'] == phase]
+            
+            # Apply the cumulative function (bcum) for bowling
+            temp_df = bcum(temp_df)
+            
+            # If the DataFrame is empty after applying bcum, skip this iteration
+            if temp_df.empty:
+                continue
+            
+            # Add the phase as a column for later distinction
+            temp_df['phase'] = phase
+            
+            # Concatenate results into result_df
+            result_df = pd.concat([result_df, temp_df], ignore_index=True)
+        
+        # Drop unwanted columns from the result DataFrame
+        result_df = result_df.drop(columns=['bowler', 'debut_year', 'final_year'])
+        
+        # Standardize column names
+        result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+        
+        # Convert the relevant columns to integers and fill NaN values
+        columns_to_convert = ['WKTS']
+        result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0).astype(int)
+        result_df = round_up_floats(result_df)
+        
+        # Specify the desired column order with 'PHASE' first
+        cols = result_df.columns.tolist()
+        new_order = ['PHASE'] + [col for col in cols if col not in 'PHASE']
+        result_df = result_df[new_order]
+        
+        # Display the final table
+        st.markdown("### Cumulative Bowling Performance Across Phases")
+        st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+       
+        strong_against = []
+        weak_against = []
+        
+        # Check each phase's stats against the thresholds
+        for index, row in result_df.iterrows():
+            strong_count = 0
+            weak_count = 0
+            if row['INNINGS'] >= 3:
+                # Evaluate strengths
+                if row['SR'] <= strength_thresholds['SR']:
+                    strong_count += 1
+                if row['AVG'] <= strength_thresholds['AVG']:
+                    strong_count += 1
+                if row['DOT%'] >= strength_thresholds['DOT%']:
+                    strong_count += 1
+                if row['ECON'] <= strength_thresholds['ECON']:
+                    strong_count += 1
+        
+                # Evaluate weaknesses
+                if row['SR'] >= weakness_thresholds['SR']:
+                    weak_count += 1
+                if row['AVG'] >= weakness_thresholds['AVG']:
+                    weak_count += 1
+                if row['DOT%'] <= weakness_thresholds['DOT%']:
+                    weak_count += 1
+                if row['ECON'] >= weakness_thresholds['ECON']:
+                    weak_count += 1
+        
+                # Determine strong/weak based on counts
+                if strong_count >= 3:
+                    strong_against.append(row['PHASE'])
+                if weak_count >= 3:
+                    weak_against.append(row['PHASE'])
+        
+        # Format the output message
+        strong_message = f"{player_name} is strong during: {', '.join(strong_against)}." if strong_against else f"{player_name} has no clear strengths in any phase."
+        weak_message = f"{player_name} is weak during: {', '.join(weak_against)}." if weak_against else f"{player_name} has no clear weaknesses in any phase."
+        
+        # Display strengths and weaknesses messages
+        st.markdown("### Strengths and Weaknesses Across Phases")
+        st.write(strong_message)
+        st.write(weak_message)
+
+      
     
       
       
