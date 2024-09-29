@@ -1646,7 +1646,7 @@ elif sidebar_option == "Strength vs Weakness":
           plt.barh(dismissal_counts['dismissal_kind'], dismissal_counts['count'], color='skyblue')
           plt.xlabel('Number of Dismissals', fontsize=10)
           plt.ylabel('Dismissal Type', fontsize=10)
-          plt.title(f'Number of Dismissals by Dismissal Type for {player_name}',, fontsize=14)
+          plt.title(f'Number of Dismissals by Dismissal Type for {player_name}',fontsize=14)
           plt.grid(axis='x', linestyle='--', alpha=0.7)
           plt.tight_layout()
           
