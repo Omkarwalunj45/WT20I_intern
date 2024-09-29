@@ -1033,15 +1033,47 @@ if sidebar_option == "Player Profile":
             
     #     else:
     #         st.write("No recent matches found for this player.")
+    # with tab3:
+    #     st.header("Current Form")
+    #     current_form_df = get_current_form(bpdf, player_name)
+        
+    #     if not current_form_df.empty:
+    #         current_form_df.columns = [col.upper() for col in current_form_df.columns]
+            
+    #         # Create clickable links for MATCH ID without brackets
+    #         # current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(lambda x: f"<a href='#{x}'>{x}</a>")
+            
+    #         # Rearranging columns
+    #         cols = current_form_df.columns.tolist()
+    #         new_order = ['MATCH ID', 'DATE'] + [col for col in cols if col not in ['MATCH ID', 'DATE']]
+    #         current_form_df = current_form_df[new_order]
+    #         current_form_df = current_form_df.loc[:, ~current_form_df.columns.duplicated()]
+    
+    #         # Formatting the date
+    #         current_form_df['DATE'] = pd.to_datetime(current_form_df['DATE'], format='%m/%d/%Y')
+    #         current_form_df = current_form_df.sort_values(by='DATE', ascending=False)
+    #         current_form_df = current_form_df.reset_index(drop=True)
+    #         current_form_df['DATE'] = current_form_df['DATE'].dt.strftime('%m/%d/%Y')
+    
+    #         # Displaying the table with clickable MATCH ID
+    #         st.markdown(current_form_df.to_html(escape=False), unsafe_allow_html=True)
+            
+    #         # Handling clicks on MATCH ID links
+    #         for match_id in current_form_df['MATCH ID']:
+    #             if st.button(f'View Match {match_id}'):
+    #                 show_match_details(match_id)
+    #                 # if not match_data.empty:
+    #                 #     st.write(match_data)  # Display the match data
+    #                 # else:
+    #                 #     st.write("No data available for this match.")
+    #     else:
+    #         st.write("No recent matches found for this player.")
     with tab3:
         st.header("Current Form")
         current_form_df = get_current_form(bpdf, player_name)
         
         if not current_form_df.empty:
             current_form_df.columns = [col.upper() for col in current_form_df.columns]
-            
-            # Create clickable links for MATCH ID without brackets
-            # current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(lambda x: f"<a href='#{x}'>{x}</a>")
             
             # Rearranging columns
             cols = current_form_df.columns.tolist()
@@ -1055,17 +1087,44 @@ if sidebar_option == "Player Profile":
             current_form_df = current_form_df.reset_index(drop=True)
             current_form_df['DATE'] = current_form_df['DATE'].dt.strftime('%m/%d/%Y')
     
-            # Displaying the table with clickable MATCH ID
-            st.markdown(current_form_df.to_html(escape=False), unsafe_allow_html=True)
-            
-            # Handling clicks on MATCH ID links
-            for match_id in current_form_df['MATCH ID']:
-                if st.button(f'View Match {match_id}'):
-                    show_match_details(match_id)
-                    # if not match_data.empty:
-                    #     st.write(match_data)  # Display the match data
-                    # else:
-                    #     st.write("No data available for this match.")
+            # Create clickable links for MATCH ID
+            current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(lambda x: f'<a href="#" onclick="showMatchDetails(\'{x}\'); return false;" style="color: blue; text-decoration: underline;">{x}</a>')
+    
+            # Convert DataFrame to HTML
+            html_table = current_form_df.to_html(escape=False, index=False)
+    
+            # Add custom JavaScript function
+            js_code = """
+            <script>
+            function showMatchDetails(matchId) {
+                const event = new CustomEvent('showMatchDetails', { detail: matchId });
+                window.dispatchEvent(event);
+            }
+            </script>
+            """
+    
+            # Combine HTML table and JavaScript
+            html_content = f"{js_code}<div style='overflow-x: auto;'>{html_table}</div>"
+    
+            # Display the table with clickable MATCH ID
+            st.markdown(html_content, unsafe_allow_html=True)
+    
+            # Handle the custom event in Streamlit
+            result = st.empty()
+            st.markdown("""
+            <script>
+            window.addEventListener('showMatchDetails', function(event) {
+                const matchId = event.detail;
+                window.Streamlit.setComponentValue(matchId);
+            });
+            </script>
+            """, unsafe_allow_html=True)
+    
+            # Check if a match ID was clicked
+            clicked_match_id = result.text_input("", key="clicked_match_id", label_visibility="hidden")
+            if clicked_match_id:
+                show_match_details(clicked_match_id)
+    
         else:
             st.write("No recent matches found for this player.")
     
