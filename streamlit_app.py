@@ -216,7 +216,7 @@ def bcum(df):
 
     
     dismissals_count = df.groupby(['bowler', 'match_id'])['bowler_wkt'].sum()
-    three_wicket_hauls = dismissals_count[dismissals_count >= 3].groupby('bowler').count().reset_index().rename(columns={'match_id': 'three_wicket_hauls'})
+    three_wicket_hauls = dismissals_count[dismissals_count >= 3].groupby('bowler').count().reset_index().rename(columns={'bowler_wkt': 'three_wicket_hauls'})
     bbi = dismissals_count.groupby('bowler').max().reset_index().rename(columns={'bowler_wkt': 'bbi'})
 
     
