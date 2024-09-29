@@ -1660,8 +1660,8 @@ elif sidebar_option == "Strength vs Weakness":
           
           # Reorder columns to make 'bat_kind' the first column
           cols = temp_df.columns.tolist()
-          new_order = ['batting_style'] + [col for col in cols if col != 'batting_style']
-          temp_df = temp_df[new_order]
+          # new_order = ['batting_style'] + [col for col in cols if col != 'batting_style']
+          # temp_df = temp_df[new_order]
           
           # Concatenate results into result_df
           if i == 0:
