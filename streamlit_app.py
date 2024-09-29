@@ -89,7 +89,7 @@ def show_innings_scorecard(inning_data, title):
     
     # Iterate through each batsman to populate Wicket and Dismissal Kind based on inning_data
     for index, row in batting_data.iterrows():
-        batsman = row['Batsman']
+        batsman = row['batter_full_name']
         
         # Get data where this batsman was dismissed
         dismissed_data = inning_data[(inning_data['batter_full_name'] == batsman) & (inning_data['is_wkt'] == 1)]
