@@ -1062,10 +1062,10 @@ if sidebar_option == "Player Profile":
             for match_id in current_form_df['MATCH ID']:
                 if st.button(f'View Match {match_id}'):
                     show_match_details(match_id)
-                    if not match_data.empty:
-                        st.write(match_data)  # Display the match data
-                    else:
-                        st.write("No data available for this match.")
+                    # if not match_data.empty:
+                    #     st.write(match_data)  # Display the match data
+                    # else:
+                    #     st.write("No data available for this match.")
         else:
             st.write("No recent matches found for this player.")
     
