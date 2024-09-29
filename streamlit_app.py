@@ -982,8 +982,8 @@ if sidebar_option == "Player Profile":
             
                     result_df = pd.concat([result_df, temp_df], ignore_index=True)
             
-            # if 'bowler' in result_df.columns:
-                # result_df = result_df.drop(columns=['bowler','debut_year','final_year','matches','batting_team'])
+            if 'bowler' in result_df.columns:
+                # result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
             columns_to_convert = ['RUNS','THREE WICKET HAULS', 'MAIDEN OVERS']
 
