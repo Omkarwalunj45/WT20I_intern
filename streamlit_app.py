@@ -1737,6 +1737,6 @@ elif sidebar_option == "Strength vs Weakness":
         st.markdown("### Strengths and Weaknesses Against Batting Styles")
         st.write(strong_message)
         st.write(weak_message)
-    )
+    
       
       
