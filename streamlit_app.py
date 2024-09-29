@@ -1033,38 +1033,42 @@ if sidebar_option == "Player Profile":
             
     #     else:
     #         st.write("No recent matches found for this player.")
-    with tab3:
-        st.header("Current Form")
-        current_form_df = get_current_form(bpdf, player_name)
+with tab3:
+    st.header("Current Form")
+    current_form_df = get_current_form(bpdf, player_name)
+    
+    if not current_form_df.empty:
+        current_form_df.columns = [col.upper() for col in current_form_df.columns]
         
-        if not current_form_df.empty:
-            current_form_df.columns = [col.upper() for col in current_form_df.columns]
-            current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(lambda x: f"[{x}](#{x})")
-            cols = current_form_df.columns.tolist()
-            new_order = ['MATCH ID', 'DATE'] + [col for col in cols if col not in ['MATCH ID', 'DATE']]
-            current_form_df = current_form_df[new_order]
-            current_form_df = current_form_df.loc[:, ~current_form_df.columns.duplicated()]
-            
-            # Assuming the date column is named 'date' in MM/DD/YYYY format
-            current_form_df['DATE'] = pd.to_datetime(current_form_df['DATE'], format='%m/%d/%Y')
-            current_form_df = current_form_df.sort_values(by='DATE', ascending=False)
-            current_form_df = current_form_df.reset_index(drop=True)
-            current_form_df['DATE'] = current_form_df['DATE'].dt.strftime('%m/%d/%Y')
-            
-            
-            # Display the table with clickable MATCH IDs
-            st.markdown(current_form_df.to_html(escape=False), unsafe_allow_html=True)
-    
-            # Check for user click on MATCH ID
-            for match_id in current_form_df['MATCH ID']:
-                if st.markdown(f"[{match_id}](#{match_id})", unsafe_allow_html=True):
-                    # Extracting match_id and switching to match details view
-                    selected_match_id = int(match_id.split('[')[-1].split(']')[0])  # Extracting the match_id
-                    show_match_details(selected_match_id)
-                    break  # Stop after processing the first click
-    
-        else:
-            st.write("No recent matches found for this player.")
+        # Create clickable links for MATCH ID without brackets
+        current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(lambda x: f"<a href='#{x}'>{x}</a>")
+        
+        # Rearranging columns
+        cols = current_form_df.columns.tolist()
+        new_order = ['MATCH ID', 'DATE'] + [col for col in cols if col not in ['MATCH ID', 'DATE']]
+        current_form_df = current_form_df[new_order]
+        current_form_df = current_form_df.loc[:, ~current_form_df.columns.duplicated()]
+
+        # Formatting the date
+        current_form_df['DATE'] = pd.to_datetime(current_form_df['DATE'], format='%m/%d/%Y')
+        current_form_df = current_form_df.sort_values(by='DATE', ascending=False)
+        current_form_df = current_form_df.reset_index(drop=True)
+        current_form_df['DATE'] = current_form_df['DATE'].dt.strftime('%m/%d/%Y')
+
+        # Displaying the table with clickable MATCH ID
+        st.markdown(current_form_df.to_html(escape=False), unsafe_allow_html=True)
+        
+        # Handling clicks on MATCH ID links
+        for match_id in current_form_df['MATCH ID']:
+            if st.button(f'View Match {match_id}'):
+                match_data = bpdf[bpdf['MATCH_ID'] == match_id]
+                if not match_data.empty:
+                    st.write(match_data)  # Display the match data
+                else:
+                    st.write("No data available for this match.")
+    else:
+        st.write("No recent matches found for this player.")
+
     
     # Add a section for navigation to go back to Current Form
     if 'current_view' not in st.session_state:
