@@ -214,10 +214,11 @@ def bcum(df):
     sixes = pd.DataFrame(df.groupby(['bowler'])['is_six'].sum()).reset_index().rename(columns={'is_six': 'sixes'})
     fpi = pd.DataFrame(df.groupby(['bowler'])['ball_fantasy_pts'].sum()).reset_index().rename(columns={'ball_fantasy_pts': 'fantasy_points'})
 
-    # Calculate 3W or more hauls by bowler
+    
     dismissals_count = df.groupby(['bowler', 'match_id'])['bowler_wkt'].sum()
-    three_wicket_hauls = dismissals_count[dismissals_count >= 3].groupby('bowler').count().reset_index().rename(columns={'bowler_wkt': 'three_wicket_hauls'})
-    bbi = dismissals_count.groupby('bowler')['dismissals_count'].max().reset_index().rename(columns={'bowler_wkt': 'bbi'})
+    three_wicket_hauls = dismissals_count[dismissals_count >= 3].groupby('bowler').count().reset_index().rename(columns={'match_id': 'three_wicket_hauls'})
+    bbi = dismissals_count.groupby('bowler').max().reset_index().rename(columns={'bowler_wkt': 'bbi'})
+
     
     # Identify maiden overs (group by match and over, check if total_runs == 0)
     df['over'] = df['ball'].apply(lambda x: int(x))  # Assuming ball represents the ball within an over
