@@ -81,7 +81,7 @@ def get_current_form(bpdf, player_name):
             econ = (runs_given / (balls_bowled / 6)) if balls_bowled > 0 else 0.0  # Calculate Econ
             venue = bowl_match_data['venue'].iloc[0]
             match_id = bowl_match_data['match_id'].iloc[0]
-            date = bowl_match_data[start_date'].iloc[0]
+            date = bowl_match_data['start_date'].iloc[0]
         else:
             balls_bowled = 0
             runs_given = 0
