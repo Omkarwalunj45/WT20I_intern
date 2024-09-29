@@ -1674,7 +1674,7 @@ elif sidebar_option == "Strength vs Weakness":
               result_df = pd.concat([result_df, temp_df], ignore_index=True)
   
       # Drop unwanted columns from the result DataFrame
-      result_df = result_df.drop(columns=['matches_x', 'matches_y', 'bowler', 'debut_year', 'final_year', 'wickets', 'best_bowling', 'bowling_team', 'matches'])
+      # result_df = result_df.drop(columns=['matches_x', 'matches_y', 'bowler', 'debut_year', 'final_year', 'wickets', 'best_bowling', 'bowling_team', 'matches'])
       result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
       columns_to_convert = ['WICKETS']
   
