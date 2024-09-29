@@ -15,6 +15,7 @@ bpdf=pd.read_csv("Dataset/THEGRANDMASTER.csv",low_memory=False)
 bidf=pd.read_csv("Dataset/lifesaver_bowl.csv",low_memory=False)
 info_df=info_df.rename(columns={'Player':'Player_name'})
 
+
 def show_match_details(match_id):
     # Filter match details for the selected match_id
     match_details = bpdf[bpdf['match_id'] == match_id]
