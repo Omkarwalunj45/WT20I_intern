@@ -1654,7 +1654,7 @@ elif sidebar_option == "Strength vs Weakness":
           # Display the plot in Streamlit
           st.pyplot(plt)
           plt.figure(figsize=(10, 6))
-          plt.barhs(dismissal_counts['dismissal_kind'], dismissal_counts['count'], color='skyblue')
+          plt.barh(dismissal_counts['dismissal_kind'], dismissal_counts['count'], color='skyblue')
           plt.xlabel('Dismissal Type')
           plt.ylabel('Number of Dismissals')
           plt.title(f'Number of Dismissals by Dismissal Type for {player_name}')
