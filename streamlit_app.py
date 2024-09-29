@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import math as mt
 import numpy as np
+import matplotlib.pyplot as plt
 
 # Page settings
 st.set_page_config(page_title='WT20I Performance Analysis Portal', layout='wide')
@@ -1633,8 +1634,6 @@ elif sidebar_option == "Strength vs Weakness":
           st.markdown("##### Strengths and Weaknesses")
           st.write(strong_message)
           st.write(weak_message)
-
-          import matplotlib.pyplot as plt
           player_data = pdf[pdf['batsman'] == player_name]
           
           # Group by dismissal_kind and count the number of dismissals
