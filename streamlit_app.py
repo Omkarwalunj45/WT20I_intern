@@ -115,6 +115,7 @@ def show_innings_scorecard(inning_data, title):
     
     # Filter out batsmen with 0 runs
     batting_data = batting_data[batting_data['Batsman'] != '0']
+    batting_data.index = batting_data.index + 1
     st.table(batting_data)
 
     
@@ -144,6 +145,7 @@ def show_innings_scorecard(inning_data, title):
     bowling_data = bowling_data[(bowling_data.Bowler) != '0']
     
     # Display bowling scorecard
+    bowling_data.index = bowling_data.index + 1
     st.table(bowling_data)
 
 
