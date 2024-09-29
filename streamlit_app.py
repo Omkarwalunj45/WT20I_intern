@@ -1709,7 +1709,7 @@ elif sidebar_option == "Strength vs Weakness":
                     strong_count += 1
                 if row['DOT%'] >= strength_thresholds['DOT%']:
                     strong_count += 1
-                if row['Econ'] <= strength_thresholds['Econ']:
+                if row['ECON'] <= strength_thresholds['Econ']:
                     strong_count += 1
                
                 
@@ -1720,7 +1720,7 @@ elif sidebar_option == "Strength vs Weakness":
                     weak_count += 1
                 if row['DOT%'] <= weakness_thresholds['DOT%']:
                     weak_count += 1
-                if row['Econ'] >= strength_thresholds['Econ']:
+                if row['ECON'] >= strength_thresholds['Econ']:
                     weak_count += 1
                 
                 # Determine strong/weak based on counts
