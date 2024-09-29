@@ -1068,13 +1068,13 @@ if sidebar_option == "Player Profile":
     #                 #     st.write("No data available for this match.")
     #     else:
     #         st.write("No recent matches found for this player.")
-    with tab3:
+   with tab3:
         st.header("Current Form")
         current_form_df = get_current_form(bpdf, player_name)
-        
+    
         if not current_form_df.empty:
             current_form_df.columns = [col.upper() for col in current_form_df.columns]
-            
+    
             # Rearranging columns
             cols = current_form_df.columns.tolist()
             new_order = ['MATCH ID', 'DATE'] + [col for col in cols if col not in ['MATCH ID', 'DATE']]
@@ -1089,18 +1089,18 @@ if sidebar_option == "Player Profile":
     
             # Create a new column 'VIEW MATCH' with buttons
             def create_view_match_button(match_id):
-                return f"<button onclick='showMatchDetails(\"{match_id}\")'>View Match {match_id}</button>"
+                return f'<button type="button" onclick="document.getElementById(\'match_input\').value = \'{match_id}\'; document.getElementById(\'match_submit\').click();">View Match</button>'
     
-            # Create VIEW MATCH column as the first column
-            current_form_df.insert(0, 'VIEW MATCH', current_form_df['MATCH ID'].apply(lambda x: f'<a href="#{x}">{create_view_match_button(x)}</a>'))
+            # Insert VIEW MATCH button as the first column
+            current_form_df.insert(0, 'VIEW MATCH', current_form_df['MATCH ID'].apply(lambda x: create_view_match_button(x)))
     
-            # Display the table with clickable MATCH ID and VIEW MATCH buttons
+            # Display the table with clickable buttons
             st.markdown(current_form_df.to_html(escape=False), unsafe_allow_html=True)
     
-            # Handling clicks on MATCH ID buttons
-            for match_id in current_form_df['MATCH ID']:
-                if st.button(f'View Match {match_id}', key=f'match_{match_id}'):
-                    show_match_details(match_id)
+            # Hidden form for handling match detail requests
+            match_id_input = st.text_input('', '', key='match_input')
+            if st.button('Load Match', key='match_submit'):
+                show_match_details(match_id_input)
     
         else:
             st.write("No recent matches found for this player.")
