@@ -108,14 +108,6 @@ def cumulator(temp_df):
     # Ensure 'total_runs' exists
     if 'total_runs' not in temp_df.columns:
         raise KeyError("Column 'total_runs' does not exist in temp_df.")
-    
-    # Create new columns for counting runs
-    # temp_df['is_dot'] = temp_df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
-    # temp_df['is_one'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
-    # temp_df['is_two'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 2 else 0)
-    # temp_df['is_three'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 3 else 0)
-    # temp_df['is_four'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 4 else 0)
-    # temp_df['is_six'] = temp_df['batsman_runs'].apply(lambda x: 1 if x == 6 else 0)
 
     # Calculate runs, balls faced, innings, dismissals, etc.
     runs = temp_df.groupby(['batsman'])['batsman_runs'].sum().reset_index().rename(columns={'batsman_runs': 'runs'})
@@ -207,15 +199,7 @@ def bcum(df):
     df = df.drop_duplicates(subset=['match_id', 'ball','inning'], keep='first')
     print(f"After removing duplicates based on 'match_id' and 'ball': {df.shape}")
     # df['total_runs']=df['batsman_runs']+df['extras']
-
-    # Define helper columns for various runs
-    # df.loc[:, 'is_dot'] = df['total_runs'].apply(lambda x: 1 if x == 0 else 0)
-    # df.loc[:, 'is_one'] = df['batsman_runs'].apply(lambda x: 1 if x == 1 else 0)
-    # df.loc[:, 'is_two'] = df['batsman_runs'].apply(lambda x: 1 if x == 2 else 0)
-    # df.loc[:, 'is_three'] = df['batsman_runs'].apply(lambda x: 1 if x == 3 else 0)
-    # df.loc[:, 'is_four'] = df['batsman_runs'].apply(lambda x: 1 if x == 4 else 0)
-    # df.loc[:, 'is_six'] = df['batsman_runs'].apply(lambda x: 1 if x == 6 else 0)
-
+  
     # Create various aggregates
     runs = pd.DataFrame(df.groupby(['bowler'])['batsman_runs'].sum()).reset_index().rename(columns={'batsman_runs': 'runs'})
     innings = pd.DataFrame(df.groupby(['bowler'])['match_id'].nunique()).reset_index().rename(columns={'match_id': 'innings'})
@@ -1005,6 +989,7 @@ if sidebar_option == "Player Profile":
         # Add current form content here
         current_form_df = get_current_form(bpdf,player_name)
         if not current_form_df.empty:
+            current_form_df['year'] =current_form_df['year'].apply(standardize_season)
             current_form_df.columns = [col.upper() for col in current_form_df.columns]
             cols = current_form_df.columns.tolist()
             new_order = ['MATCH ID','YEAR'] + [col for col in cols if col != ['MATCH ID','YEAR']]          
