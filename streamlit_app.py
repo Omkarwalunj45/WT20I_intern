@@ -8,10 +8,10 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title='WT20I Performance Analysis Portal', layout='wide')
 st.title('WT20I Performance Analysis Portal')
 # # Load data
-pdf = pd.read_csv("Dataset/THEFINALMASTER.csv",low_memory=False)
+pdf = pd.read_csv("Dataset/THEGRANDMASTER.csv",low_memory=False)
 idf = pd.read_csv("Dataset/lifesaver_bat.csv",low_memory=False)
 info_df=pd.read_csv("Dataset/player_info_k.csv",low_memory=False)
-bpdf=pd.read_csv("Dataset/THEFINALMASTER.csv",low_memory=False)
+bpdf=pd.read_csv("Dataset/THEGRANDMASTER.csv",low_memory=False)
 bidf=pd.read_csv("Dataset/lifesaver_bowl.csv",low_memory=False)
 info_df=info_df.rename(columns={'Player':'Player_name'})
 
@@ -76,7 +76,7 @@ def show_match_details(match_id):
 def show_innings_scorecard(inning_data, title):
     # Batting scorecard
     st.write("Batting")
-    batting_data = inning_data.groupby(['batsman']).agg({
+    batting_data = inning_data.groupby(['batter_full_name']).agg({
         'batsman_runs': 'sum',
         'ball': 'count',
         'is_four': 'sum',
@@ -89,9 +89,9 @@ def show_innings_scorecard(inning_data, title):
     
     # Populate Wicket and Dismissal Kind based on inning_data
     for index, row in batting_data.iterrows():
-        batsman = row['batsman']
+        batsman = row['batter_full_name']
         # Get the data from inning_data where the batsman has been dismissed
-        dismissed_data = inning_data[inning_data['batsman'] == batsman]
+        dismissed_data = inning_data[inning_data['batter_full_name'] == batsman]
         
         # Check if the batsman was dismissed
         if not dismissed_data[dismissed_data['is_wkt'] == 1].empty:
@@ -100,7 +100,7 @@ def show_innings_scorecard(inning_data, title):
             
             # If bowler_wkt is 1, the dismissal is due to the bowler
             if wicket_info['bowler_wkt'].iloc[0] == 1:
-                batting_data.at[index, 'Wicket'] = wicket_info['bowler'].iloc[0]  # Bowler's name
+                batting_data.at[index, 'Wicket'] = wicket_info['bowler_full_name'].iloc[0]  # Bowler's name
                 batting_data.at[index, 'Dismissal Kind'] = wicket_info['dismissal_kind'].iloc[0]  # Dismissal kind
             else:
                 batting_data.at[index, 'Wicket'] = "-"  # No bowler responsible, could be run out, etc.
@@ -119,7 +119,7 @@ def show_innings_scorecard(inning_data, title):
     
     # Bowling scorecard
     st.write("Bowling")
-    bowling_data = inning_data.groupby(['bowler']).agg({
+    bowling_data = inning_data.groupby([''bowler_full_name']).agg({
         'ball': 'count',
         'total_runs': 'sum',
         'is_wkt': 'sum',
@@ -1366,6 +1366,7 @@ elif sidebar_option == "Matchup Analysis":
         result_df=result_df.sort_values('YEAR',ascending=True)
         result_df=result_df[['MATCH ID'] + ['YEAR'] + [col for col in result_df.columns if col not in ['MATCH ID','YEAR']]]
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+        
                  
     elif grouping_option == "Venue":
         # Filter the DataFrame for the selected batsman and bowler
@@ -1429,6 +1430,9 @@ elif sidebar_option == "Matchup Analysis":
         result_df=result_df.sort_values('YEAR',ascending=True)
         result_df=result_df[['VENUE'] + ['YEAR'] + [col for col in result_df.columns if col not in ['VENUE','YEAR']]]
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+        for match_id in result_df['MATCH ID']:
+                    if st.button(f'View Match {match_id}'):
+                        show_match_details(match_id)
     else:
         # Assuming pdf is your main DataFrame
         # Filter for innings 1 and 2 and prepare to accumulate results
