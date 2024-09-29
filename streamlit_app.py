@@ -1681,15 +1681,15 @@ elif sidebar_option == "Strength vs Weakness":
         # Set thresholds for strengths and weaknesses for Women's T20Is (Bowling performance)
         strength_thresholds = {
             'SR': 20,               # Strike Rate (balls per wicket)
-            'AVG': 15,              # Average (runs per wicket)
-            'DOT%': 50,   # Dot ball percentage
+            'AVG': 16.5,              # Average (runs per wicket)
+            'DOT%': 45,   # Dot ball percentage
             'Econ': 6, 
         }
     
         weakness_thresholds = {
-            'SR': 35,               # Strike Rate (balls per wicket)
-            'AVG': 30,              # Average (runs per wicket)
-            'DOT%': 40,   # Dot ball percentage
+            'SR': 30,               # Strike Rate (balls per wicket)
+            'AVG': 26,              # Average (runs per wicket)
+            'DOT%': 38,   # Dot ball percentage
             'Econ':8,
         }
     
