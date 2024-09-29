@@ -726,7 +726,7 @@ if sidebar_option == "Player Profile":
                     result_df = pd.concat([result_df, temp_df],ignore_index=True)
                     
             
-                result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','final_year','matches_x','matches_y','matches','batting_team'])
+                result_df = result_df.drop(columns=['batsman', 'batting_team','debut_year','final_year','matches_x','matches_y','batting_team'])
                 # Round off the remaining float columns to 2 decimal places
                 float_cols = result_df.select_dtypes(include=['float']).columns
                 result_df[float_cols] = result_df[float_cols].round(2)
