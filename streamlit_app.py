@@ -1637,15 +1637,15 @@ elif sidebar_option == "Strength vs Weakness":
     if option == "Bowling":
       # st.subheader("Bowler vs Batting Style Analysis")
       allowed_batting_styles = {
-          'left_hand_bat': 'Left-hand bat',
-          'right_hand_bat': 'Right-hand bat'
+          'Left-hand bat',
+          'Right-hand bat'
       }
   
       result_df = pd.DataFrame()
       i = 0
   
       # Loop over left-hand and right-hand batting styles
-      for bat_kind, bat_style in allowed_batting_styles.items():
+      for bat_style in allowed_batting_styles:
           temp_df = pdf[pdf['bowler'] == player_name]  # Filter data for the selected bowler
           
           # Filter for the specific batting style
@@ -1658,12 +1658,9 @@ elif sidebar_option == "Strength vs Weakness":
           if temp_df.empty:
               continue
           
-          # Add the bat_kind column
-          temp_df['bat_kind'] = bat_kind
-          
           # Reorder columns to make 'bat_kind' the first column
           cols = temp_df.columns.tolist()
-          new_order = ['bat_kind'] + [col for col in cols if col != 'bat_kind']
+          new_order = ['batting_style'] + [col for col in cols if col != 'batting_style']
           temp_df = temp_df[new_order]
           
           # Concatenate results into result_df
@@ -1686,7 +1683,7 @@ elif sidebar_option == "Strength vs Weakness":
   
       # Specify the desired order with 'bat_kind' first
       cols = result_df.columns.tolist()
-      new_order = ['BAT KIND', 'INNINGS'] + [col for col in cols if col not in ['BAT KIND', 'INNINGS']]
+      new_order = ['BATTING STYLE', 'INNINGS'] + [col for col in cols if col not in ['BATTING STYLE', 'INNINGS']]
       
       # Reindex the DataFrame with the new column order
       result_df = result_df[new_order]
