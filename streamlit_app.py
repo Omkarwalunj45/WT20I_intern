@@ -60,12 +60,14 @@ def get_current_form(bpdf, player_name):
         bat_match_data = bpdf[(bpdf['start_date'] == date) & (bpdf['batsman'] == player_name)]
         
         if not bat_match_data.empty:
-            runs = bat_match_data['batsman_runs'].sum()  # Sum runs if player batted multiple times
+            runs = bat_match_data['batsman_runs'].sum() 
             balls_faced = bat_match_data['ball'].count()  # Sum balls faced
             SR = (runs / balls_faced) * 100 if balls_faced > 0 else 0.0
             venue = bat_match_data['venue'].iloc[0]
             match_id = bat_match_data['match_id'].iloc[0]
             date = bat_match_data['start_date'].iloc[0]
+            opp = bat_match_data['bowling_team'].iloc[0]
+            fan_pts_bat = bat_match_data['bat_fantasy_pts'].sum()
         else:
             runs = 0
             balls_faced = 0
@@ -82,6 +84,8 @@ def get_current_form(bpdf, player_name):
             venue = bowl_match_data['venue'].iloc[0]
             match_id = bowl_match_data['match_id'].iloc[0]
             date = bowl_match_data['start_date'].iloc[0]
+            opp = bowl_match_data['batting_team'].iloc[0]
+            fan_pts_bowl = bowl_match_data['ball_fantasy_pts'].sum()
         else:
             balls_bowled = 0
             runs_given = 0
@@ -98,6 +102,10 @@ def get_current_form(bpdf, player_name):
             "Wickets": wickets,
             "Econ": econ,
             "Venue": venue,
+            "Opponent" : opp,
+            "Batting_Fantasy_Pts" : fan_pts_bat,
+            "Bowling_Fantasy_Pts" : fan_pts_bowl,
+            
         })
     
     return pd.DataFrame(results)
