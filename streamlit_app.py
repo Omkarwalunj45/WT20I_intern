@@ -120,7 +120,7 @@ def show_innings_scorecard(inning_data, title):
     
     # Bowling scorecard
     st.write("Bowling")
-    bowling_data = inning_data.groupby([''bowler_full_name']).agg({
+    bowling_data = inning_data.groupby(['bowler_full_name']).agg({
         'ball': 'count',
         'total_runs': 'sum',
         'is_wkt': 'sum',
