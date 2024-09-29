@@ -1371,9 +1371,8 @@ elif sidebar_option == "Matchup Analysis":
         # Handling clicks on MATCH ID links
         for match_id in result_df['MATCH ID']:
              if st.button(f'View Match {match_id}'):
+                  tdf=pdf[pdf['match_id']==match_id]
                   show_match_details(match_id)
-             else:
-                  st.write("No recent matches found for this player.")
                  
     elif grouping_option == "Venue":
         # Filter the DataFrame for the selected batsman and bowler
