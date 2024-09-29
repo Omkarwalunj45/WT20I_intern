@@ -47,6 +47,7 @@ def get_current_form(bpdf, player_name):
     player_matches = bpdf[(bpdf['batsman'] == player_name) | (bpdf['bowler'] == player_name)]
     player_matches['start_date'] = pd.to_datetime(player_matches['start_date'], format='%m/%d/%Y')
     player_matches = player_matches.sort_values(by='start_date', ascending=False)
+    bpdf['start_date'] = pd.to_datetime(bpdf['start_date'], format='%m/%d/%Y')
     
     # Get the last 10 unique match IDs
     last_10_matches = player_matches['start_date'].drop_duplicates().sort_values(ascending=False).head(10)
