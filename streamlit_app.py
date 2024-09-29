@@ -1683,16 +1683,14 @@ elif sidebar_option == "Strength vs Weakness":
             'SR': 20,               # Strike Rate (balls per wicket)
             'AVG': 15,              # Average (runs per wicket)
             'DOT%': 50,   # Dot ball percentage
-            'BPB': 8,               # Balls per boundary
-            'BPD': 20               # Balls per dismissal
+            'Econ': 6, 
         }
     
         weakness_thresholds = {
             'SR': 35,               # Strike Rate (balls per wicket)
             'AVG': 30,              # Average (runs per wicket)
             'DOT%': 40,   # Dot ball percentage
-            'BPB': 5,               # Balls per boundary
-            'BPD': 35               # Balls per dismissal
+            'Econ':8,
         }
     
         # Initialize lists to hold strengths and weaknesses
@@ -1711,10 +1709,9 @@ elif sidebar_option == "Strength vs Weakness":
                     strong_count += 1
                 if row['DOT%'] >= strength_thresholds['DOT%']:
                     strong_count += 1
-                if row['BPB'] >= strength_thresholds['BPB']:
+                if row['Econ'] <= strength_thresholds['Econ']:
                     strong_count += 1
-                if row['BPD'] <= strength_thresholds['BPD']:
-                    strong_count += 1
+               
                 
                 # Evaluate weaknesses
                 if row['SR'] >= weakness_thresholds['SR']:
@@ -1723,9 +1720,7 @@ elif sidebar_option == "Strength vs Weakness":
                     weak_count += 1
                 if row['DOT%'] <= weakness_thresholds['DOT%']:
                     weak_count += 1
-                if row['BPB'] <= weakness_thresholds['BPB']:
-                    weak_count += 1
-                if row['BPD'] >= weakness_thresholds['BPD']:
+                if row['Econ'] >= strength_thresholds['Econ']:
                     weak_count += 1
                 
                 # Determine strong/weak based on counts
