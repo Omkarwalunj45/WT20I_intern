@@ -1089,18 +1089,19 @@ if sidebar_option == "Player Profile":
     
             # Create a new column 'VIEW MATCH' with buttons
             def create_view_match_button(match_id):
-                return f'<button type="button" onclick="document.getElementById(\'match_input\').value = \'{match_id}\'; document.getElementById(\'match_submit\').click();">View Match</button>'
+                return st.button(f'View Match {match_id}', key=match_id)
     
-            # Insert VIEW MATCH button as the first column
+            # Create a new dataframe column with buttons
             current_form_df.insert(0, 'VIEW MATCH', current_form_df['MATCH ID'].apply(lambda x: create_view_match_button(x)))
     
-            # Display the table with clickable buttons
-            st.markdown(current_form_df.to_html(escape=False), unsafe_allow_html=True)
+            # Display the table with buttons in the 'VIEW MATCH' column
+            st.write(current_form_df.drop(columns=['MATCH ID']), unsafe_allow_html=True)
     
-            # Hidden form for handling match detail requests
-            match_id_input = st.text_input('', '', key='match_input')
-            if st.button('Load Match', key='match_submit'):
-                show_match_details(match_id_input)
+            # Handling clicks on 'View Match' buttons
+            for match_id in current_form_df['MATCH ID']:
+                if st.session_state.get(match_id):  # Check if button was clicked
+                    st.write(f"Showing details for match ID: {match_id}")
+                    show_match_details(match_id)  # Call the function to display match details
     
         else:
             st.write("No recent matches found for this player.")
