@@ -1074,7 +1074,7 @@ if sidebar_option == "Player Profile":
         
         if not current_form_df.empty:
             current_form_df.columns = [col.upper() for col in current_form_df.columns]
-            
+    
             # Rearranging columns
             cols = current_form_df.columns.tolist()
             new_order = ['MATCH ID', 'DATE'] + [col for col in cols if col not in ['MATCH ID', 'DATE']]
@@ -1087,44 +1087,28 @@ if sidebar_option == "Player Profile":
             current_form_df = current_form_df.reset_index(drop=True)
             current_form_df['DATE'] = current_form_df['DATE'].dt.strftime('%m/%d/%Y')
     
-            # Function to create a clickable link
-            def make_clickable(match_id):
-                return f'<a href="#" onclick="showMatchDetails(\'{match_id}\'); return false;" style="color: blue; text-decoration: underline; cursor: pointer;">{match_id}</a>'
+            # Display each row with clickable match IDs
+            for i, row in current_form_df.iterrows():
+                match_id = row['MATCH ID']
+                match_details = row.drop(labels=['MATCH ID'])
     
-            # Apply the function to the MATCH ID column
-            current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(make_clickable)
+                # Create a clickable button for each MATCH ID
+                if st.button(f"Match ID: {match_id}", key=f"match_{match_id}"):
+                    st.session_state['selected_match_id'] = match_id
     
-            # Convert DataFrame to HTML
-            html = current_form_df.to_html(escape=False, index=False)
+            # If a match ID is selected, display the match details
+            if 'selected_match_id' in st.session_state:
+                st.write(f"Showing details for Match ID: {st.session_state['selected_match_id']}")
+                match_data = bpdf[bpdf['MATCH_ID'] == int(st.session_state['selected_match_id'])]
     
-            # Wrap the table in a div with scrolling and add necessary JavaScript
-            html = f"""
-            <div style="overflow-x: auto;">
-                {html}
-            </div>
-            <script>
-            function showMatchDetails(matchId) {{
-                console.log("Match ID clicked:", matchId);
-                const element = parent.document.querySelector('input[key="clicked_match_id"]');
-                if (element) {{
-                    element.value = matchId;
-                    element.dispatchEvent(new Event('input', {{ bubbles: true }}));
-                }}
-            }}
-            </script>
-            """
-    
-            # Display the table
-            st.markdown(html, unsafe_allow_html=True)
-    
-            # Check if a match ID was clicked
-            clicked_match_id = st.text_input("", key="clicked_match_id", label_visibility="hidden")
-            if clicked_match_id:
-                st.write(f"Showing details for match ID: {clicked_match_id}")
-                show_match_details(clicked_match_id)
+                if not match_data.empty:
+                    st.write(match_data)  # Display the match data
+                else:
+                    st.write("No data available for this match.")
     
         else:
             st.write("No recent matches found for this player.")
+
         
     #     # Add a section for navigation to go back to Current Form
     #     if 'current_view' not in st.session_state:
