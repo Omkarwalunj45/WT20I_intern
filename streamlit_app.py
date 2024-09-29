@@ -1633,6 +1633,27 @@ elif sidebar_option == "Strength vs Weakness":
           st.markdown("##### Strengths and Weaknesses")
           st.write(strong_message)
           st.write(weak_message)
+
+          import matplotlib.pyplot as plt
+          player_data = pdf[pdf['batsman'] == player_name]
+          
+          # Group by dismissal_kind and count the number of dismissals
+          dismissal_counts = player_data.groupby('dismissal_kind').size().reset_index(name='count')
+          
+          # Sort the dismissal kinds by count
+          dismissal_counts = dismissal_counts.sort_values(by='count', ascending=True)
+          
+          # Plotting the horizontal bar chart
+          plt.figure(figsize=(10, 6))
+          plt.barh(dismissal_counts['dismissal_kind'], dismissal_counts['count'], color='skyblue')
+          plt.xlabel('Dismissal Type')
+          plt.ylabel('Number of Dismissals')Number of Dismissals
+          plt.title(f'Number of Dismissals by Dismissal Type for {player_name}')
+          plt.grid(axis='x', linestyle='--', alpha=0.7)
+          plt.tight_layout()
+          
+          # Display the plot in Streamlit
+          st.pyplot(plt)
     if option == "Bowling":
         # st.subheader("Bowler vs Batting Style Analysis")
         allowed_batting_styles = ['Left-hand bat', 'Right-hand bat']  # Define the two batting styles
