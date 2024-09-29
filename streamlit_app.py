@@ -217,7 +217,8 @@ def bcum(df):
     # Calculate 3W or more hauls by bowler
     dismissals_count = df.groupby(['bowler', 'match_id'])['bowler_wkt'].sum()
     three_wicket_hauls = dismissals_count[dismissals_count >= 3].groupby('bowler').count().reset_index().rename(columns={'bowler_wkt': 'three_wicket_hauls'})
-
+    bbi = dismissals_count.groupby('bowler')['bowler_wkts'].max().reset_index().rename(columns={'bowler_wkt': 'bbi'})
+    
     # Identify maiden overs (group by match and over, check if total_runs == 0)
     df['over'] = df['ball'].apply(lambda x: int(x))  # Assuming ball represents the ball within an over
     maiden_overs = df.groupby(['bowler', 'match_id', 'over']).filter(lambda x: x['total_runs'].sum() == 0)
@@ -232,7 +233,9 @@ def bcum(df):
                  .merge(dots, on='bowler')\
                  .merge(three_wicket_hauls, on='bowler', how='left')\
                  .merge(maiden_overs_count, on='bowler', how='left')\
-                 .merge(fpi, on='bowler', how='left')
+                 .merge(fpi, on='bowler', how='left')\
+                 .merge(bbi, on='bowler', how='left')
+                  
 
     # Fill NaN values for bowlers with no 3W hauls or maiden overs
     bowl_rec['three_wicket_hauls'] = bowl_rec['three_wicket_hauls'].fillna(0)
