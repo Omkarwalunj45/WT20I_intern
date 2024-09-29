@@ -1400,7 +1400,7 @@ elif sidebar_option == "Strength vs Weakness":
                   continue
           
           # Display strengths and weaknesses messages
-          st.markdown("### Strengths and Weaknesses Against Bowling Types")
+          st.markdown("####Strengths and Weaknesses Against Bowling Types")
           st.write(strong_message)
           st.write(weak_message)
 
@@ -1519,7 +1519,7 @@ elif sidebar_option == "Strength vs Weakness":
               else:
                   continue
           # Display strengths and weaknesses messages
-          st.markdown("### Strengths and Weaknesses")
+          st.markdown("##### Strengths and Weaknesses")
           st.write(strong_message)
           st.write(weak_message)
 
@@ -1794,7 +1794,7 @@ elif sidebar_option == "Strength vs Weakness":
                     strong_count += 1
                 if row['DOT%'] >= strength_thresholds['DOT%']:
                     strong_count += 1
-                if row['ECON'] <= strength_thresholds['ECON']:
+                if row['ECON'] <= strength_thresholds['Econ']:
                     strong_count += 1
         
                 # Evaluate weaknesses
@@ -1804,7 +1804,7 @@ elif sidebar_option == "Strength vs Weakness":
                     weak_count += 1
                 if row['DOT%'] <= weakness_thresholds['DOT%']:
                     weak_count += 1
-                if row['ECON'] >= weakness_thresholds['ECON']:
+                if row['ECON'] >= weakness_thresholds['Econ']:
                     weak_count += 1
         
                 # Determine strong/weak based on counts
