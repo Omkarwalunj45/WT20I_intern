@@ -56,31 +56,42 @@ def show_innings_scorecard(inning_data, title):
         'batsman_runs': 'sum',
         'ball': 'count',
         'is_four': 'sum',
-        'is_six': 'sum',
-        'is_wkt': 'sum',
-        'bowler_wkt': 'first',  # Get the bowler's name if the batsman is out
-        'dismissal_kind': 'first'  # Get the dismissal kind if applicable
+        'is_six': 'sum'
     }).reset_index()
+    
+    # Initialize Wicket and Dismissal Kind columns
+    batting_data['Wicket'] = "Not Out"  # Default value
+    batting_data['Dismissal Kind'] = "-"  # Default value
+    
+    # Populate Wicket and Dismissal Kind based on inning_data
+    for index, row in batting_data.iterrows():
+        batsman = row['batsman']
+        # Get the data from inning_data where the batsman has been dismissed
+        dismissed_data = inning_data[inning_data['batsman'] == batsman]
+        
+        # Check if the batsman was dismissed
+        if not dismissed_data[dismissed_data['is_wkt'] == 1].empty:
+            # Get the bowler's name and dismissal kind
+            wicket_info = dismissed_data[dismissed_data['is_wkt'] == 1]
+            
+            # If bowler_wkt is 1, the dismissal is due to the bowler
+            if wicket_info['bowler_wkt'].iloc[0] == 1:
+                batting_data.at[index, 'Wicket'] = wicket_info['bowler'].iloc[0]  # Bowler's name
+                batting_data.at[index, 'Dismissal Kind'] = wicket_info['dismissal_kind'].iloc[0]  # Dismissal kind
+            else:
+                batting_data.at[index, 'Wicket'] = "-"  # No bowler responsible, could be run out, etc.
+                batting_data.at[index, 'Dismissal Kind'] = wicket_info['dismissal_kind'].iloc[0]  # Dismissal kind
     
     # Calculate strike rate
     batting_data['batter_sr'] = (batting_data['batsman_runs'] / batting_data['ball']) * 100
     
-    # Create Wicket and Dismissal Kind columns
-    batting_data['Wicket'] = batting_data.apply(
-        lambda row: row['bowler_wkt'] if row['is_wkt'] == 1 else "Not Out", axis=1
-    )
-    batting_data['Dismissal Kind'] = batting_data.apply(
-        lambda row: row['dismissal_kind'] if row['is_wkt'] == 1 else "-", axis=1
-    )
-    
     # Rename columns for the batting scorecard
-    batting_data.columns = ['Batsman', 'R', 'B', '4s', '6s', 'Wickets', 'Bowler', 'Dismissal Kind', 'SR']
+    batting_data.columns = ['Batsman', 'R', 'B', '4s', '6s', 'Wicket', 'Dismissal Kind', 'SR']
     
-    # Filter out batsmen who have not scored
-    batting_data = batting_data[(batting_data.Batsman) != '0']
-    
-    # Display batting scorecard
+    # Filter out batsmen with 0 runs
+    batting_data = batting_data[batting_data['R'] > 0]
     st.table(batting_data)
+
     
     # Bowling scorecard
     # st.write(f"## {title} - Bowling")
