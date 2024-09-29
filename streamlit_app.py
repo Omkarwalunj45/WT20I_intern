@@ -1676,13 +1676,12 @@ elif sidebar_option == "Strength vs Weakness":
       # Drop unwanted columns from the result DataFrame
       # result_df = result_df.drop(columns=['matches_x', 'matches_y', 'bowler', 'debut_year', 'final_year', 'wickets', 'best_bowling', 'bowling_team', 'matches'])
       result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-      columns_to_convert = ['WICKETS']
+      # columns_to_convert = ['WICKETS']
   
       # Fill NaN values with 0
-      result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
-      
+      # result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
       # Convert the specified columns to integer type
-      result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+      # result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
       result_df = round_up_floats(result_df)
   
       # Specify the desired order with 'bat_kind' first
