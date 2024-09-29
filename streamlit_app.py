@@ -1089,7 +1089,7 @@ if sidebar_option == "Player Profile":
     
             # Function to create a clickable link
             def make_clickable(match_id):
-                return f'<a href="#" onclick="showMatchDetails(\'{match_id}\'); return false;" style="color: blue; text-decoration: underline;">{match_id}</a>'
+                return f'<a href="#" onclick="showMatchDetails(\'{match_id}\'); return false;" style="color: blue; text-decoration: underline; cursor: pointer;">{match_id}</a>'
     
             # Apply the function to the MATCH ID column
             current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(make_clickable)
@@ -1104,8 +1104,12 @@ if sidebar_option == "Player Profile":
             </div>
             <script>
             function showMatchDetails(matchId) {{
-                const event = new CustomEvent('showMatchDetails', {{ detail: matchId }});
-                window.dispatchEvent(event);
+                console.log("Match ID clicked:", matchId);
+                const element = parent.document.querySelector('input[key="clicked_match_id"]');
+                if (element) {{
+                    element.value = matchId;
+                    element.dispatchEvent(new Event('input', {{ bubbles: true }}));
+                }}
             }}
             </script>
             """
@@ -1113,20 +1117,10 @@ if sidebar_option == "Player Profile":
             # Display the table
             st.markdown(html, unsafe_allow_html=True)
     
-            # Handle the custom event
-            result = st.empty()
-            st.markdown("""
-            <script>
-            window.addEventListener('showMatchDetails', function(event) {
-                const matchId = event.detail;
-                window.Streamlit.setComponentValue(matchId);
-            });
-            </script>
-            """, unsafe_allow_html=True)
-    
             # Check if a match ID was clicked
-            clicked_match_id = result.text_input("", key="clicked_match_id", label_visibility="hidden")
+            clicked_match_id = st.text_input("", key="clicked_match_id", label_visibility="hidden")
             if clicked_match_id:
+                st.write(f"Showing details for match ID: {clicked_match_id}")
                 show_match_details(clicked_match_id)
     
         else:
