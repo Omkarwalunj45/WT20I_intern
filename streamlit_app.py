@@ -88,7 +88,7 @@ def get_current_form(bpdf, player_name):
             wickets = 0
             econ = 0.0
         results.append({
-            "Date" : start_date,
+            "Date" : date,
             "Match ID": match_id,
             "Runs": runs,
             "Balls Faced": balls_faced,
