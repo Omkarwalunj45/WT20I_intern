@@ -42,7 +42,7 @@ def show_match_details(match_id):
             overs_1 = total_balls_1 // 6
             balls_1 = total_balls_1 % 6
             # Handle special case for exactly 20 overs
-            if total_balls_1 == 120:  # 20 overs with exactly 0 balls remaining
+            if total_balls_1 >= 120:  # 20 overs with exactly 0 balls remaining
                 overs_display = "20.0"
             else:
                 # Display format for less than 20 overs
@@ -59,7 +59,7 @@ def show_match_details(match_id):
             overs_1 = total_balls_1 // 6
             balls_1 = total_balls_1 % 6
             # Handle special case for exactly 20 overs
-            if total_balls_1 == 120:  # 20 overs with exactly 0 balls remaining
+            if total_balls_1 >= 120:  # 20 overs with exactly 0 balls remaining
                 overs_display = "20.0"
             else:
                 # Display format for less than 20 overs
