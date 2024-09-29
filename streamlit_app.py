@@ -27,7 +27,7 @@ def show_match_details(match_id):
     match_details = bpdf[bpdf['match_id'] == match_id]
     # First, remove duplicates based on match_id and ball within the same match
     print(f"Before removing duplicates based on 'match_id' and 'ball': {match_details.shape}")
-    match_details = match_details.drop_duplicates(subset=['match_id', 'ball','inning'], keep='first')
+    match_details = match_details.drop_duplicates(subset=['match_id', 'ball', 'inning'], keep='first')
     print(f"After removing duplicates based on 'match_id' and 'ball': {match_details.shape}")
     
     if not match_details.empty:
@@ -37,13 +37,18 @@ def show_match_details(match_id):
         innings_1 = match_details[match_details['inning'] == 1]
         innings_2 = match_details[match_details['inning'] == 2]
 
+        # Get batting teams for both innings
+        batting_team_1 = innings_1['batting_team'].unique()[0] if not innings_1.empty else "Unknown"
+        batting_team_2 = innings_2['batting_team'].unique()[0] if not innings_2.empty else "Unknown"
+
         # Show the scorecard for each innings
         if not innings_1.empty:
-            show_innings_scorecard(innings_1, "Innings 1")
+            show_innings_scorecard(innings_1, f"Innings 1: {batting_team_1} Women")
         if not innings_2.empty:
-            show_innings_scorecard(innings_2, "Innings 2")
+            show_innings_scorecard(innings_2, f"Innings 2: {batting_team_2} Women")
     else:
         st.write("No match details found.")
+
 def show_innings_scorecard(inning_data, title):
     # Batting scorecard
     st.write(f"## {title} - Batting")
@@ -61,6 +66,7 @@ def show_innings_scorecard(inning_data, title):
     batting_data.columns = ['Batsman', 'R', 'B', '4s', '6s', 'SR']
     
     # Display batting scorecard
+    batting_data=batting_data[(batting_data.Batsman)!='0']
     st.table(batting_data)
     
     # Bowling scorecard
@@ -86,6 +92,7 @@ def show_innings_scorecard(inning_data, title):
     # Select and rename columns for the bowling scorecard
     bowling_data = bowling_data[['bowler', 'Overs', 'total_runs', 'is_wkt', 'wides', 'noballs', 'econ', 'bowl_sr']]
     bowling_data.columns = ['Bowler', 'O', 'R', 'W', 'WD', 'NB', 'Econ', 'SR']
+    bowling_data=bowling_data[(bowling_data.Bowler)!='0']
     
     # Display bowling scorecard
     st.table(bowling_data)
