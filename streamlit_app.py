@@ -61,7 +61,7 @@ def get_current_form(bpdf, player_name):
             balls_faced = bat_match_data['ball'].count()  # Sum balls faced
             SR = (runs / balls_faced) * 100 if balls_faced > 0 else 0.0
             venue = bat_match_data['venue'].iloc[0]
-            year = bat_match_data['season'].iloc[0]
+            start_date = bat_match_data['start_date'].iloc[0]
         else:
             runs = 0
             balls_faced = 0
@@ -76,7 +76,7 @@ def get_current_form(bpdf, player_name):
             wickets = bowl_match_data['bowler_wkt'].sum()  # Sum wickets taken
             econ = (runs_given / (balls_bowled / 6)) if balls_bowled > 0 else 0.0  # Calculate Econ
             venue = bowl_match_data['venue'].iloc[0]
-            year = bowl_match_data['season'].iloc[0]
+            start_date = bowl_match_data['start_date'].iloc[0]
         else:
             balls_bowled = 0
             runs_given = 0
@@ -92,7 +92,7 @@ def get_current_form(bpdf, player_name):
             "Wickets": wickets,
             "Econ": econ,
             "Venue": venue,
-            "Year" : year,
+            "Date" : start_date,
         })
     
     return pd.DataFrame(results)
@@ -988,10 +988,10 @@ if sidebar_option == "Player Profile":
         # Add current form content here
         current_form_df = get_current_form(bpdf,player_name)
         if not current_form_df.empty:
-            current_form_df['Year'] =current_form_df['Year'].apply(standardize_season)
+            # current_form_df['Year'] =current_form_df['Year'].apply(standardize_season)
             current_form_df.columns = [col.upper() for col in current_form_df.columns]
             cols = current_form_df.columns.tolist()
-            new_order = ['MATCH ID','YEAR'] + [col for col in cols if col != ['MATCH ID','YEAR']]          
+            new_order = ['MATCH ID','DATE'] + [col for col in cols if col != ['MATCH ID','DATE']]          
             current_form_df = current_form_df[new_order] 
             # st.table(current_form_df[['Match ID', 'Runs', 'Balls Faced', 'SR','Balls Bowled','Runs Given','Wickets', 'Econ','Venue']])
             current_form_df = current_form_df.loc[:, ~current_form_df.columns.duplicated()]
