@@ -1872,14 +1872,14 @@ elif sidebar_option == "Strength vs Weakness":
             
             # Step 2: Define ball ranges
           def ball_range(ball_count):
-              if ball_count <= 8:
-                  return '0-8'
-              elif ball_count <= 15:
-                  return '8-15'
-              elif ball_count <= 25:
-                  return '16-25'
+              if ball_count <= 10:
+                  return '0-10'
+              elif ball_count <= 20:
+                  return '11-20'
+              elif ball_count <= 30:
+                  return '21-30'
               elif ball_count <= 40:
-                  return '26-40'
+                  return '31-40'
               else:
                   return '>40'
             
