@@ -149,7 +149,7 @@ def show_innings_scorecard(inning_data, title):
     for i, row in inning_data.iterrows():
         bowler = row['bowler']
         
-        if bowler not in bowler_order:
+        if bowler not in bowling_order:
             bowling_order.append(bowler)
             
     bowling_data = inning_data.groupby(['bowler']).agg({
