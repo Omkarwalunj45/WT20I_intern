@@ -1918,7 +1918,7 @@ elif sidebar_option == "Strength vs Weakness":
             # Customize the plot
           plt.title('Ball-wise Average Strike Rate Across Matches', fontsize=14)
           plt.xlabel('Ball Range', fontsize=12)
-          plt.ylabel('Average Strike Rate (SR)', fontsize=12))
+          plt.ylabel('Average Strike Rate (SR)', fontsize=12)
           plt.grid(True, axis='y', linestyle='--', alpha=0.6)
             
             # Show the plot
