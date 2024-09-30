@@ -1379,6 +1379,9 @@ elif sidebar_option == "Matchup Analysis":
         result_df=result_df.sort_values('YEAR',ascending=True)
         result_df=result_df[['MATCH ID'] + ['YEAR'] + [col for col in result_df.columns if col not in ['MATCH ID','YEAR']]]
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+        for match_id in result_df['MATCH ID']:
+                    if st.button(f'View Match {match_id}'):
+                        show_match_details(match_id)
         
                  
     elif grouping_option == "Venue":
