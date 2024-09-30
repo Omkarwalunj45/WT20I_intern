@@ -14,6 +14,7 @@ info_df=pd.read_csv("Dataset/player_info_k.csv",low_memory=False)
 bpdf=pd.read_csv("Dataset/Mydataset.csv",low_memory=False)
 bidf=pd.read_csv("Dataset/lifesaver_bowl.csv",low_memory=False)
 info_df=info_df.rename(columns={'Player':'Player_name'})
+pdf['valid_ball']=pdf.apply(lambda x : 1 if (x['wides']==0 & x['noballs']==0) else 0)
 
 
 def show_match_details(match_id):
@@ -38,17 +39,10 @@ def show_match_details(match_id):
         # Show the scorecard for each innings
         if not innings_1.empty:
             total_runs_1 = innings_1['total_runs'].sum()
-            total_balls_1 = innings_1['ball'].iloc[-1]
+            total_balls_1 = (innings_1['valid_ball'].sum())%6
             total_overs_1=innings_1['over'].iloc[-1]
-            # Calculate overs and balls
-            overs_1 = total_balls_1 // 6
-            balls_1 = (total_balls_1 * 10)%10
             # Handle special case for exactly 20 overs
-            if total_balls_1 >= 19.6:  # 20 overs with exactly 0 balls remaining
-                overs_display = "20.0"
-            else:
-                # Display format for less than 20 overs
-                overs_display = f"{total_overs_1-1}.{balls_1}"  # +1 because overs start from 1
+            overs_display = f"{total_overs_1-1}.{total_balls_1}"  # +1 because overs start from 1
             # Display innings result
             st.markdown(f"<h5 style='font-size: 30px;'>{innings_1['batting_team'].iloc[0]} Innings: {total_runs_1}/{innings_1['is_wkt'].sum()} ({overs_display} ov)</h5>", unsafe_allow_html=True)
 
@@ -56,16 +50,9 @@ def show_match_details(match_id):
             show_innings_scorecard(innings_1, f"Innings 1: {batting_team_1} Women")
         if not innings_2.empty:
             total_runs_2 = innings_2['total_runs'].sum()
-            total_balls_2 = innings_2['ball'].iloc[-1]
+            total_balls_2 = (innings_2['valid_ball'].sum())%6
             total_overs_2=innings_2['over'].iloc[-1]
-            overs_2 = total_balls_2 // 6
-            balls_2 = (total_balls_2 * 10)%10
-            # Handle special case for exactly 20 overs
-            if total_balls_2 >= 19.6:  # 20 overs with exactly 0 balls remaining
-                overs_display = "20.0"
-            else:
-                # Display format for less than 20 overs
-                overs_display = f"{total_overs_2-1}.{balls_2}"  # +1 because overs start from 1
+            overs_display = f"{total_overs_2-1}.{total_balls_2}"  # +1 because overs start from 1
             # Display innings result
             st.markdown(f"<h5 style='font-size: 30px;'>{innings_2['batting_team'].iloc[0]} Innings: {total_runs_2}/{innings_2['is_wkt'].sum()} ({overs_display} ov)</h5>", unsafe_allow_html=True)
 
@@ -80,7 +67,7 @@ def show_innings_scorecard(inning_data, title):
     st.write("Batting")
     batting_data = inning_data.groupby(['batsman']).agg({
         'batsman_runs': 'sum',
-        'ball': 'count',
+        'valid_ball': 'sum',
         'is_four': 'sum',
         'is_six': 'sum'
     }).reset_index()
@@ -136,7 +123,7 @@ def show_innings_scorecard(inning_data, title):
     # Bowling scorecard
     st.write("Bowling")
     bowling_data = inning_data.groupby(['bowler']).agg({
-        'ball': 'count',
+        'valid_ball': 'sum',
         'total_runs': 'sum',
         'is_wkt': 'sum',
         'wides': 'sum',
