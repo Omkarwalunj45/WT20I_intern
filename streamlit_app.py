@@ -18,7 +18,7 @@ info_df=info_df.rename(columns={'Player':'Player_name'})
 
 def show_match_details(match_id):
     # Filter match details for the selected match_id
-    match_details = bpdf[bpdf['match_id'] == match_id]
+    match_details = pdf[pdf['match_id'] == match_id]
     # First, remove duplicates based on match_id and ball within the same match
     print(f"Before removing duplicates based on 'match_id' and 'ball': {match_details.shape}")
     match_details = match_details.drop_duplicates(subset=['match_id', 'ball', 'inning','batter_full_name','bowler_full_name','over'], keep='first')
