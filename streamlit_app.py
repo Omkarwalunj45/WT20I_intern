@@ -72,6 +72,7 @@ def show_match_details(match_id):
 def show_innings_scorecard(inning_data, title):
     # Batting scorecard
     st.write("Batting")
+    total_extras = inning_data['extras'].sum()
     batting_data = inning_data.groupby(['batsman']).agg({
         'batsman_runs': 'sum',
         'valid_ball': 'sum',
@@ -125,6 +126,7 @@ def show_innings_scorecard(inning_data, title):
     batting_data = batting_data[batting_data['Batsman'] != '0']
     batting_data.index = batting_data.index + 1
     st.table(batting_data)
+    st.write(f"**Extras:** {total_extras}")
 
     
     # Bowling scorecard
