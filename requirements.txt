@@ -2,6 +2,4 @@ streamlit>=1.26.0
 pandas
 numpy
 matplotlib
-sklearn.model_selection 
-sklearn.ensemble 
-sklearn.preprocessing
+scikit-learn==1.2.0
