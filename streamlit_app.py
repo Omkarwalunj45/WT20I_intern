@@ -8,10 +8,10 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title='WT20I Performance Analysis Portal', layout='wide')
 st.title('WT20I Performance Analysis Portal')
 # # Load data
-pdf = pd.read_csv("Dataset/THEGRANDMASTER.csv",low_memory=False)
+pdf = pd.read_csv("Dataset/Mydataset.csv",low_memory=False)
 idf = pd.read_csv("Dataset/lifesaver_bat.csv",low_memory=False)
 info_df=pd.read_csv("Dataset/player_info_k.csv",low_memory=False)
-bpdf=pd.read_csv("Dataset/THEGRANDMASTER.csv",low_memory=False)
+bpdf=pd.read_csv("Dataset/Mydataset.csv",low_memory=False)
 bidf=pd.read_csv("Dataset/lifesaver_bowl.csv",low_memory=False)
 info_df=info_df.rename(columns={'Player':'Player_name'})
 
@@ -77,7 +77,7 @@ def show_match_details(match_id):
 def show_innings_scorecard(inning_data, title):
     # Batting scorecard
     st.write("Batting")
-    batting_data = inning_data.groupby(['batter_full_name']).agg({
+    batting_data = inning_data.groupby(['batsman']).agg({
         'batsman_runs': 'sum',
         'ball': 'count',
         'is_four': 'sum',
@@ -89,10 +89,10 @@ def show_innings_scorecard(inning_data, title):
     
     # Iterate through each batsman to populate Wicket and Dismissal Kind based on inning_data
     for index, row in batting_data.iterrows():
-        batsman = row['batter_full_name']
+        batsman = row['batsman']
         
         # Get data where this batsman was dismissed
-        dismissed_data = inning_data[(inning_data['batter_full_name'] == batsman) & (inning_data['is_wkt'] == 1)]
+        dismissed_data = inning_data[(inning_data['batsman'] == batsman) & (inning_data['is_wkt'] == 1)]
         
         # Check if the batsman was dismissed
         if not dismissed_data.empty:
@@ -102,7 +102,7 @@ def show_innings_scorecard(inning_data, title):
             # Check if the dismissal was due to the bowler
             if dismissal_event['bowler_wkt'] == 1:
                 # Bowler took the wicket, populate with bowler's name and dismissal kind
-                batting_data.at[index, 'Wicket'] = dismissal_event['bowler_full_name']
+                batting_data.at[index, 'Wicket'] = dismissal_event['bowler']
                 batting_data.at[index, 'Dismissal Kind'] = dismissal_event['dismissal_kind']
             else:
                 # If bowler_wkt is not 1, this could be a run-out or other non-bowler dismissal
@@ -110,7 +110,7 @@ def show_innings_scorecard(inning_data, title):
                 batting_data.at[index, 'Dismissal Kind'] = dismissal_event['dismissal_kind']
         
         # Handle cases like retired hurt or retired out (use dismissal_kind)
-        retired_data = inning_data[(inning_data['batter_full_name'] == batsman) & (inning_data['dismissal_kind'].str.contains("retired", na=False))]
+        retired_data = inning_data[(inning_data['batsman'] == batsman) & (inning_data['dismissal_kind'].str.contains("retired", na=False))]
         if not retired_data.empty:
             # If the batsman retired, update the fields
             retired_event = retired_data.iloc[-1]
@@ -134,7 +134,7 @@ def show_innings_scorecard(inning_data, title):
     
     # Bowling scorecard
     st.write("Bowling")
-    bowling_data = inning_data.groupby(['bowler_full_name']).agg({
+    bowling_data = inning_data.groupby(['bowler']).agg({
         'ball': 'count',
         'total_runs': 'sum',
         'is_wkt': 'sum',
@@ -153,7 +153,7 @@ def show_innings_scorecard(inning_data, title):
     bowling_data['bowl_sr'] = bowling_data['bowl_sr'].replace([float('inf'), float('nan')], 0)
     
     # Select and rename columns for the bowling scorecard
-    bowling_data = bowling_data[['bowler_full_name', 'Overs', 'total_runs', 'is_wkt', 'wides', 'noballs', 'econ', 'bowl_sr']]
+    bowling_data = bowling_data[['bowler', 'Overs', 'total_runs', 'is_wkt', 'wides', 'noballs', 'econ', 'bowl_sr']]
     bowling_data.columns = ['Bowler', 'O', 'R', 'W', 'WD', 'NB', 'Econ', 'SR']
     bowling_data = bowling_data[(bowling_data.Bowler) != '0']
     
