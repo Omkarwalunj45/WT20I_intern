@@ -155,7 +155,7 @@ def show_innings_scorecard(inning_data, title):
     bowling_data = inning_data.groupby(['bowler']).agg({
         'valid_ball': 'sum',
         'total_runs': 'sum',
-        'is_wkt': 'sum',
+        'bowler_wkt': 'sum',
         'wides': 'sum',
         'noballs': 'sum'
     }).reset_index()
