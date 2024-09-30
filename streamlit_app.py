@@ -151,10 +151,10 @@ def show_innings_scorecard(inning_data, title):
         
         if bowler not in bowling_order:
             bowling_order.append(bowler)
-            
+    inning_data['adjusted_runs'] = inning_data['total_runs'] - (inning_data['byes'] + inning_data['legbyes'] + inning_data['penalty'])
     bowling_data = inning_data.groupby(['bowler']).agg({
         'valid_ball': 'sum',
-        'total_runs': 'sum',
+        'adjusted_runs': 'sum',
         'bowler_wkt': 'sum',
         'wides': 'sum',
         'noballs': 'sum'
@@ -164,14 +164,14 @@ def show_innings_scorecard(inning_data, title):
     bowling_data['Overs'] = (bowling_data['valid_ball'] // 6).astype(str) + "." + (bowling_data['valid_ball'] % 6).astype(str)
     
     # Calculate economy rate (total runs / overs)
-    bowling_data['econ'] = bowling_data['total_runs'] / (bowling_data['valid_ball'] / 6)
+    bowling_data['econ'] = bowling_data['adjusted_runs'] / (bowling_data['valid_ball'] / 6)
     
     # Calculate bowling strike rate (balls per wicket, avoid division by zero)
     bowling_data['bowl_sr'] = bowling_data['valid_ball'] / bowling_data['bowler_wkt']
     bowling_data['bowl_sr'] = bowling_data['bowl_sr'].replace([float('inf'), float('nan')], 0)
     
     # Select and rename columns for the bowling scorecard
-    bowling_data = bowling_data[['bowler', 'Overs', 'total_runs', 'bowler_wkt', 'wides', 'noballs', 'econ', 'bowl_sr']]
+    bowling_data = bowling_data[['bowler', 'Overs', 'adjusted_runs', 'bowler_wkt', 'wides', 'noballs', 'econ', 'bowl_sr']]
     bowling_data.columns = ['Bowler', 'O', 'R', 'W', 'WD', 'NB', 'Econ', 'SR']
     bowling_data = bowling_data[(bowling_data.Bowler) != '0']
     
