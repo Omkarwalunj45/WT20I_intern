@@ -3,9 +3,7 @@ import pandas as pd
 import math as mt
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import LabelEncoder
+
 # Page settings
 st.set_page_config(page_title='WT20I Performance Analysis Portal', layout='wide')
 st.title('WT20I Performance Analysis Portal')
@@ -1681,47 +1679,7 @@ elif sidebar_option == "Strength vs Weakness":
   
           st.markdown("### Performance Against Bowling Styles")
           st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
-          # Encoding categorical variables
-          label_encoder_bowler = LabelEncoder()
-          label_encoder_dismissal = LabelEncoder()
-        
-        # We assume that 'bowler' is represented in result_df; otherwise, you might need to adjust the feature set.
-          result_df['BOWLER_ENCODED'] = label_encoder_bowler.fit_transform(result_df['BOWLING STYLE'])
-          result_df['DISMISSAL_ENCODED'] = label_encoder_dismissal.fit_transform(result_df['INNINGS'])  # Modify this if there's an actual 'dismissal_kind' column
-        
-        # Define X (features) and y (target)
-          X = result_df[['BOWLER_ENCODED']]  # Adjust features as necessary based on the DataFrame columns
-          y = result_df['DISMISSAL_ENCODED']  # Modify the target variable accordingly
-        
-        # Train-test split
-          X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        
-        # Train Random Forest Classifier
-          model = RandomForestClassifier(n_estimators=100, random_state=42)
-          model.fit(X_train, y_train)
-        
-        # Function to predict dismissal
-          def predict_dismissal(bowling_style):
-            encoded_bowler = label_encoder_bowler.transform([bowling_style])
-            prediction = model.predict([[encoded_bowler[0]]])
-            dismissal_type = label_encoder_dismissal.inverse_transform(prediction)
-            return dismissal_type[0]
-        
-        # Create a predictions DataFrame
-          predictions_df = pd.DataFrame(columns=['BOWLING STYLE', 'PREDICTED DISMISSAL'])
-        
-        # Iterate over each bowling style in result_df and predict dismissals
-          for bowling_style in result_df['BOWLING STYLE'].unique():
-            predicted_dismissal = predict_dismissal(bowling_style)
-            predictions_df = predictions_df.append({
-                'BOWLING STYLE': bowling_style,
-                'PREDICTED DISMISSAL': predicted_dismissal
-            }, ignore_index=True)
-        
-        # Display predictions in the sidebar
-          st.markdown("### Predicted Dismissal Types Against Bowlers")
-          st.table(predictions_df)
-        
+          
           strong_against = []
           weak_against = []
           
