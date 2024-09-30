@@ -73,7 +73,7 @@ def show_innings_scorecard(inning_data, title):
     st.write("Batting")
     batting_data = inning_data.groupby(['batsman']).agg({
         'batsman_runs': 'sum',
-        'valid_ball': 'sum',
+        'valid_ball': 'count',
         'is_four': 'sum',
         'is_six': 'sum'
     }).reset_index()
@@ -129,7 +129,7 @@ def show_innings_scorecard(inning_data, title):
     # Bowling scorecard
     st.write("Bowling")
     bowling_data = inning_data.groupby(['bowler']).agg({
-        'valid_ball': 'sum',
+        'valid_ball': 'count',
         'total_runs': 'sum',
         'is_wkt': 'sum',
         'wides': 'sum',
