@@ -14,7 +14,7 @@ info_df=pd.read_csv("Dataset/player_info_k.csv",low_memory=False)
 bpdf=pd.read_csv("Dataset/Mydataset.csv",low_memory=False)
 bidf=pd.read_csv("Dataset/lifesaver_bowl.csv",low_memory=False)
 info_df=info_df.rename(columns={'Player':'Player_name'})
-pdf['valid_ball']=pdf.apply(lambda x : 1 if (x['wides']==0 & x['noballs']==0) else 0)
+pdf['valid_ball'] = pdf.apply(lambda x: 1 if (x['wides'] == 0 and x['noballs'] == 0) else 0, axis=1)
 
 
 def show_match_details(match_id):
