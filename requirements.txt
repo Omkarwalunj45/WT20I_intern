@@ -2,6 +2,6 @@ streamlit>=1.26.0
 pandas
 numpy
 matplotlib
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import LabelEncoder
+sklearn.model_selection 
+sklearn.ensemble 
+sklearn.preprocessing
