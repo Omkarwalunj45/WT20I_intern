@@ -1913,13 +1913,12 @@ elif sidebar_option == "Strength vs Weakness":
             
             # Step 11: Plot the bar graph
           plt.figure(figsize=(8,6))
-          plt.bar(sr_df['ball_range'], sr_df['avg_strike_rate'], color='royalblue')
+          plt.bar(sr_df['ball_range'], sr_df['avg_strike_rate'], color='lightpink')
             
             # Customize the plot
           plt.title('Ball-wise Average Strike Rate Across Matches', fontsize=14)
           plt.xlabel('Ball Range', fontsize=12)
-          plt.ylabel('Average Strike Rate (SR)', fontsize=12)
-          plt.xticks(rotation=45)
+          plt.ylabel('Average Strike Rate (SR)', fontsize=12))
           plt.grid(True, axis='y', linestyle='--', alpha=0.6)
             
             # Show the plot
