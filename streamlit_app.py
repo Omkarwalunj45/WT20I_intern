@@ -42,7 +42,10 @@ def show_match_details(match_id):
             total_balls_1 = (innings_1['valid_ball'].sum())%6
             total_overs_1=innings_1['over'].iloc[-1]
             # Handle special case for exactly 20 overs
-            overs_display = f"{total_overs_1-1}.{total_balls_1}"  # +1 because overs start from 1
+            if (total_balls_1==0):
+                overs_display = f"{total_overs_1}.{total_balls_1}"  # +1 because overs start from 1
+            else:            
+                overs_display = f"{total_overs_1-1}.{total_balls_1}"  # +1 because overs start from 1
             # Display innings result
             st.markdown(f"<h5 style='font-size: 30px;'>{innings_1['batting_team'].iloc[0]} Innings: {total_runs_1}/{innings_1['is_wkt'].sum()} ({overs_display} ov)</h5>", unsafe_allow_html=True)
 
@@ -52,7 +55,10 @@ def show_match_details(match_id):
             total_runs_2 = innings_2['total_runs'].sum()
             total_balls_2 = (innings_2['valid_ball'].sum())%6
             total_overs_2=innings_2['over'].iloc[-1]
-            overs_display = f"{total_overs_2-1}.{total_balls_2}"  # +1 because overs start from 1
+            if (total_balls_1==0):
+                overs_display = f"{total_overs_1}.{total_balls_1}"  # +1 because overs start from 1
+            else:            
+                overs_display = f"{total_overs_1-1}.{total_balls_1}"  # +1 because overs start from 1
             # Display innings result
             st.markdown(f"<h5 style='font-size: 30px;'>{innings_2['batting_team'].iloc[0]} Innings: {total_runs_2}/{innings_2['is_wkt'].sum()} ({overs_display} ov)</h5>", unsafe_allow_html=True)
 
