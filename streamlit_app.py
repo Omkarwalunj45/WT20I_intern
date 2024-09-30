@@ -1251,6 +1251,7 @@ if sidebar_option == "Player Profile":
                 current_form_df['DATE'] = current_form_df['DATE'].dt.strftime('%m/%d/%Y')
                 
                 # Displaying the table with clickable MATCH ID
+                current_form_df.index = batting_data.index + 1
                 st.markdown(current_form_df.to_html(escape=False), unsafe_allow_html=True)
                 
                 # Handling clicks on MATCH ID links
