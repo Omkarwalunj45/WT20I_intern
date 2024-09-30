@@ -72,6 +72,17 @@ def show_match_details(match_id):
 def show_innings_scorecard(inning_data, title):
     # Batting scorecard
     st.write("Batting")
+    batting_order = []
+    
+    for i, row in inning_data.iterrows():
+        batsman = row['batsman']
+        non_striker = row['non_striker']
+        
+        if batsman not in batting_order:
+            batting_order.append(batsman)
+        if non_striker not in batting_order:
+            batting_order.append(non_striker)
+    
     total_extras = inning_data['extras'].sum()
     batting_data = inning_data.groupby(['batsman']).agg({
         'batsman_runs': 'sum',
@@ -124,6 +135,8 @@ def show_innings_scorecard(inning_data, title):
     
     # Filter out batsmen with 0 runs
     batting_data = batting_data[batting_data['Batsman'] != '0']
+    batting_data['order'] = batting_data['Batsman'].apply(lambda x: batting_order.index(x))
+    batting_data = batting_data.sort_values(by='order').drop(columns='order')
     batting_data.index = batting_data.index + 1
     st.table(batting_data)
     st.write(f"**Extras:** {total_extras}")
