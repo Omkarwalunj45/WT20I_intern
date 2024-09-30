@@ -109,7 +109,7 @@ def show_innings_scorecard(inning_data, title):
 
     
     # Calculate strike rate
-    batting_data['batter_sr'] = (batting_data['batsman_runs'] / batting_data['ball']) * 100
+    batting_data['batter_sr'] = (batting_data['batsman_runs'] / batting_data['valid_ball']) * 100
     
     # Rename columns for the batting scorecard
     batting_data.columns = ['Batsman', 'R', 'B', '4s', '6s', 'Wicket', 'Dismissal Kind', 'SR']
@@ -131,13 +131,13 @@ def show_innings_scorecard(inning_data, title):
     }).reset_index()
     
     # Calculate overs bowled (converting balls to overs)
-    bowling_data['Overs'] = (bowling_data['ball'] // 6).astype(str) + "." + (bowling_data['ball'] % 6).astype(str)
+    bowling_data['Overs'] = (bowling_data['valid_ball'] // 6).astype(str) + "." + (bowling_data['valid_ball'] % 6).astype(str)
     
     # Calculate economy rate (total runs / overs)
-    bowling_data['econ'] = bowling_data['total_runs'] / (bowling_data['ball'] / 6)
+    bowling_data['econ'] = bowling_data['total_runs'] / (bowling_data['valid_ball'] / 6)
     
     # Calculate bowling strike rate (balls per wicket, avoid division by zero)
-    bowling_data['bowl_sr'] = bowling_data['ball'] / bowling_data['is_wkt']
+    bowling_data['bowl_sr'] = bowling_data['valid_ball'] / bowling_data['is_wkt']
     bowling_data['bowl_sr'] = bowling_data['bowl_sr'].replace([float('inf'), float('nan')], 0)
     
     # Select and rename columns for the bowling scorecard
