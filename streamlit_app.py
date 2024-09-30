@@ -16,11 +16,10 @@ bidf=pd.read_csv("Dataset/lifesaver_bowl.csv",low_memory=False)
 info_df=info_df.rename(columns={'Player':'Player_name'})
 pdf[['noballs', 'wides','byes','legbyes','penalty']] = pdf[['noballs', 'wides','byes','legbyes','penalty']].fillna(0).astype(int)
 pdf['valid_ball'] = pdf.apply(lambda x: 1 if (x['wides'] == 0 and x['noballs'] == 0) else 0, axis=1)
+# Group by 'bowler' and 'match_id' to sum the 'bowler_wkt'
 dismissals_count = bpdf.groupby(['bowler', 'match_id'])['bowler_wkt'].sum()
 bbi = dismissals_count.groupby('bowler').max().reset_index().rename(columns={'bowler_wkt': 'bbi'})
-bidf= pd.merge(bbi, on='bowler')
-
-
+bidf = pd.merge(bidf, bbi, on='bowler')
 
 def show_match_details(match_id):
     # Filter match details for the selected match_id
