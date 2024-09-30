@@ -1923,7 +1923,7 @@ elif sidebar_option == "Strength vs Weakness":
           plt.grid(True, axis='y', linestyle='--', alpha=0.6)
             
             # Show the plot
-          plt.show()
+          st.pyplot(plt)
 
       
     if option == "Bowling":
