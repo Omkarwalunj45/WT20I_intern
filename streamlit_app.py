@@ -1175,62 +1175,6 @@ if sidebar_option == "Player Profile":
             st.markdown(f"### **In Host Country**")
             st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
-#     # with tab3:
-#     #     st.header("Current Form")
-#     #     # Add current form content here
-#     #     current_form_df = get_current_form(bpdf,player_name)
-#     #     if not current_form_df.empty:
-#     #         # current_form_df['Year'] =current_form_df['Year'].apply(standardize_season)
-#     #         current_form_df.columns = [col.upper() for col in current_form_df.columns]
-#     #         cols = current_form_df.columns.tolist()
-#     #         new_order = ['MATCH ID','DATE'] + [col for col in cols if col != ['MATCH ID','DATE']]          
-#     #         current_form_df = current_form_df[new_order] 
-#     #         current_form_df = current_form_df.loc[:, ~current_form_df.columns.duplicated()]
-#     #         # Assuming the date column is named 'date' in MM/DD/YYYY format
-#     #         current_form_df['DATE'] = pd.to_datetime(current_form_df['DATE'], format='%m/%d/%Y')
-#     #         current_form_df = current_form_df.sort_values(by='DATE', ascending=False)
-#     #         current_form_df = current_form_df.reset_index(drop=True)
-#     #         current_form_df['DATE'] = current_form_df['DATE'].dt.strftime('%m/%d/%Y')
-#     #         st.table(current_form_df.style.set_table_attributes("style='font-weight: bold;'"))
-            
-            
-#     #     else:
-#     #         st.write("No recent matches found for this player.")
-#     # with tab3:
-#     #     st.header("Current Form")
-#     #     current_form_df = get_current_form(bpdf, player_name)
-        
-#     #     if not current_form_df.empty:
-#     #         current_form_df.columns = [col.upper() for col in current_form_df.columns]
-            
-#     #         # Create clickable links for MATCH ID without brackets
-#     #         # current_form_df['MATCH ID'] = current_form_df['MATCH ID'].apply(lambda x: f"<a href='#{x}'>{x}</a>")
-            
-#     #         # Rearranging columns
-#     #         cols = current_form_df.columns.tolist()
-#     #         new_order = ['MATCH ID', 'DATE'] + [col for col in cols if col not in ['MATCH ID', 'DATE']]
-#     #         current_form_df = current_form_df[new_order]
-#     #         current_form_df = current_form_df.loc[:, ~current_form_df.columns.duplicated()]
-    
-#     #         # Formatting the date
-#     #         current_form_df['DATE'] = pd.to_datetime(current_form_df['DATE'], format='%m/%d/%Y')
-#     #         current_form_df = current_form_df.sort_values(by='DATE', ascending=False)
-#     #         current_form_df = current_form_df.reset_index(drop=True)
-#     #         current_form_df['DATE'] = current_form_df['DATE'].dt.strftime('%m/%d/%Y')
-    
-#     #         # Displaying the table with clickable MATCH ID
-#     #         st.markdown(current_form_df.to_html(escape=False), unsafe_allow_html=True)
-            
-#     #         # Handling clicks on MATCH ID links
-#     #         for match_id in current_form_df['MATCH ID']:
-#     #             if st.button(f'View Match {match_id}'):
-#     #                 show_match_details(match_id)
-#     #                 # if not match_data.empty:
-#     #                 #     st.write(match_data)  # Display the match data
-#     #                 # else:
-#     #                 #     st.write("No data available for this match.")
-#     #     else:
-#     #         st.write("No recent matches found for this player.")
     with tab3:
             st.header("Current Form")
             current_form_df = get_current_form(bpdf, player_name)
@@ -1474,9 +1418,7 @@ elif sidebar_option == "Matchup Analysis":
         result_df=result_df.sort_values('YEAR',ascending=True)
         result_df=result_df[['VENUE'] + ['YEAR'] + [col for col in result_df.columns if col not in ['VENUE','YEAR']]]
         st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
-        for match_id in result_df['MATCH ID']:
-                    if st.button(f'View Match {match_id}'):
-                        show_match_details(match_id)
+        
     else:
         # Assuming pdf is your main DataFrame
         # Filter for innings 1 and 2 and prepare to accumulate results
