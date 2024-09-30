@@ -151,7 +151,8 @@ def show_innings_scorecard(inning_data, title):
         
         if bowler not in bowling_order:
             bowling_order.append(bowler)
-    inning_data['adjusted_runs'] = inning_data['total_runs'] - (inning_data['byes'] + inning_data['legbyes'] + inning_data['penalty'])
+    
+    inning_data['adjusted_runs'] = inning_data.apply(lambda row: row['total_runs'] - (row['byes'] + row['legbyes'] + row['penalty']), axis=1)
     bowling_data = inning_data.groupby(['bowler']).agg({
         'valid_ball': 'sum',
         'adjusted_runs': 'sum',
