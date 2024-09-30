@@ -139,7 +139,7 @@ def show_innings_scorecard(inning_data, title):
     # Filter out batsmen with 0 runs
     batting_data = batting_data[batting_data['Batsman'] != '0']
     batting_data['order'] = batting_data['Batsman'].apply(lambda x: batting_order.index(x))
-    batting_data = batting_data.sort_values(by='order').drop(columns='order')
+    batting_data = batting_data.sort_values(by='order').drop(columns='order').reset_index(drop=True)
     batting_data.index = batting_data.index + 1
     st.table(batting_data)
     st.write(f"**Extras:** {total_extras}")
