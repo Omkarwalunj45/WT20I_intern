@@ -144,6 +144,14 @@ def show_innings_scorecard(inning_data, title):
     
     # Bowling scorecard
     st.write("Bowling")
+    bowling_order = []
+    
+    for i, row in inning_data.iterrows():
+        bowler = row['bowler']
+        
+        if bowler not in bowler_order:
+            bowling_order.append(bowler)
+            
     bowling_data = inning_data.groupby(['bowler']).agg({
         'valid_ball': 'sum',
         'total_runs': 'sum',
@@ -168,6 +176,8 @@ def show_innings_scorecard(inning_data, title):
     bowling_data = bowling_data[(bowling_data.Bowler) != '0']
     
     # Display bowling scorecard
+    bowling_data['order'] =bowling_data['Bowler'].apply(lambda x: bowling_order.index(x))
+    bowling_data = bowling_data.sort_values(by='order').drop(columns='order')
     bowling_data.index = bowling_data.index + 1
     st.table(bowling_data)
 
