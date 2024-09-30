@@ -167,7 +167,7 @@ def show_innings_scorecard(inning_data, title):
     bowling_data['econ'] = bowling_data['total_runs'] / (bowling_data['valid_ball'] / 6)
     
     # Calculate bowling strike rate (balls per wicket, avoid division by zero)
-    bowling_data['bowl_sr'] = bowling_data['valid_ball'] / bowling_data['is_wkt']
+    bowling_data['bowl_sr'] = bowling_data['valid_ball'] / bowling_data['bowler_wkt']
     bowling_data['bowl_sr'] = bowling_data['bowl_sr'].replace([float('inf'), float('nan')], 0)
     
     # Select and rename columns for the bowling scorecard
