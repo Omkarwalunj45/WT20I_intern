@@ -1884,7 +1884,7 @@ elif sidebar_option == "Strength vs Weakness":
                   return '>40'
             
             # Step 3: Initialize an empty dictionary to store SR for each range
-          range_sr_dict = {'0-8': [], '8-15': [], '16-25': [], '26-40': [], '>40': []}
+          range_sr_dict = {'0-10': [], '11-20': [], '21-30': [], '31-40': [], '>40': []}
           
           # Step 4: Loop through each match_id
           for match_id in df_ball_wise['match_id'].unique():
