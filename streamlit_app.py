@@ -59,7 +59,7 @@ def show_match_details(match_id):
             if (total_balls_2==0):
                 overs_display = f"{total_overs_2}.{total_balls_2}"  # +1 because overs start from 1
             else:            
-                overs_display = f"{total_overs_1-2}.{total_balls_2}"  # +1 because overs start from 1
+                overs_display = f"{total_overs_2-1}.{total_balls_2}"  # +1 because overs start from 1
             # Display innings result
             st.markdown(f"<h5 style='font-size: 30px;'>{innings_2['batting_team'].iloc[0]} Innings: {total_runs_2}/{innings_2['is_wkt'].sum()} ({overs_display} ov)</h5>", unsafe_allow_html=True)
 
