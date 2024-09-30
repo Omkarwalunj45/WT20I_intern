@@ -1441,7 +1441,7 @@ elif sidebar_option == "Matchup Analysis":
                 result_df = pd.concat([result_df, temp_df], ignore_index=True)
         
         # After processing both innings, drop unnecessary columns if needed
-        columns_to_drop = ['batsman', 'bowler', 'batting_team', 'debut_year', 'matches_x', 'matches_y', 'fifties', 'hundreds', 'thirties', 'highest_score', 'matches']
+        columns_to_drop = ['batsman', 'bowler', 'batting_team', 'debut_year', 'matches_x', 'matches_y', 'fifties', 'hundreds', 'thirties', 'highest_score', 'matches','last_year']
         result_df = result_df.drop(columns=columns_to_drop, errors='ignore')
         
         # Convert specific columns to integers and fill NaN values
@@ -1450,14 +1450,10 @@ elif sidebar_option == "Matchup Analysis":
             result_df[col] = result_df[col].fillna(0).astype(int)
         
         result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-        result_df['FINAL YEAR']=result_df['FINAL YEAR'].apply(standardize_season)
-        
-        result_df = result_df.rename(columns={'FINAL YEAR': 'YEAR'})   
-        result_df=result_df.sort_values('YEAR',ascending=True)
         
         # Display the results
         st.markdown("### **Innings Performance**")
-        result_df=result_df[['INNING'] + ['YEAR'] + [col for col in result_df.columns if col not in ['INNING','YEAR']]]
+        result_df=result_df[['INNING'] + [col for col in result_df.columns if col not in ['INNING']]]
         st.table(result_df.style.set_table_attributes("style='fsont-weight: bold;'"))
       
 elif sidebar_option == "Strength vs Weakness":
