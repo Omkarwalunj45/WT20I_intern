@@ -1860,6 +1860,71 @@ elif sidebar_option == "Strength vs Weakness":
           
           # Display the plot in Streamlit
           st.pyplot(plt)
+          import pandas as pd
+          import matplotlib.pyplot as plt
+            
+            # Copy the original dataset to a new DataFrame
+          df_ball_wise = pdf.copy()
+          df_ball_wise = df_ball_wise[df_ball_wise['batsman']==player_name] 
+            
+            # Step 1: Filter for valid balls (valid_ball == 1)
+          df_ball_wise = df_ball_wise[df_ball_wise['valid_ball'] == 1]
+            
+            # Step 2: Define ball ranges
+          def ball_range(ball_count):
+              if ball_count <= 8:
+                  return '0-8'
+              elif ball_count <= 15:
+                  return '8-15'
+              elif ball_count <= 25:
+                  return '16-25'
+              elif ball_count <= 40:
+                  return '26-40'
+              else:
+                  return '>40'
+            
+            # Step 3: Initialize an empty dictionary to store SR for each range
+          range_sr_dict = {'0-8': [], '8-15': [], '16-25': [], '26-40': [], '>40': []}
+          
+          # Step 4: Loop through each match_id
+          for match_id in df_ball_wise['match_id'].unique():
+              # Filter data for the current match_id
+              match_data = df_ball_wise[df_ball_wise['match_id'] == match_id]
+              
+                # Step 5: Create ball_count column for the current match
+              match_data['ball_count'] = match_data.groupby(['batsman']).cumcount() + 1
+                
+                # Step 6: Apply ball range categorization
+              match_data['ball_range'] = match_data['ball_count'].apply(ball_range)
+                
+                # Step 7: Calculate SR for each ball range within the current match
+              sr_by_range = match_data.groupby('ball_range').agg({'batsman_runs': 'sum', 'ball_count': 'count'}).reset_index()
+              sr_by_range['strike_rate'] = (sr_by_range['batsman_runs'] / sr_by_range['ball_count']) * 100
+                
+                # Step 8: Store the SR in the range_sr_dict for each range
+              for idx, row in sr_by_range.iterrows():
+                  range_sr_dict[row['ball_range']].append(row['strike_rate'])
+            
+            # Step 9: Calculate the mean SR for each range across all matches
+          mean_sr_by_range = {range_: sum(sr_list)/len(sr_list) for range_, sr_list in range_sr_dict.items()}
+            
+            # Step 10: Convert the dictionary to a DataFrame for plotting
+          sr_df = pd.DataFrame(list(mean_sr_by_range.items()), columns=['ball_range', 'avg_strike_rate'])
+            
+            # Step 11: Plot the bar graph
+          plt.figure(figsize=(8,6))
+          plt.bar(sr_df['ball_range'], sr_df['avg_strike_rate'], color='royalblue')
+            
+            # Customize the plot
+          plt.title('Ball-wise Average Strike Rate Across Matches', fontsize=14)
+          plt.xlabel('Ball Range', fontsize=12)
+          plt.ylabel('Average Strike Rate (SR)', fontsize=12)
+          plt.xticks(rotation=45)
+          plt.grid(True, axis='y', linestyle='--', alpha=0.6)
+            
+            # Show the plot
+          plt.show()
+
       
     if option == "Bowling":
         # st.subheader("Bowler vs Batting Style Analysis")
