@@ -939,9 +939,9 @@ if sidebar_option == "Player Profile":
                 # Filter for the selected player
             player_stats = temp_df[temp_df['bowler'] == player_name]  # Assuming bidf has bowler data
             if player_stats.empty:
-                st.write("No Bowling stats available")
+                st.markdown("No Bowling stats available")
             else:   
-                        # Convert column names to uppercase and replace underscores with spaces
+                    # Convert column names to uppercase and replace underscores with spaces
                     player_stats.columns = [col.upper().replace('_', ' ') for col in player_stats.columns]
                         
                         # Function to round float values if necessary (assuming round_up_floats exists)
@@ -977,7 +977,7 @@ if sidebar_option == "Player Profile":
                             'innings': 'inning', 
                             'bowler': 'bowler_name'
                         })
-                    
+                    rrrr
                         # Drop rows where 'ball' is missing, if not already done
                         bpdf = bpdf.dropna(subset=['ball'])
                     
@@ -1018,7 +1018,6 @@ if sidebar_option == "Player Profile":
                             i += 1
                         else:
                             result_df = pd.concat([result_df, temp_df], ignore_index=True)
-                    
                     # Display the final result_df
                     result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
                     result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
