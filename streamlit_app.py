@@ -1065,7 +1065,7 @@ if sidebar_option == "Player Profile":
                                             result_df = pd.concat([result_df, temp_df], ignore_index=True)
                             # Display the final result_df
                             if result_df.empty():
-                                st.markdown("Bowling stats do not exist')
+                                st.markdown('Bowling stats do not exist')
                             else:
                                 result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
                                 result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
@@ -1107,7 +1107,7 @@ if sidebar_option == "Player Profile":
                                     else:
                                             result_df = pd.concat([result_df, temp_df], ignore_index=True)  # Append subsequent data
                             if result_df.empty():
-                                st.markdown("Bowling stats do not exist')
+                                st.markdown('Bowling stats do not exist')
                             else:                    
                                 result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
                                 result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
