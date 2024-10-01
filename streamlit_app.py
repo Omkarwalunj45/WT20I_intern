@@ -147,7 +147,7 @@ def show_innings_scorecard(inning_data, title):
                     'valid_ball': [0],
                     'is_four': [0],
                     'is_six': [0],
-                    'Wicket': [dismissal_event['bowler'] if dismissal_event['bowler_wkt'] == 1 else '-'],
+                    'Wicket': [dismissal_event['bowler'] if dismissal_event.bowler_wkt == 1 else '-'],
                     'Dismissal Kind': [dismissal_event['dismissal_kind']]
                 })
                 
