@@ -2142,7 +2142,7 @@ elif sidebar_option == "Strength vs Weakness":
         plt.tight_layout()
         
         # Display the plot in Streamlit
-#         st.pyplot(plt)
+        st.pyplot(plt)
 
 
       
