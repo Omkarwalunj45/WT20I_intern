@@ -140,7 +140,7 @@ def show_innings_scorecard(inning_data, title):
             valid_ball_sum = p_data['valid_ball'].sum()
             if valid_ball_sum == 0:
                     # Player got out without facing a legal ball, include them in the scorecard
-                    dismissal_event = player_data.iloc[0]
+                    dismissal_event = player_data
             
                     new_row = pd.DataFrame({
                     'batsman': [player],
