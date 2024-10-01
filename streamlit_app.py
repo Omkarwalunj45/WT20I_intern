@@ -1059,20 +1059,17 @@ if sidebar_option == "Player Profile":
                                 else:
                                     result_df = pd.concat([result_df, temp_df], ignore_index=True)
                     # Display the final result_df
-                    if result_df.empty():
-                        st.markdown('Bowling stats do not exist')
-                    else:
-                        result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
-                        result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-                        columns_to_convert = ['RUNS','THREE WICKET HAULS', 'MAIDEN OVERS']
-            
-                           # Fill NaN values with 0
-                        result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
-                            
-                           # Convert the specified columns to integer type
-                        result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
-                        # result_df=round_up_floats(result_df)
-                        st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+                    result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
+                    result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+                    columns_to_convert = ['RUNS','THREE WICKET HAULS', 'MAIDEN OVERS']
+        
+                       # Fill NaN values with 0
+                    result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+                        
+                       # Convert the specified columns to integer type
+                    result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+                    # result_df=round_up_floats(result_df)
+                    st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
           
                     
     #                             tdf = bpdf[bpdf['bowler'] == player_name]  # Filter data for the specific bowler
