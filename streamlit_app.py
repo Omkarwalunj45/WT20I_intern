@@ -152,8 +152,17 @@ def show_innings_scorecard(inning_data, title):
                 # })
                 # Check if 'bowler_wkt' exists in the dismissal event data
                 if 'bowler_wkt' in dismissal_event.index:
-                    clean_dismissal_kind = dismissal_event['dismissal_kind'].split()[0] 
-                    # Create a new row for the player to be added to the batting data
+                    import re
+                    
+                    # Function to extract only the dismissal kind
+                    def clean_dismissal_kind(dismissal_str):
+                        # Use regex to extract the last word(s) after potential identifiers
+                        match = re.search(r'\b(\w+(?: \w+)*)\b$', dismissal_str)
+                        return match.group(1) if match else dismissal_str
+                    
+                    # Update the row creation to use the cleaning function
+                    clean_dismissal_kind_value = clean_dismissal_kind(dismissal_event['dismissal_kind'])
+
                     new_row = pd.DataFrame({
                         'batsman': [player],
                         'batsman_runs': [0],
