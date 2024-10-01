@@ -137,23 +137,26 @@ def show_innings_scorecard(inning_data, title):
             # Get data for the dismissed player
             player_data = inning_data[inning_data['player_dismissed'] == player]
             p_data = inning_data[inning_data['batsman'] == player]
-            valid_ball_sum = p_data['valid_ball'].sum()
-            if valid_ball_sum == 0:
-                    # Player got out without facing a legal ball, include them in the scorecard
-                    dismissal_event = player_data
+            # Assuming dismissal_event is a single row, extract the scalar value using .iloc[0]
+            bowler_wkt = dismissal_event['bowler_wkt'].iloc[0] if isinstance(dismissal_event['bowler_wkt'], pd.Series) else dismissal_event['bowler_wkt']
             
-                    new_row = pd.DataFrame({
+            # Handling the case where the player is dismissed without facing a legal ball
+            if valid_ball_sum == 0:
+                dismissal_event = player_data.iloc[0]  # Get the first row since it's a single dismissal event
+                
+                # Create a new row for the player to be added to the batting data
+                new_row = pd.DataFrame({
                     'batsman': [player],
                     'batsman_runs': [0],
                     'valid_ball': [0],
                     'is_four': [0],
                     'is_six': [0],
-                    'Wicket': [dismissal_event['bowler'] if dismissal_event['bowler_wkt'] == 1 else '-'],
+                    'Wicket': [dismissal_event['bowler'] if bowler_wkt == 1 else '-'],
                     'Dismissal Kind': [dismissal_event['dismissal_kind']]
                 })
-            
-            # Use pd.concat to add the new row to the existing DataFrame
-            batting_data = pd.concat([batting_data, new_row], ignore_index=True)
+                
+                # Use pd.concat to add the new row to the existing DataFrame
+                batting_data = pd.concat([batting_data, new_row], ignore_index=True)
     
     # Calculate strike rate
     batting_data['batter_sr'] = (batting_data['batsman_runs'] / batting_data['valid_ball']).replace({0: 0}) * 100
