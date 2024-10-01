@@ -322,7 +322,6 @@ def get_current_form(bpdf, player_name):
     return pd.DataFrame(results)
 # Define the columns related to runs
 columns_to_convert = ['runs', 'hundreds', 'fifties', 'thirties', 'highest_scores']
-ldf = pd.read_csv("Dataset/squads.csv",low_memory=False)  # Load squads.csv for batting type
 # pdf = pdf.drop_duplicates(subset=['match_id', 'ball'], keep='first')
 
 def cumulator(temp_df):
