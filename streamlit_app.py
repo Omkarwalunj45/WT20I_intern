@@ -152,6 +152,7 @@ def show_innings_scorecard(inning_data, title):
                 # })
                 # Check if 'bowler_wkt' exists in the dismissal event data
                 if 'bowler_wkt' in dismissal_event.index:
+                    clean_dismissal_kind = dismissal_event['dismissal_kind'].split()[0] 
                     # Create a new row for the player to be added to the batting data
                     new_row = pd.DataFrame({
                         'batsman': [player],
