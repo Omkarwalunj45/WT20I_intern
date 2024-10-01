@@ -665,7 +665,7 @@ if sidebar_option == "Player Profile":
         # Display Career Averages based on selection
         if option == "Batting":
             # Create a temporary DataFrame and filter the player's row
-            temp_df = idf.drop(columns=['Unnamed: 0', 'final_year', 'matches_x', 'matches_y','matches','batting_team'])
+            temp_df = idf.drop(columns=['final_year', 'matches_x', 'matches_y','matches','batting_team'])
             player_stats = temp_df[temp_df['batsman'] == player_name]  # Filter for the selected player
 
             # Convert column names to uppercase and replace underscores with spaces
@@ -953,7 +953,7 @@ if sidebar_option == "Player Profile":
             player_stats[columns_to_convert] =  player_stats[columns_to_convert].astype(int)
                 
                 # Display the player's bowling statistics in a table format with bold headers
-            player_stats = player_stats.drop(columns=['UNNAMED: 0','BOWLER'])
+            player_stats = player_stats.drop(columns=['BOWLER'])
             st.markdown("### Bowling Statistics")
             st.table(player_stats.style.set_table_attributes("style='font-weight: bold;'"))  # Display the filtered DataFrame as a table
             allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh', 
