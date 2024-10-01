@@ -136,11 +136,12 @@ def show_innings_scorecard(inning_data, title):
         if player not in batting_data['batsman'].values:
             # Get data for the dismissed player
             player_data = inning_data[inning_data['player_dismissed'] == player]
-            valid_ball_sum = player_data['valid_ball'].sum()
+            p_data = inning_data[inning_data['batsman'] == player]
+            valid_ball_sum = p_data['valid_ball'].sum()
             
             if valid_ball_sum == 0:
                 # Player got out without facing a legal ball, include them in the scorecard
-                dismissal_event = player_data.iloc[0]
+                dismissal_event = player_data
                 batting_data = batting_data.append({
                     'batsman': player,
                     'batsman_runs': 0,
