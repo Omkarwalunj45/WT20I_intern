@@ -137,8 +137,11 @@ def show_innings_scorecard(inning_data, title):
             # Get data for the dismissed player
             player_data = inning_data[inning_data['player_dismissed'] == player]
             p_data = inning_data[inning_data['batsman'] == player]
+            valid_ball_sum = p_data['valid_ball'].sum()
+            
             # Assuming dismissal_event is a single row, extract the scalar value using .iloc[0]
             bowler_wkt = dismissal_event['bowler_wkt'].iloc[0] if isinstance(dismissal_event['bowler_wkt'], pd.Series) else dismissal_event['bowler_wkt']
+            
             
             # Handling the case where the player is dismissed without facing a legal ball
             if valid_ball_sum == 0:
