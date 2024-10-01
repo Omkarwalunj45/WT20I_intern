@@ -1097,10 +1097,10 @@ if sidebar_option == "Player Profile":
                             temp_df['YEAR'] = season
                                             
                             if i == 0:
-                            result_df = temp_df  # Initialize the result_df with the first season's data
-                            i += 1
+                                    result_df = temp_df  # Initialize the result_df with the first season's data
+                                    i += 1
                             else:
-                                result_df = pd.concat([result_df, temp_df], ignore_index=True)  # Append subsequent data
+                                    result_df = pd.concat([result_df, temp_df], ignore_index=True)  # Append subsequent data
                                         
                             result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
                             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
