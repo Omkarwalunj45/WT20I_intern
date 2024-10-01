@@ -78,7 +78,8 @@ def show_innings_scorecard(inning_data, title):
     # Batting scorecard
     st.write("Batting")
     batting_order = []
-
+    
+    # Iterate through the innings data to establish the batting order
     for i, row in inning_data.iterrows():
         batsman = row['batsman']
         non_striker = row['non_striker']
@@ -88,8 +89,10 @@ def show_innings_scorecard(inning_data, title):
         if non_striker not in batting_order:
             batting_order.append(non_striker)
     
+    # Calculate total extras
     total_extras = inning_data['extras'].sum()
     
+    # Aggregate batting data for runs, balls faced, fours, and sixes
     batting_data = inning_data.groupby(['batsman']).agg({
         'batsman_runs': 'sum',
         'valid_ball': 'sum',
@@ -97,64 +100,65 @@ def show_innings_scorecard(inning_data, title):
         'is_six': 'sum'
     }).reset_index()
     
-    # Initialize Wicket and Dismissal Kind columns
+    # Initialize columns for Wicket and Dismissal Kind
     batting_data['Wicket'] = "Not Out"  # Default value if no dismissal
     batting_data['Dismissal Kind'] = "-"  # Default value if no dismissal
     
-    # Iterate through each batsman to populate Wicket and Dismissal Kind based on inning_data
+    # Populate Wicket and Dismissal Kind based on dismissal events
     for index, row in batting_data.iterrows():
         batsman = row['batsman']
         
-        # Get data where this batsman was dismissed
+        # Check if this batsman was dismissed
         dismissed_data = inning_data[(inning_data['batsman'] == batsman) & (inning_data['is_wkt'] == 1)]
         
-        # Check if the batsman was dismissed
         if not dismissed_data.empty:
-            # Grab the first occurrence where the batsman was dismissed (could be bowled, caught, run out, etc.)
             dismissal_event = dismissed_data.iloc[0]
             
-            # Check if the dismissal was due to the bowler
+            # If bowler_wkt is 1, the bowler took the wicket
             if dismissal_event['bowler_wkt'] == 1:
-                # Bowler took the wicket, populate with bowler's name and dismissal kind
                 batting_data.at[index, 'Wicket'] = dismissal_event['bowler']
-                batting_data.at[index, 'Dismissal Kind'] = dismissal_event['dismissal_kind']
             else:
-                # If bowler_wkt is not 1, this could be a run-out or other non-bowler dismissal
                 batting_data.at[index, 'Wicket'] = "-"
-                batting_data.at[index, 'Dismissal Kind'] = dismissal_event['dismissal_kind']
+            
+            # Update dismissal kind
+            batting_data.at[index, 'Dismissal Kind'] = dismissal_event['dismissal_kind']
         
-        # Handle cases like retired hurt or retired out (use dismissal_kind)
-        retired_data = inning_data[(inning_data['batsman'] == batsman) & (inning_data['dismissal_kind']=='retired')]
+        # Handle retired cases
+        retired_data = inning_data[(inning_data['batsman'] == batsman) & (inning_data['dismissal_kind'] == 'retired')]
         if not retired_data.empty:
-            # If the batsman retired, update the fields
             retired_event = retired_data.iloc[-1]
             batting_data.at[index, 'Wicket'] = "-"
             batting_data.at[index, 'Dismissal Kind'] = retired_event['dismissal_kind']
     
-    # Handle cases where a non-striker gets out without facing a ball
-    dismissed_non_strikers = inning_data[(inning_data['is_wkt'] == 1) & (inning_data['valid_ball'] == 0)]
-    for index, row in dismissed_non_strikers.iterrows():
-        non_striker = row['non_striker']
-        if non_striker not in batting_data['batsman'].values:
-            # Add the non-striker to batting_data if they don't exist
-            batting_data = batting_data.append({
-                'batsman': non_striker,
-                'batsman_runs': 0,
-                'valid_ball': 0,
-                'is_four': 0,
-                'is_six': 0,
-                'Wicket': row['bowler'] if row['bowler_wkt'] == 1 else '-',
-                'Dismissal Kind': row['dismissal_kind']
-            }, ignore_index=True)
+    # Now handle players who are dismissed but have no valid balls faced
+    for player in inning_data['player_dismissed'].unique():
+        # Check if player is already in the batting_data
+        if player not in batting_data['batsman'].values:
+            # Get data for the dismissed player
+            player_data = inning_data[inning_data['player_dismissed'] == player]
+            valid_ball_sum = player_data['valid_ball'].sum()
+            
+            if valid_ball_sum == 0:
+                # Player got out without facing a legal ball, include them in the scorecard
+                dismissal_event = player_data.iloc[0]
+                batting_data = batting_data.append({
+                    'batsman': player,
+                    'batsman_runs': 0,
+                    'valid_ball': 0,
+                    'is_four': 0,
+                    'is_six': 0,
+                    'Wicket': dismissal_event['bowler'] if dismissal_event['bowler_wkt'] == 1 else '-',
+                    'Dismissal Kind': dismissal_event['dismissal_kind']
+                }, ignore_index=True)
     
     # Calculate strike rate
-    batting_data['batter_sr'] = (batting_data['batsman_runs'] / batting_data['valid_ball']).replace({0:0}) * 100
+    batting_data['batter_sr'] = (batting_data['batsman_runs'] / batting_data['valid_ball']).replace({0: 0}) * 100
     
     # Rename columns for the batting scorecard
     batting_data.columns = ['Batsman', 'R', 'B', '4s', '6s', 'Wicket', 'Dismissal Kind', 'SR']
     
-    # Filter out batsmen with 0 runs
-    batting_data['order'] = batting_data['Batsman'].apply(lambda x: batting_order.index(x))
+    # Filter out batsmen with 0 runs (if needed)
+    batting_data['order'] = batting_data['Batsman'].apply(lambda x: batting_order.index(x) if x in batting_order else -1)
     batting_data = batting_data.sort_values(by='order').drop(columns='order').reset_index(drop=True)
     batting_data.index = batting_data.index + 1
     
