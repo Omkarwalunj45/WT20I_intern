@@ -1071,7 +1071,7 @@ if sidebar_option == "Player Profile":
                                     
                                    # Convert the specified columns to integer type
                                 result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
-                                result_df=round_up_floats(result_df)
+                                # result_df=round_up_floats(result_df)
                                 st.markdown("### Opponentwise Performance")
                                 st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
                       
