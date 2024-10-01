@@ -977,7 +977,6 @@ if sidebar_option == "Player Profile":
                             'innings': 'inning', 
                             'bowler': 'bowler_name'
                         })
-                    rrrr
                         # Drop rows where 'ball' is missing, if not already done
                         bpdf = bpdf.dropna(subset=['ball'])
                     
@@ -995,188 +994,191 @@ if sidebar_option == "Player Profile":
                         
                         # Filter for the specific country
                         temp_df = temp_df[temp_df['batting_team'] == country]
-                    
-                        # Apply the cumulative function (bcum)
-                        temp_df = bcum(temp_df)
-                    
-                        # If the DataFrame is empty after applying `bcum`, skip this iteration
                         if temp_df.empty:
-                            continue
+                                st.markdown("No Bowling stats available")
+                        else:
                     
-                        # Add the country column with the current country's value
-                        temp_df['opponent'] = country.upper()
-                    
-                        # Reorder columns to make 'country' the first column
-                        cols = temp_df.columns.tolist()
-                        new_order = ['opponent'] + [col for col in cols if col != 'opponent']
-                        temp_df = temp_df[new_order]
-                        
-                    
-                        # Concatenate results into result_df
-                        if i == 0:
+                                # Apply the cumulative function (bcum)
+                                temp_df = bcum(temp_df)
+                            
+                                # If the DataFrame is empty after applying `bcum`, skip this iteration
+                                if temp_df.empty:
+                                    continue
+                            
+                                # Add the country column with the current country's value
+                                temp_df['opponent'] = country.upper()
+                            
+                                # Reorder columns to make 'country' the first column
+                                cols = temp_df.columns.tolist()
+                                new_order = ['opponent'] + [col for col in cols if col != 'opponent']
+                                temp_df = temp_df[new_order]
+                                
+                            
+                                # Concatenate results into result_df
+                                if i == 0:
+                                    result_df = temp_df
+                                    i += 1
+                                else:
+                                    result_df = pd.concat([result_df, temp_df], ignore_index=True)
+                            # Display the final result_df
+                            result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
+                            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+                            columns_to_convert = ['RUNS','THREE WICKET HAULS', 'MAIDEN OVERS']
+                
+                               # Fill NaN values with 0
+                            result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+                                
+                               # Convert the specified columns to integer type
+                            result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+                            result_df=round_up_floats(result_df)
+                            st.markdown("### Opponentwise Performance")
+                            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+                  
+                
+                            tdf = bpdf[bpdf['bowler'] == player_name]  # Filter data for the specific bowler
+                
+                            def standardize_season(season):
+                                if '/' in season:  # Check if the season is in 'YYYY/YY' format
+                                    year = season.split('/')[0]  # Get the first part
+                                else:
+                                    year = season  # Use as is if already in 'YYYY' format
+                                return year.strip()  # Return the year stripped of whitespace
+                            
+                            # Standardize the 'season' column
+                            tdf['season'] = tdf['season'].apply(standardize_season)
+                            
+                            # Populate an array of unique seasons
+                            unique_seasons = sorted(set(tdf['season'].unique()))  # Optional: Sorted list of unique seasons
+                            
+                            # Initialize an empty DataFrame to store the final results
+                            i = 0
+                            for season in unique_seasons:
+                                temp_df = tdf[tdf['season'] == season]  # Filter data for the current season
+                                temp_df = bcum(temp_df)  # Apply the cumulative function (specific to your logic)
+                                temp_df['YEAR'] = season
+                                
+                                if i == 0:
+                                    result_df = temp_df  # Initialize the result_df with the first season's data
+                                    i += 1
+                                else:
+                                    result_df = pd.concat([result_df, temp_df], ignore_index=True)  # Append subsequent data
+                            
+                            result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
+                            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+                            columns_to_convert = ['THREE WICKET HAULS', 'MAIDEN OVERS']
+                
+                               # Fill NaN values with 0
+                            result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
+                                
+                               # Convert the specified columns to integer type
+                            result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
+                            result_df=round_up_floats(result_df)
+                            # result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+                            
+                            # No need to convert columns to integer (for bowling-specific data)
+                            
+                            # Display the results
+                            st.markdown(f"### **Yearwise Bowling Performance**")
+                            cols = result_df.columns.tolist()
+                            
+                            # Specify the desired order with 'YEAR' first
+                            new_order = ['YEAR'] + [col for col in cols if col != 'YEAR']
+                            
+                            # Reindex the DataFrame with the new column order
+                            result_df = result_df[new_order]
+                            
+                            # Display the table with bold headers
+                            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+                
+                            
+                
+                            # Filter data for the specific bowler
+                            tdf = bpdf[bpdf['bowler'] == player_name]
+                            
+                            # Process for the first inning
+                            temp_df = tdf[(tdf['inning'] == 1)]
+                            temp_df = bcum(temp_df)  # Apply the cumulative function specific to bowlers
+                            temp_df['inning'] = 1  # Add the inning number
+                            
+                            # Reorder columns to have 'inning' first
+                            cols = temp_df.columns.tolist()
+                            new_order = ['inning'] + [col for col in cols if col != 'inning']          
+                            temp_df = temp_df[new_order] 
+                            
+                            # Initialize result_df with the first inning's data
                             result_df = temp_df
-                            i += 1
-                        else:
+                            
+                            # Process for the second inning
+                            temp_df = tdf[(tdf['inning'] == 2)]
+                            temp_df = bcum(temp_df)  # Apply the cumulative function specific to bowlers
+                            temp_df['inning'] = 2  # Add the inning number
+                            
+                            # Reorder columns to have 'inning' first
+                            cols = temp_df.columns.tolist()
+                            new_order = ['inning'] + [col for col in cols if col != 'inning']          
+                            temp_df = temp_df[new_order] 
+                            
+                            # Concatenate the results for both innings
                             result_df = pd.concat([result_df, temp_df], ignore_index=True)
-                    # Display the final result_df
-                    result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
-                    result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-                    columns_to_convert = ['RUNS','THREE WICKET HAULS', 'MAIDEN OVERS']
-        
-                       # Fill NaN values with 0
-                    result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
-                        
-                       # Convert the specified columns to integer type
-                    result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
-                    result_df=round_up_floats(result_df)
-                    st.markdown("### Opponentwise Performance")
-                    st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
-          
-        
-                    tdf = bpdf[bpdf['bowler'] == player_name]  # Filter data for the specific bowler
-        
-                    def standardize_season(season):
-                        if '/' in season:  # Check if the season is in 'YYYY/YY' format
-                            year = season.split('/')[0]  # Get the first part
-                        else:
-                            year = season  # Use as is if already in 'YYYY' format
-                        return year.strip()  # Return the year stripped of whitespace
-                    
-                    # Standardize the 'season' column
-                    tdf['season'] = tdf['season'].apply(standardize_season)
-                    
-                    # Populate an array of unique seasons
-                    unique_seasons = sorted(set(tdf['season'].unique()))  # Optional: Sorted list of unique seasons
-                    
-                    # Initialize an empty DataFrame to store the final results
-                    i = 0
-                    for season in unique_seasons:
-                        temp_df = tdf[tdf['season'] == season]  # Filter data for the current season
-                        temp_df = bcum(temp_df)  # Apply the cumulative function (specific to your logic)
-                        temp_df['YEAR'] = season
-                        
-                        if i == 0:
-                            result_df = temp_df  # Initialize the result_df with the first season's data
-                            i += 1
-                        else:
-                            result_df = pd.concat([result_df, temp_df], ignore_index=True)  # Append subsequent data
-                    
-                    result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
-                    result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-                    columns_to_convert = ['THREE WICKET HAULS', 'MAIDEN OVERS']
-        
-                       # Fill NaN values with 0
-                    result_df[columns_to_convert] = result_df[columns_to_convert].fillna(0)
-                        
-                       # Convert the specified columns to integer type
-                    result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
-                    result_df=round_up_floats(result_df)
-                    # result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-                    
-                    # No need to convert columns to integer (for bowling-specific data)
-                    
-                    # Display the results
-                    st.markdown(f"### **Yearwise Bowling Performance**")
-                    cols = result_df.columns.tolist()
-                    
-                    # Specify the desired order with 'YEAR' first
-                    new_order = ['YEAR'] + [col for col in cols if col != 'YEAR']
-                    
-                    # Reindex the DataFrame with the new column order
-                    result_df = result_df[new_order]
-                    
-                    # Display the table with bold headers
-                    st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
-        
-                    
-        
-                    # Filter data for the specific bowler
-                    tdf = bpdf[bpdf['bowler'] == player_name]
-                    
-                    # Process for the first inning
-                    temp_df = tdf[(tdf['inning'] == 1)]
-                    temp_df = bcum(temp_df)  # Apply the cumulative function specific to bowlers
-                    temp_df['inning'] = 1  # Add the inning number
-                    
-                    # Reorder columns to have 'inning' first
-                    cols = temp_df.columns.tolist()
-                    new_order = ['inning'] + [col for col in cols if col != 'inning']          
-                    temp_df = temp_df[new_order] 
-                    
-                    # Initialize result_df with the first inning's data
-                    result_df = temp_df
-                    
-                    # Process for the second inning
-                    temp_df = tdf[(tdf['inning'] == 2)]
-                    temp_df = bcum(temp_df)  # Apply the cumulative function specific to bowlers
-                    temp_df['inning'] = 2  # Add the inning number
-                    
-                    # Reorder columns to have 'inning' first
-                    cols = temp_df.columns.tolist()
-                    new_order = ['inning'] + [col for col in cols if col != 'inning']          
-                    temp_df = temp_df[new_order] 
-                    
-                    # Concatenate the results for both innings
-                    result_df = pd.concat([result_df, temp_df], ignore_index=True)
-                    
-                    # Drop unnecessary columns
-                    result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
-                    result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-                    columns_to_convert = ['THREE WICKET HAULS', 'MAIDEN OVERS']
-        
-                       # Fill NaN values with 0
-                    result_df[columns_to_convert] =  result_df[columns_to_convert].fillna(0)
-                        
-                       # Convert the specified columns to integer type
-                    result_df[columns_to_convert] =  result_df[columns_to_convert].astype(int)
-                    result_df=round_up_floats(result_df)
-                    
-                    # Display the results
-                    st.markdown(f"### **Inningwise Bowling Performance**")
-                    st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
-        
-                    
-                    
-                    # Creating a DataFrame to display venues and their corresponding countries
-                    bpdf['country'] = bpdf['venue'].map(venue_country_map)
-                    allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh',
-                                         'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
-                    
-                    i = 0
-                    for country in allowed_countries:
-                        temp_df = bpdf[bpdf['bowler'] == player_name]  # Change to 'bowler'
-                        temp_df = temp_df[(temp_df['country'] == country)]
-                        temp_df = bcum(temp_df)  # Use bcum instead of cumulator
-                        temp_df.insert(0, 'country', country.upper())
-                        
-                    
-                        # If temp_df is empty after applying bcum, skip to the next iteration
-                        if len(temp_df) == 0:
-                            continue
-                        elif i == 0:
-                            result_df = temp_df
-                            i += 1
-                        else:
-                            result_df = result_df.reset_index(drop=True)
-                            temp_df = temp_df.reset_index(drop=True)
-                            result_df = result_df.loc[:, ~result_df.columns.duplicated()]
-                    
-                            result_df = pd.concat([result_df, temp_df], ignore_index=True)
-                    
-                    if 'bowler' in result_df.columns:
-                        result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
-                    result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
-                    columns_to_convert = ['RUNS','THREE WICKET HAULS', 'MAIDEN OVERS']
-        
-                       # Fill NaN values with 0
-                    result_df[columns_to_convert] =  result_df[columns_to_convert].fillna(0)
-                        
-                       # Convert the specified columns to integer type
-                    result_df[columns_to_convert] =  result_df[columns_to_convert].astype(int)
-                    result_df=round_up_floats(result_df)
-                    
-                    st.markdown(f"### **In Host Country**")
-                    st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+                            
+                            # Drop unnecessary columns
+                            result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
+                            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+                            columns_to_convert = ['THREE WICKET HAULS', 'MAIDEN OVERS']
+                
+                               # Fill NaN values with 0
+                            result_df[columns_to_convert] =  result_df[columns_to_convert].fillna(0)
+                                
+                               # Convert the specified columns to integer type
+                            result_df[columns_to_convert] =  result_df[columns_to_convert].astype(int)
+                            result_df=round_up_floats(result_df)
+                            
+                            # Display the results
+                            st.markdown(f"### **Inningwise Bowling Performance**")
+                            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+                
+                            
+                            
+                            # Creating a DataFrame to display venues and their corresponding countries
+                            bpdf['country'] = bpdf['venue'].map(venue_country_map)
+                            allowed_countries = ['India', 'England', 'Australia', 'Pakistan', 'Bangladesh',
+                                                 'West Indies', 'Scotland', 'South Africa', 'New Zealand', 'Sri Lanka']
+                            
+                            i = 0
+                            for country in allowed_countries:
+                                temp_df = bpdf[bpdf['bowler'] == player_name]  # Change to 'bowler'
+                                temp_df = temp_df[(temp_df['country'] == country)]
+                                temp_df = bcum(temp_df)  # Use bcum instead of cumulator
+                                temp_df.insert(0, 'country', country.upper())
+                                
+                            
+                                # If temp_df is empty after applying bcum, skip to the next iteration
+                                if len(temp_df) == 0:
+                                    continue
+                                elif i == 0:
+                                    result_df = temp_df
+                                    i += 1
+                                else:
+                                    result_df = result_df.reset_index(drop=True)
+                                    temp_df = temp_df.reset_index(drop=True)
+                                    result_df = result_df.loc[:, ~result_df.columns.duplicated()]
+                            
+                                    result_df = pd.concat([result_df, temp_df], ignore_index=True)
+                            
+                            if 'bowler' in result_df.columns:
+                                result_df = result_df.drop(columns=['bowler','debut_year','final_year'])
+                            result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
+                            columns_to_convert = ['RUNS','THREE WICKET HAULS', 'MAIDEN OVERS']
+                
+                               # Fill NaN values with 0
+                            result_df[columns_to_convert] =  result_df[columns_to_convert].fillna(0)
+                                
+                               # Convert the specified columns to integer type
+                            result_df[columns_to_convert] =  result_df[columns_to_convert].astype(int)
+                            result_df=round_up_floats(result_df)
+                            
+                            st.markdown(f"### **In Host Country**")
+                            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
 
     with tab3:
             st.header("Current Form")
