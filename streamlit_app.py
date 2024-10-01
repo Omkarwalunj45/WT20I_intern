@@ -78,7 +78,7 @@ def show_innings_scorecard(inning_data, title):
     # Batting scorecard
     st.write("Batting")
     batting_order = []
-    
+
     for i, row in inning_data.iterrows():
         batsman = row['batsman']
         non_striker = row['non_striker']
@@ -89,12 +89,14 @@ def show_innings_scorecard(inning_data, title):
             batting_order.append(non_striker)
     
     total_extras = inning_data['extras'].sum()
+    
     batting_data = inning_data.groupby(['batsman']).agg({
         'batsman_runs': 'sum',
         'valid_ball': 'sum',
         'is_four': 'sum',
         'is_six': 'sum'
     }).reset_index()
+    
     # Initialize Wicket and Dismissal Kind columns
     batting_data['Wicket'] = "Not Out"  # Default value if no dismissal
     batting_data['Dismissal Kind'] = "-"  # Default value if no dismissal
@@ -129,22 +131,39 @@ def show_innings_scorecard(inning_data, title):
             batting_data.at[index, 'Wicket'] = "-"
             batting_data.at[index, 'Dismissal Kind'] = retired_event['dismissal_kind']
     
-    # Now, the `Wicket` and `Dismissal Kind` columns should reflect the correct information
-
+    # Handle cases where a non-striker gets out without facing a ball
+    dismissed_non_strikers = inning_data[(inning_data['is_wkt'] == 1) & (inning_data['valid_ball'] == 0)]
+    for index, row in dismissed_non_strikers.iterrows():
+        non_striker = row['non_striker']
+        if non_striker not in batting_data['batsman'].values:
+            # Add the non-striker to batting_data if they don't exist
+            batting_data = batting_data.append({
+                'batsman': non_striker,
+                'batsman_runs': 0,
+                'valid_ball': 0,
+                'is_four': 0,
+                'is_six': 0,
+                'Wicket': row['bowler'] if row['bowler_wkt'] == 1 else '-',
+                'Dismissal Kind': row['dismissal_kind']
+            }, ignore_index=True)
     
     # Calculate strike rate
-    batting_data['batter_sr'] = (batting_data['batsman_runs'] / batting_data['valid_ball']) * 100
+    batting_data['batter_sr'] = (batting_data['batsman_runs'] / batting_data['valid_ball']).replace({0:0}) * 100
     
     # Rename columns for the batting scorecard
     batting_data.columns = ['Batsman', 'R', 'B', '4s', '6s', 'Wicket', 'Dismissal Kind', 'SR']
     
     # Filter out batsmen with 0 runs
-    batting_data = batting_data[batting_data['Batsman'] != '0']
     batting_data['order'] = batting_data['Batsman'].apply(lambda x: batting_order.index(x))
     batting_data = batting_data.sort_values(by='order').drop(columns='order').reset_index(drop=True)
     batting_data.index = batting_data.index + 1
+    
+    # Display the batting table
     st.table(batting_data)
+    
+    # Show extras
     st.write(f"**Extras:** {total_extras}")
+
 
     
     # Bowling scorecard
