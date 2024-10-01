@@ -1031,15 +1031,15 @@ if sidebar_option == "Player Profile":
                     st.markdown("### Opponentwise Performance")
                     # Iterate over allowed countries for batting analysis
                     temp_df = bpdf[bpdf['bowler'] == player_name]  # Filter data for the selected batsman
-                        
-                        # Filter for the specific country
-                    temp_df = temp_df[temp_df['batting_team'] == country]
                     if temp_df.empty:
                             st.markdown("No Bowling stats available")
 
                     else:
                         
                             for country in allowed_countries:
+                                            
+                                        # Filter for the specific country
+                                        temp_df = temp_df[temp_df['batting_team'] == country]
                                 
                                         # Apply the cumulative function (bcum)
                                         temp_df = bcum(temp_df)
