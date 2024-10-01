@@ -122,7 +122,7 @@ def show_innings_scorecard(inning_data, title):
                 batting_data.at[index, 'Dismissal Kind'] = dismissal_event['dismissal_kind']
         
         # Handle cases like retired hurt or retired out (use dismissal_kind)
-        retired_data = inning_data[(inning_data['batsman'] == batsman) & (inning_data['dismissal_kind'].str.contains("retired", na=False))]
+        retired_data = inning_data[(inning_data['batsman'] == batsman) & (inning_data['dismissal_kind']=='retired')]
         if not retired_data.empty:
             # If the batsman retired, update the fields
             retired_event = retired_data.iloc[-1]
