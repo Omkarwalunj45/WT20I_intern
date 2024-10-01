@@ -126,7 +126,7 @@ def show_innings_scorecard(inning_data, title):
             batting_data.at[index, 'Wicket'] = "-"
             batting_data.at[index, 'Dismissal Kind'] = retired_event['dismissal_kind']
     
-    Now handle players who are dismissed but have no valid balls faced
+    # Now handle players who are dismissed but have no valid balls faced
     for player in inning_data['player_dismissed'].unique():
         # Check if player is already in the batting_data
         if player not in batting_data['batsman'].values:
