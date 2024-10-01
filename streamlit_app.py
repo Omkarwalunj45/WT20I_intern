@@ -235,11 +235,23 @@ def is_bowlers_wkt(player_dismissed,dismissal_kind):
   else:
     return 0
 bpdf['bowler_wkt']=bpdf.apply(lambda x: (is_bowlers_wkt(x['player_dismissed'],x['dismissal_kind'])),axis=1)
+# def round_up_floats(df, decimal_places=2):
+#     # Round up only for float columns
+#     float_cols = df.select_dtypes(include=['float'])
+#     df[float_cols.columns] = np.ceil(float_cols * (10 ** decimal_places)) / (10 ** decimal_places)
+#     return df
 def round_up_floats(df, decimal_places=2):
-    # Round up only for float columns
-    float_cols = df.select_dtypes(include=['float'])
-    df[float_cols.columns] = np.ceil(float_cols * (10 ** decimal_places)) / (10 ** decimal_places)
+    # Select only float columns from the DataFrame
+    float_cols = df.select_dtypes(include=['float64', 'float32'])  # Ensure to catch all float types
+    
+    # Round up the float columns and maintain the same shape
+    rounded_floats = np.ceil(float_cols * (10 ** decimal_places)) / (10 ** decimal_places)
+    
+    # Assign the rounded values back to the original DataFrame
+    df[float_cols.columns] = rounded_floats
+    
     return df
+
 def standardize_season(season):
     if '/' in season:  # Check if the season is in 'YYYY/YY' format
           year = season.split('/')[0]  # Get the first part
