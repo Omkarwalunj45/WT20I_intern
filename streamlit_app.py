@@ -142,7 +142,7 @@ def show_innings_scorecard(inning_data, title):
             # Handling the case where the player is dismissed without facing a legal ball
             if valid_ball_sum == 0:
                 dismissal_event = player_data.copy()  # Get the first row since it's a single dismissal event
-                bowler_wkt = dismissal_event['bowler_wkt'].iloc[0] if isinstance(dismissal_event['bowler_wkt'], pd.Series) else dismissal_event['bowler_wkt']
+                bowler_wkt = dismissal_event['bowler_wkt'] #if isinstance(dismissal_event['bowler_wkt'], pd.Series) else dismissal_event['bowler_wkt']
                 
                 # Create a new row for the player to be added to the batting data
                 new_row = pd.DataFrame({
