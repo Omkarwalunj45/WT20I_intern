@@ -126,34 +126,36 @@ def show_innings_scorecard(inning_data, title):
             batting_data.at[index, 'Wicket'] = "-"
             batting_data.at[index, 'Dismissal Kind'] = retired_event['dismissal_kind']
     
-    # # Now handle players who are dismissed but have no valid balls faced
-    # for player in inning_data['player_dismissed'].unique():
-    #     # Check if player is already in the batting_data
-    #     if player not in batting_data['batsman'].values:
-    #         # Get data for the dismissed player
-    #         player_data = (inning_data[inning_data['player_dismissed'] == player])
-    #         p_data = inning_data[inning_data['batsman'] == player]
-    #         valid_ball_sum = p_data['valid_ball'].sum()         
+    # Now handle players who are dismissed but have no valid balls faced
+    for player in inning_data['player_dismissed'].unique():
+        # Check if player is already in the batting_data
+        if player not in batting_data['batsman'].values:
+            # Get data for the dismissed player
+            player_data = (inning_data[inning_data['player_dismissed'] == player])
+            p_data = inning_data[inning_data['batsman'] == player]
+            valid_ball_sum = p_data['valid_ball'].sum()         
             
-    #         # Handling the case where the player is dismissed without facing a legal ball
-    #         if valid_ball_sum == 0:
-    #             dismissal_event = inning_data[inning_data['player_dismissed'] == player]  # Get the first row since it's a single dismissal event
-    #             # # bowler_wkt = dismissal_event['bowler_wkt'] #if isinstance(dismissal_event['bowler_wkt'], pd.Series) else dismissal_event['bowler_wkt']
+            # Handling the case where the player is dismissed without facing a legal ball
+            if valid_ball_sum == 0:
+                dismissal_event = inning_data[inning_data['player_dismissed'] == player]  # Get the first row since it's a single dismissal event
+                # bowler_wkt = dismissal_event['bowler_wkt'] #if isinstance(dismissal_event['bowler_wkt'], pd.Series) else dismissal_event['bowler_wkt']
                 
-    #             # # Create a new row for the player to be added to the batting data
-    #             # new_row = pd.DataFrame({
-    #             #     'batsman': [player],
-    #             #     'batsman_runs': [0],
-    #             #     'valid_ball': [0],
-    #             #     'is_four': [0],
-    #             #     'is_six': [0],
-    #             #     'Wicket': [dismissal_event['bowler'] if dismissal_event['bowler_wkt'] == 1 else '-'],
-    #             #     'Dismissal Kind': [dismissal_event['dismissal_kind']]
-    #             # })
-    #             # Check if 'bowler_wkt' exists in the dismissal event data
-                
-    #             # Use pd.concat to add the new row to the existing DataFrame
-    #             batting_data = pd.concat([batting_data, new_row], ignore_index=True)
+                # Create a new row for the player to be added to the batting data
+                new_row = pd.DataFrame({
+                    'batsman': [player],
+                    'batsman_runs': [0],
+                    'valid_ball': [0],
+                    'is_four': [0],
+                    'is_six': [0],
+                    # 'Wicket': [dismissal_event['bowler'] if dismissal_event['bowler_wkt'] == 1 else '-'],
+                    # 'Dismissal Kind': [dismissal_event['dismissal_kind']]
+                })
+                # Check if 'bowler_wkt' exists in the dismissal event data
+                if dismissal_event['bowler_wkt'] == 1:
+                        new_row.at[index, 'Wicket'] = dismissal_event['bowler']
+                new_row.at[index, 'dismissal_kind'] = dismissal_event['dismissal_kind']
+                # Use pd.concat to add the new row to the existing DataFrame
+                batting_data = pd.concat([batting_data, new_row], ignore_index=True)
     
     # Calculate strike rate
     batting_data['batter_sr'] = (batting_data['batsman_runs'] / batting_data['valid_ball']).replace({0: 0}) * 100
