@@ -2083,7 +2083,7 @@ elif sidebar_option == "Strength vs Weakness":
         allowed_batting_styles = ['Left-hand bat', 'Right-hand bat']  # Define the two batting styles
         result_df = pd.DataFrame()
         temp_df = pdf[pdf['bowler'] == player_name]
-        if temp_df.empty() :
+        if temp_df.empty :
             st.markdown('Bowling stats do not exist')
         else:
             # Loop over left-hand and right-hand batting styles
