@@ -1582,7 +1582,7 @@ elif sidebar_option == "Strength vs Weakness":
           
           # Reindex the DataFrame with the new column order
           # result_df = result_df[new_order]
-          
+          result_df['BOWL KIND'] = result_df['BOWL KIND'].str.capitalize()
           st.markdown("### Performance Against Bowling Types (Pace vs Spin)")
           st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
           
