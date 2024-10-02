@@ -2195,7 +2195,7 @@ elif sidebar_option == "Strength vs Weakness":
         weakness_thresholds_pp= {
             'SR': 28,               # Strike Rate (balls per wicket)
             'AVG': 24,              # Average (runs per wicket)
-            'DOT%': 43,   # Dot ball percentage
+            'DOT%': 25,   # Dot ball percentage
             'Econ':8,
         }
         strength_thresholds_m = {
