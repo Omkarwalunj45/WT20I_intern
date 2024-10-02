@@ -155,8 +155,6 @@ def show_innings_scorecard(inning_data, title):
                         'Dismissal Kind': ["-"]
                     })
                     # Check if 'bowler_wkt' exists in the dismissal event data
-                    if dismissal_event['bowler_wkt'] == 1:
-                             new_row.at[0, 'Wicket'] = dismissal_event['bowler']  # Use .at[0] because it's a single-row DataFrame
                     new_row.at[0, 'Dismissal Kind'] = dismissal_event['dismissal_kind']
                 # Use pd.concat to add the new row to the existing DataFrame
                     batting_data = pd.concat([batting_data, new_row], ignore_index=True)
