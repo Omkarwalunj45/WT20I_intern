@@ -160,7 +160,7 @@ def show_innings_scorecard(inning_data, title):
                     batting_data = pd.concat([batting_data, new_row], ignore_index=True)
     
     # Calculate strike rate
-    batting_data['batter_sr'] = (batting_data['batsman_runs'] / batting_data['valid_ball']).replace({0: 0}) * 100
+    batting_data['batter_sr'] = (batting_data['batsman_runs'] / batting_data['valid_ball']).replace({0 : 0}) * 100
     
     # Rename columns for the batting scorecard
     batting_data.columns = ['Batsman', 'R', 'B', '4s', '6s', 'Wicket', 'Dismissal Kind', 'SR']
@@ -1783,6 +1783,51 @@ elif sidebar_option == "Strength vs Weakness":
           
           # Streamlit header
           # st.header("Phase-wise Strength and Weakness Analysis")
+          strength_thresholds_pp = {
+              'SR': 135,               # Threshold for Strike Rate
+              'AVG': 20,               # Threshold for Average
+              'DOT PERCENTAGE': 25,    # Threshold for Dot Percentage
+              'BPB': 4,                # Threshold for Boundary Percentage Batsman
+              'BPD': 18                # Threshold for Boundary Percentage Delivery
+                                }
+          
+          weakness_thresholds_pp = {
+              'SR': 120,                # Threshold for Strike Rate
+              'AVG': 10,               # Threshold for Average
+              'DOT PERCENTAGE': 30,    # Threshold for Dot Percentage
+              'BPB': 7,                # Threshold for Boundary Percentage Batsman
+              'BPD': 15                # Threshold for Boundary Percentage Delivery
+                                }
+          strength_thresholds_m = {
+              'SR': 120,               # Threshold for Strike Rate
+              'AVG': 30,               # Threshold for Average
+              'DOT PERCENTAGE': 32,    # Threshold for Dot Percentage
+              'BPB': 6,                # Threshold for Boundary Percentage Batsman
+              'BPD': 23                # Threshold for Boundary Percentage Delivery
+                                }
+          
+          weakness_thresholds_m = {
+              'SR': 110,                # Threshold for Strike Rate
+              'AVG': 25,               # Threshold for Average
+              'DOT PERCENTAGE': 40,    # Threshold for Dot Percentage
+              'BPB': 4,                # Threshold for Boundary Percentage Batsman
+              'BPD': 18                # Threshold for Boundary Percentage Delivery
+                                }
+          strength_thresholds_d = {
+              'SR': 145,               # Threshold for Strike Rate
+              'AVG': 20,               # Threshold for Average
+              'DOT PERCENTAGE': 25=3,    # Threshold for Dot Percentage
+              'BPB': 4,                # Threshold for Boundary Percentage Batsman
+              'BPD': 15                # Threshold for Boundary Percentage Delivery
+                                }
+          
+          weakness_thresholds_d = {
+              'SR': 130,                # Threshold for Strike Rate
+              'AVG': 10,               # Threshold for Average
+              'DOT PERCENTAGE': 32,    # Threshold for Dot Percentage
+              'BPB': 6,                # Threshold for Boundary Percentage Batsman
+              'BPD': 10                # Threshold for Boundary Percentage Delivery
+                                }
           
           # DataFrame to hold results
           result_df = pd.DataFrame()
@@ -1847,37 +1892,101 @@ elif sidebar_option == "Strength vs Weakness":
           for index, row in result_df.iterrows():
               strong_count = 0
               weak_count = 0
-              if row['INNINGS'] >= 3:
-                  # Evaluate strengths
-                  if row['SR'] >= strength_thresholds['SR']:
-                      strong_count += 1
-                  if row['AVG'] >= strength_thresholds['AVG']:
-                      strong_count += 1
-                  if row['DOT PERCENTAGE'] <= strength_thresholds['DOT PERCENTAGE']:
-                      strong_count += 1
-                  if row['BPB'] <= strength_thresholds['BPB']:
-                      strong_count += 1
-                  if row['BPD'] >= strength_thresholds['BPD']:
-                      strong_count += 1
-                  
-                  # Evaluate weaknesses
-                  if row['SR'] <= weakness_thresholds['SR']:
-                      weak_count += 1
-                  if row['AVG'] <= weakness_thresholds['AVG']:
-                      weak_count += 1
-                  if row['DOT PERCENTAGE'] >= weakness_thresholds['DOT PERCENTAGE']:
-                      weak_count += 1
-                  if row['BPB'] >= weakness_thresholds['BPB']:
-                      weak_count += 1
-                  if row['BPD'] <= weakness_thresholds['BPD']:
-                      weak_count += 1
-                  
-                  # Determine strong/weak based on counts
-                  if strong_count >= 3:
-                      strong_against.append(row['PHASE'])
-                  if weak_count >= 3:
-                      weak_against.append(row['PHASE'])
-                  
+              if row['PHASE']=='Powerplay':
+                  if row['INNINGS'] >= 3:
+                      # Evaluate strengths
+                      if row['SR'] >= strength_thresholds_pp['SR']:
+                          strong_count += 1
+                      if row['AVG'] >= strength_thresholds_pp['AVG']:
+                          strong_count += 1
+                      if row['DOT PERCENTAGE'] <= strength_thresholds_pp['DOT PERCENTAGE']:
+                          strong_count += 1
+                      if row['BPB'] <= strength_thresholds_pp['BPB']:
+                          strong_count += 1
+                      if row['BPD'] >= strength_thresholds_pp['BPD']:
+                          strong_count += 1
+                      
+                      # Evaluate weaknesses
+                      if row['SR'] <= weakness_thresholds_pp['SR']:
+                          weak_count += 1
+                      if row['AVG'] <= weakness_thresholds_pp['AVG']:
+                          weak_count += 1
+                      if row['DOT PERCENTAGE'] >= weakness_thresholds_pp['DOT PERCENTAGE']:
+                          weak_count += 1
+                      if row['BPB'] >= weakness_thresholds_pp['BPB']:
+                          weak_count += 1
+                      if row['BPD'] <= weakness_thresholds_pp['BPD']:
+                          weak_count += 1
+                      
+                      # Determine strong/weak based on counts
+                      if strong_count >= 3:
+                          strong_against.append(row['PHASE'])
+                      if weak_count >= 3:
+                          weak_against.append(row['PHASE'])
+                                              
+              if row['PHASE']=='Middle':
+                  if row['INNINGS'] >= 3:
+                      # Evaluate strengths
+                      if row['SR'] >= strength_thresholds_m['SR']:
+                          strong_count += 1
+                      if row['AVG'] >= strength_thresholds_m['AVG']:
+                          strong_count += 1
+                      if row['DOT PERCENTAGE'] <= strength_thresholds_m['DOT PERCENTAGE']:
+                          strong_count += 1
+                      if row['BPB'] <= strength_thresholds_m['BPB']:
+                          strong_count += 1
+                      if row['BPD'] >= strength_thresholds_m['BPD']:
+                          strong_count += 1
+                      
+                      # Evaluate weaknesses
+                      if row['SR'] <= weakness_thresholds_m['SR']:
+                          weak_count += 1
+                      if row['AVG'] <= weakness_thresholds_m['AVG']:
+                          weak_count += 1
+                      if row['DOT PERCENTAGE'] >= weakness_thresholds_m['DOT PERCENTAGE']:
+                          weak_count += 1
+                      if row['BPB'] >= weakness_thresholds_m['BPB']:
+                          weak_count += 1
+                      if row['BPD'] <= weakness_thresholds_m['BPD']:
+                          weak_count += 1
+                      
+                      # Determine strong/weak based on counts
+                      if strong_count >= 3:
+                          strong_against.append(row['PHASE'])
+                      if weak_count >= 3:
+                          weak_against.append(row['PHASE'])
+              if row['PHASE']=='Death':
+                  if row['INNINGS'] >= 3:
+                      # Evaluate strengths
+                      if row['SR'] >= strength_thresholds_d['SR']:
+                          strong_count += 1
+                      if row['AVG'] >= strength_thresholds_d['AVG']:
+                          strong_count += 1
+                      if row['DOT PERCENTAGE'] <= strength_thresholds_d['DOT PERCENTAGE']:
+                          strong_count += 1
+                      if row['BPB'] <= strength_thresholds_d['BPB']:
+                          strong_count += 1
+                      if row['BPD'] >= strength_thresholds_d['BPD']:
+                          strong_count += 1
+                      
+                      # Evaluate weaknesses
+                      if row['SR'] <= weakness_thresholds_d['SR']:
+                          weak_count += 1
+                      if row['AVG'] <= weakness_thresholds_d['AVG']:
+                          weak_count += 1
+                      if row['DOT PERCENTAGE'] >=weakness_thresholds_d['DOT PERCENTAGE']:
+                          weak_count += 1
+                      if row['BPB'] >= weakness_thresholds_d['BPB']:
+                          weak_count += 1
+                      if row['BPD'] <= weakness_thresholds_d['BPD']:
+                          weak_count += 1
+                      
+                      # Determine strong/weak based on counts
+                      if strong_count >= 3:
+                          strong_against.append(row['PHASE'])
+                      if weak_count >= 3:
+                          weak_against.append(row['PHASE'])      
+    
           # Format the output message
           strong_message = f"{player_name} is strong in: {', '.join(strong_against) if strong_against else 'no clear strengths in any phase.'}."
           weak_message = f"{player_name} is weak in: {', '.join(weak_against) if weak_against else 'no clear weaknesses in any phase.'}."
@@ -2076,6 +2185,45 @@ elif sidebar_option == "Strength vs Weakness":
 
         # Define the match phases
         allowed_phases = ['Powerplay', 'Middle', 'Death']  # Define the three phases
+        strength_thresholds_pp = {
+            'SR': 14,               # Strike Rate (balls per wicket)
+            'AVG': 14.5,              # Average (runs per wicket)
+            'DOT%': 35,   # Dot ball percentage
+            'Econ': 7, 
+        }
+    
+        weakness_thresholds_pp= {
+            'SR': 28,               # Strike Rate (balls per wicket)
+            'AVG': 24,              # Average (runs per wicket)
+            'DOT%': 43,   # Dot ball percentage
+            'Econ':8,
+        }
+        strength_thresholds_m = {
+            'SR': 23,               # Strike Rate (balls per wicket)
+            'AVG': 16.5,              # Average (runs per wicket)
+            'DOT%': 45,   # Dot ball percentage
+            'Econ': 6.3, 
+        }
+    
+        weakness_thresholds_m = {
+            'SR': 33,               # Strike Rate (balls per wicket)
+            'AVG': 26,              # Average (runs per wicket)
+            'DOT%': 38,   # Dot ball percentage
+            'Econ':7.5,
+        }
+        strength_thresholds_d = {
+            'SR': 22,               # Strike Rate (balls per wicket)
+            'AVG': 20.5,              # Average (runs per wicket)
+            'DOT%': 38,   # Dot ball percentage
+            'Econ': 7.8, 
+        }
+    
+        weakness_thresholds_d = {
+            'SR': 30,               # Strike Rate (balls per wicket)
+            'AVG': 26,              # Average (runs per wicket)
+            'DOT%': 30 ,   # Dot ball percentage
+            'Econ':8.5,
+        }
         
         result_df = pd.DataFrame()
         
@@ -2126,32 +2274,88 @@ elif sidebar_option == "Strength vs Weakness":
         for index, row in result_df.iterrows():
             strong_count = 0
             weak_count = 0
-            if row['INNINGS'] >= 3:
-                # Evaluate strengths
-                if row['SR'] <= strength_thresholds['SR']:
-                    strong_count += 1
-                if row['AVG'] <= strength_thresholds['AVG']:
-                    strong_count += 1
-                if row['DOT%'] >= strength_thresholds['DOT%']:
-                    strong_count += 1
-                if row['ECON'] <= strength_thresholds['Econ']:
-                    strong_count += 1
-        
-                # Evaluate weaknesses
-                if row['SR'] >= weakness_thresholds['SR']:
-                    weak_count += 1
-                if row['AVG'] >= weakness_thresholds['AVG']:
-                    weak_count += 1
-                if row['DOT%'] <= weakness_thresholds['DOT%']:
-                    weak_count += 1
-                if row['ECON'] >= weakness_thresholds['Econ']:
-                    weak_count += 1
-        
-                # Determine strong/weak based on counts
-                if strong_count >= 3:
-                    strong_against.append(row['PHASE'])
-                if weak_count >= 3:
-                    weak_against.append(row['PHASE'])
+            if row['PHASE']=='Powerplay':
+                if row['INNINGS'] >= 3:
+                    # Evaluate strengths
+                    if row['SR'] <= strength_thresholds_pp['SR']:
+                        strong_count += 1
+                    if row['AVG'] <= strength_thresholds_pp['AVG']:
+                        strong_count += 1
+                    if row['DOT%'] >= strength_thresholds_pp['DOT%']:
+                        strong_count += 1
+                    if row['ECON'] <= strength_thresholds_pp['Econ']:
+                        strong_count += 1
+            
+                    # Evaluate weaknesses
+                    if row['SR'] >= weakness_thresholds_pp['SR']:
+                        weak_count += 1
+                    if row['AVG'] >= weakness_thresholds_pp['AVG']:
+                        weak_count += 1
+                    if row['DOT%'] <= weakness_thresholds_pp['DOT%']:
+                        weak_count += 1
+                    if row['ECON'] >= weakness_thresholds_pp['Econ']:
+                        weak_count += 1
+            
+                    # Determine strong/weak based on counts
+                    if strong_count >= 3:
+                        strong_against.append(row['PHASE'])
+                    if weak_count >= 3:
+                        weak_against.append(row['PHASE'])
+            if row['PHASE']=='Middle':
+                if row['INNINGS'] >= 3:
+                    # Evaluate strengths
+                    if row['SR'] <= strength_thresholds_m['SR']:
+                        strong_count += 1
+                    if row['AVG'] <= strength_thresholds_m['AVG']:
+                        strong_count += 1
+                    if row['DOT%'] >= strength_thresholds_m['DOT%']:
+                        strong_count += 1
+                    if row['ECON'] <= strength_thresholds_m['Econ']:
+                        strong_count += 1
+            
+                    # Evaluate weaknesses
+                    if row['SR'] >= weakness_thresholds_m['SR']:
+                        weak_count += 1
+                    if row['AVG'] >= weakness_thresholds_m['AVG']:
+                        weak_count += 1
+                    if row['DOT%'] <= weakness_thresholds_m['DOT%']:
+                        weak_count += 1
+                    if row['ECON'] >=weakness_thresholds_m['Econ']:
+                        weak_count += 1
+            
+                    # Determine strong/weak based on counts
+                    if strong_count >= 3:
+                        strong_against.append(row['PHASE'])
+                    if weak_count >= 3:
+                        weak_against.append(row['PHASE'])
+            if row['PHASE']=='Death':
+                if row['INNINGS'] >= 3:
+                    # Evaluate strengths
+                    if row['SR'] <= strength_thresholds_d['SR']:
+                        strong_count += 1
+                    if row['AVG'] <= strength_thresholds_d['AVG']:
+                        strong_count += 1
+                    if row['DOT%'] >= strength_thresholds_d['DOT%']:
+                        strong_count += 1
+                    if row['ECON'] <= strength_thresholds_d['Econ']:
+                        strong_count += 1
+            
+                    # Evaluate weaknesses
+                    if row['SR'] >= weakness_thresholds_d['SR']:
+                        weak_count += 1
+                    if row['AVG'] >= weakness_thresholds_d['AVG']:
+                        weak_count += 1
+                    if row['DOT%'] <= weakness_thresholds_d['DOT%']:
+                        weak_count += 1
+                    if row['ECON'] >=weakness_thresholds_d['Econ']:
+                        weak_count += 1
+            
+                    # Determine strong/weak based on counts
+                    if strong_count >= 3:
+                        strong_against.append(row['PHASE'])
+                    if weak_count >= 3:
+                        weak_against.append(row['PHASE'])
+            
         
         # Format the output message
         strong_message = f"{player_name} is strong during: {', '.join(strong_against)}." if strong_against else f"{player_name} has no clear strengths in any phase."
