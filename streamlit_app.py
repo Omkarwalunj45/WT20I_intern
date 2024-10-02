@@ -29,7 +29,6 @@ def show_match_details(match_id):
     
     if not match_details.empty:
         st.write(f"### Match Details - Match ID: {match_id}")
-
         # Split the data by innings
         innings_1 = match_details[match_details['inning'] == 1]
         innings_2 = match_details[match_details['inning'] == 2]
@@ -1185,9 +1184,9 @@ if sidebar_option == "Player Profile":
         
                     i = 0
                     for country in allowed_countries:
-                        temp_df = bpdf[bpdf['bowler'] == player_name]  # Change to 'bowler'
+                        temp_df = bpdf[bpdf['bowler'] == player_name] 
                         temp_df = temp_df[(temp_df['country'] == country)]
-                        temp_df = bcum(temp_df)  # Use bcum instead of cumulator
+                        temp_df = bcum(temp_df)
                         temp_df.insert(0, 'country', country.upper())
             
         
