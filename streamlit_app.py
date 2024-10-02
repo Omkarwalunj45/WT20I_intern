@@ -1816,7 +1816,7 @@ elif sidebar_option == "Strength vs Weakness":
           strength_thresholds_d = {
               'SR': 145,               # Threshold for Strike Rate
               'AVG': 20,               # Threshold for Average
-              'DOT PERCENTAGE': 25=3,    # Threshold for Dot Percentage
+              'DOT PERCENTAGE': 25,    # Threshold for Dot Percentage
               'BPB': 4,                # Threshold for Boundary Percentage Batsman
               'BPD': 15                # Threshold for Boundary Percentage Delivery
                                 }
