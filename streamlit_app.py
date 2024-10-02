@@ -137,28 +137,29 @@ def show_innings_scorecard(inning_data, title):
             
             # Handling the case where the player is dismissed without facing a legal ball
             if valid_ball_sum == 0:
-                # dismissal_event = inning_data[inning_data['player_dismissed'] == player]  # Get the first row since it's a single dismissal event
-                dismissal_event = inning_data[inning_data['player_dismissed'] == player].iloc[0]
-                # bowler_wkt = dismissal_event['bowler_wkt'] #if isinstance(dismissal_event['bowler_wkt'], pd.Series) else dismissal_event['bowler_wkt']
-                
-                # Create a new row for the player to be added to the batting data
-                new_row = pd.DataFrame({
-                    'batsman': [player],
-                    'batsman_runs': [0],
-                    'valid_ball': [0],
-                    'is_four': [0],
-                    'is_six': [0],
-                    # 'Wicket': [dismissal_event['bowler'] if dismissal_event['bowler_wkt'] == 1 else '-'],
-                    # 'Dismissal Kind': [dismissal_event['dismissal_kind']]
-                    'Wicket': ["-"],  # Default value for Wicket
-                    'Dismissal Kind': ["-"]
-                })
-                # Check if 'bowler_wkt' exists in the dismissal event data
-                if dismissal_event['bowler_wkt'] == 1:
-                         new_row.at[0, 'Wicket'] = dismissal_event['bowler']  # Use .at[0] because it's a single-row DataFrame
-                new_row.at[0, 'Dismissal Kind'] = dismissal_event['dismissal_kind']
+                dismissal_event = inning_data[inning_data['player_dismissed'] == player]  # Get the first row since it's a single dismissal event
+                # dismissal_event = inning_data[inning_data['player_dismissed'] == player].iloc[0]
+                if not dismissal_event.empty:
+                    # bowler_wkt = dismissal_event['bowler_wkt'] #if isinstance(dismissal_event['bowler_wkt'], pd.Series) else dismissal_event['bowler_wkt']
+                    
+                    # Create a new row for the player to be added to the batting data
+                    new_row = pd.DataFrame({
+                        'batsman': [player],
+                        'batsman_runs': [0],
+                        'valid_ball': [0],
+                        'is_four': [0],
+                        'is_six': [0],
+                        # 'Wicket': [dismissal_event['bowler'] if dismissal_event['bowler_wkt'] == 1 else '-'],
+                        # 'Dismissal Kind': [dismissal_event['dismissal_kind']]
+                        'Wicket': ["-"],  # Default value for Wicket
+                        'Dismissal Kind': ["-"]
+                    })
+                    # Check if 'bowler_wkt' exists in the dismissal event data
+                    if dismissal_event['bowler_wkt'] == 1:
+                             new_row.at[0, 'Wicket'] = dismissal_event['bowler']  # Use .at[0] because it's a single-row DataFrame
+                    new_row.at[0, 'Dismissal Kind'] = dismissal_event['dismissal_kind']
                 # Use pd.concat to add the new row to the existing DataFrame
-                batting_data = pd.concat([batting_data, new_row], ignore_index=True)
+                    batting_data = pd.concat([batting_data, new_row], ignore_index=True)
     
     # Calculate strike rate
     batting_data['batter_sr'] = (batting_data['batsman_runs'] / batting_data['valid_ball']).replace({0: 0}) * 100
