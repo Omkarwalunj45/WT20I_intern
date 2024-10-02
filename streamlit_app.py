@@ -2131,13 +2131,14 @@ elif sidebar_option == "Strength vs Weakness":
                 # Step 7: Calculate SR for each ball range within the current match
               sr_by_range = match_data.groupby('ball_range').agg({'batsman_runs': 'sum', 'ball_count': 'count'}).reset_index()
               sr_by_range['strike_rate'] = (sr_by_range['batsman_runs'] / sr_by_range['ball_count']) * 100
+
                 
                 # Step 8: Store the SR in the range_sr_dict for each range
               for idx, row in sr_by_range.iterrows():
                   range_sr_dict[row['ball_range']].append(row['strike_rate'])
             
             # Step 9: Calculate the mean SR for each range across all matches
-          mean_sr_by_range = {range_: sum(sr_list)/len(sr_list) for range_, sr_list in range_sr_dict.items()}
+          mean_sr_by_range = {range_: (sum(sr_list) / len(sr_list)) if sr_list else 0 for range_, sr_list in range_sr_dict.items()}
             
             # Step 10: Convert the dictionary to a DataFrame for plotting
           sr_df = pd.DataFrame(list(mean_sr_by_range.items()), columns=['ball_range', 'avg_strike_rate'])
