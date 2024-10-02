@@ -525,7 +525,7 @@ venue_country_map = {
             'Kinrara Academy Oval': 'Malaysia',
             'Royal Selangor Club': 'Malaysia',
             'Providence Stadium': 'West Indies',
-            'Daren Sammy National Cricket Stadium, Gros Islet': West Indies',
+            'Daren Sammy National Cricket Stadium, Gros Islet': 'West Indies',
             'Sir Vivian Richards Stadium, North Sound': 'West Indies',
             'Westpac Stadium': 'New Zealand',
             'Eden Park': 'New Zealand',
