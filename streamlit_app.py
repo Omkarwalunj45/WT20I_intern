@@ -584,7 +584,7 @@ venue_country_map = {
 'Wankhede Stadium, Mumbai': 'India',
 'Eden Gardens': 'India',
 # Add more as needed
-            }
+}
 
 
 # Preprocess the debut column to extract the year
