@@ -33,6 +33,7 @@ def show_match_details(match_id):
     # Filter match details for the selected match_id
     match_details = pdf[pdf['match_id'] == match_id]
     print(match_details.head())
+    print("DHENDNHEHCBDHBEDHBD")
     # First, remove duplicates based on match_id and ball within the same match
     print(f"Before removing duplicates based on 'match_id' and 'ball': {match_details.shape}")
     match_details = match_details.drop_duplicates(subset=['match_id', 'ball', 'inning','batsman','bowler','over'], keep='first')
