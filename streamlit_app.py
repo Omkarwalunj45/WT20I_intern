@@ -15,8 +15,8 @@ bpdfn = pd.read_csv("Dataset/ICC_WT20I_2024.csv",low_memory=False)
 bidf=pd.read_csv("Dataset/lifesaver_bowl.csv",low_memory=False)
 info_df=info_df.rename(columns={'Player':'Player_name'})
 cols_conv=['season','match_id']
-pdfn[cols_conv] = pdfn[cols_conv].astype(object)
-bpdfn[cols_conv] = bpdfn[cols_conv].astype(object)
+pdfn[cols_conv] = pdfn[cols_conv].astype(str)
+bpdfn[cols_conv] = bpdfn[cols_conv].astype(str)
 pdf = pd.concat([pdf, pdfn], ignore_index=True, sort=False)
 #pdf = pdf.fillna(0)
 bpdf = pd.concat([bpdf, bpdfn], ignore_index=True, sort=False)
@@ -30,7 +30,7 @@ bidf = pd.merge(bidf, bbi, on='bowler')
 
 def show_match_details(match_id):
     print("Hello")
-    match_id = object(match_id)
+    match_id = str(match_id)
     # Filter match details for the selected match_id
     match_details = pdf[pdf['match_id'] == match_id]
     print(match_details.head())
