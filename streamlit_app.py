@@ -35,6 +35,7 @@ def show_match_details(match_id):
     print(f"Before removing duplicates based on 'match_id' and 'ball': {match_details.shape}")
     match_details = match_details.drop_duplicates(subset=['match_id', 'ball', 'inning','batsman','bowler','over'], keep='first')
     print(f"After removing duplicates based on 'match_id' and 'ball': {match_details.shape}")
+    print("Hello")
     
     if not match_details.empty:
         st.write(f"### Match Details - Match ID: {match_id}")
