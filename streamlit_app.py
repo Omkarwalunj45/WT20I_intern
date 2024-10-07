@@ -14,12 +14,6 @@ bpdf=pd.read_csv("Dataset/Mydataset.csv")
 bpdfn = pd.read_csv("Dataset/ICC_WT20I_2024.csv",low_memory=False)
 bidf=pd.read_csv("Dataset/lifesaver_bowl.csv",low_memory=False)
 info_df=info_df.rename(columns={'Player':'Player_name'})
-pdf[['noballs', 'wides','byes','legbyes','penalty']] = pdf[['noballs', 'wides','byes','legbyes','penalty']].fillna(0).astype(int)
-pdf['valid_ball'] = pdf.apply(lambda x: 1 if (x['wides'] == 0 and x['noballs'] == 0) else 0, axis=1)
-# Group by 'bowler' and 'match_id' to sum the 'bowler_wkt'
-dismissals_count = bpdf.groupby(['bowler', 'match_id'])['bowler_wkt'].sum()
-bbi = dismissals_count.groupby('bowler').max().reset_index().rename(columns={'bowler_wkt': 'bbi'})
-bidf = pd.merge(bidf, bbi, on='bowler')
 cols_conv=['season','match_id']
 pdfn[cols_conv] = pdfn[cols_conv].astype(str)
 bpdfn[cols_conv] = bpdfn[cols_conv].astype(str)
@@ -27,13 +21,19 @@ pdf = pd.concat([pdf, pdfn], ignore_index=True, sort=False)
 #pdf = pdf.fillna(0)
 bpdf = pd.concat([bpdf, bpdfn], ignore_index=True, sort=False)
 #bpdf = pdf.fillna(0)
+pdf[['noballs', 'wides','byes','legbyes','penalty']] = pdf[['noballs', 'wides','byes','legbyes','penalty']].fillna(0).astype(int)
+pdf['valid_ball'] = pdf.apply(lambda x: 1 if (x['wides'] == 0 and x['noballs'] == 0) else 0, axis=1)
+# Group by 'bowler' and 'match_id' to sum the 'bowler_wkt'
+dismissals_count = bpdf.groupby(['bowler', 'match_id'])['bowler_wkt'].sum()
+bbi = dismissals_count.groupby('bowler').max().reset_index().rename(columns={'bowler_wkt': 'bbi'})
+bidf = pd.merge(bidf, bbi, on='bowler')
 
 def show_match_details(match_id):
     # Filter match details for the selected match_id
     match_details = pdf[pdf['match_id'] == match_id]
     # First, remove duplicates based on match_id and ball within the same match
     print(f"Before removing duplicates based on 'match_id' and 'ball': {match_details.shape}")
-    # match_details = match_details.drop_duplicates(subset=['match_id', 'ball', 'inning','batsman','bowler','over'], keep='first')
+    match_details = match_details.drop_duplicates(subset=['match_id', 'ball', 'inning','batsman','bowler','over'], keep='first')
     print(f"After removing duplicates based on 'match_id' and 'ball': {match_details.shape}")
     
     if not match_details.empty:
