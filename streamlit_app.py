@@ -29,6 +29,7 @@ bbi = dismissals_count.groupby('bowler').max().reset_index().rename(columns={'bo
 bidf = pd.merge(bidf, bbi, on='bowler')
 
 def show_match_details(match_id):
+    print("Hello")
     # Filter match details for the selected match_id
     match_details = pdf[pdf['match_id'] == match_id]
     # First, remove duplicates based on match_id and ball within the same match
