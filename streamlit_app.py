@@ -1337,6 +1337,7 @@ if sidebar_option == "Player Profile":
                 for match_id in current_form_df['MATCH ID']:
                     if st.button(f'View Match {match_id}'):
                         print("Fn called")
+                        print(match_id)
                         show_match_details(match_id)
             else:
                 st.write("No recent matches found for this player.")
