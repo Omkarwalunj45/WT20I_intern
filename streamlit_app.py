@@ -30,6 +30,7 @@ bidf = pd.merge(bidf, bbi, on='bowler')
 
 def show_match_details(match_id):
     print("Hello")
+    match_id = object(match_id)
     # Filter match details for the selected match_id
     match_details = pdf[pdf['match_id'] == match_id]
     print(match_details.head())
