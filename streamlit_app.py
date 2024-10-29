@@ -1592,7 +1592,7 @@ elif sidebar_option == "Matchup Analysis":
             result_df=result_df[['INNING'] + [col for col in result_df.columns if col not in ['INNING']]]
             st.table(result_df.style.set_table_attributes("style='fsont-weight: bold;'"))
     else:
-    #     st.warning("No data available for the selected matchup.")
+         st.warning("No data available for the selected matchup.")
     # if grouping_option == "Year":
     #     tdf = pdf[(pdf['batsman'] == batter_name) & (pdf['bowler'] == bowler_name)]
 
