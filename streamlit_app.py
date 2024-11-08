@@ -2893,7 +2893,7 @@ else :
         
         # Draw base field elements with lighter outer green
         # boundary = plt.Circle((0, 0), 1, fill=True, color='#228B22', alpha=0.7) 
-        boundary = plt.Circle((0, 0), 1, fill=True, color='#228B22', alpha=0.7)# Lighter green
+        boundary = plt.Circle((0, 0), 1, fill=True, color='#228B22', alpha=0.5)# Lighter green
         boundary_line = plt.Circle((0, 0), 1, fill=False, color='black', linewidth=4)
         boundary_glow = plt.Circle((0, 0), 1, fill=False, color='black', linewidth=4, alpha=1)
         inner_circle = plt.Circle((0, 0), 0.5, fill=True, color='#90EE90')
