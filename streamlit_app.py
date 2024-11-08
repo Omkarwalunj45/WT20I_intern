@@ -217,9 +217,27 @@ def show_innings_scorecard(inning_data, title):
     batting_data['order'] = batting_data['Batsman'].apply(lambda x: batting_order.index(x) if x in batting_order else -1)
     batting_data = batting_data.sort_values(by='order').drop(columns='order').reset_index(drop=True)
     batting_data.index = batting_data.index + 1
+    batting_data['Last Name'] = batting_data['Batsman'].apply(lambda x: x.split()[-1])
+
+    # Step 2: Identify batsmen to remove based on the condition
+    to_remove = []
     
+    for idx, row in batting_data.iterrows():
+        if row['R'] == 0 and row['B'] == 0 and row['Wicket'] == '-':
+            # If last name appears again with non-zero R and B, mark for removal
+            last_name = row['Last Name']
+            if any((batting_data['Last Name'] == last_name) & (batting_data['R'] != 0) & (batting_data['B'] != 0)):
+                to_remove.append(idx)
+    
+    # Step 3: Remove batsmen identified
+    batting_data_filtered = batting_data.drop(to_remove).reset_index(drop=True)
+    
+    # Step 4: Reset index and remove the 'Last Name' column
+    batting_data_filtered = batting_data_filtered.drop(columns='Last Name')
+    batting_data_filtered.index = batting_data_filtered.index + 1
+
     # Display the batting table
-    st.table(batting_data)
+    st.table(batting_data_filtered)
     
     # Show extras
     st.write(f"**Extras:** {total_extras}")
