@@ -25,10 +25,7 @@ if 'batting Style' in pdfn.columns and 'bowling Style' in pdfn.columns:
     pdfn = pdfn.rename(columns={'batting Style': 'batting_style', 'bowling Style': 'bowling_style'})
 else:
     print("Columns 'batting Style' and/or 'bowling Style' not found.")
-if 'batting Style' in bdfn.columns and 'bowling Style' in bdfn.columns:
-    bdfn = bdfn.rename(columns={'batting Style': 'batting_style', 'bowling Style': 'bowling_style'})
-else:
-    print("Columns 'batting Style' and/or 'bowling Style' not found.")
+
 
 # Ensure that 'common_columns' match the order and columns in df2
 common_columns = [col for col in pdf.columns if col in pdf.columns]
