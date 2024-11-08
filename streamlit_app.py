@@ -2860,6 +2860,100 @@ else :
             </div>
         """, unsafe_allow_html=True)
     
+    # def get_sector_angle(zone, batting_style, offset=0):
+    #     base_angles = {
+    #         1: 45,   # Third Man
+    #         2: 90,   # Point
+    #         3: 135,  # Covers
+    #         4: 180,  # Mid-off
+    #         5: 225,  # Mid-on
+    #         6: 270,  # Mid-wicket
+    #         7: 315,  # Square leg
+    #         8: 360   # Fine leg
+    #     }
+    #     angle = base_angles[zone] + offset
+    #     # if batting_style == 'LHB':
+    #     #     angle = (180 + angle) % 360
+    #     return np.radians(angle)
+
+    # def get_line_properties(runs):
+    #     properties = {
+    #         1: {'color': 'darkgreen', 'length': 0.5, 'width': 2.5,'alpha':1},    
+    #         2: {'color': 'darkblue', 'length': 0.65, 'width': 2.5},    
+    #         3: {'color': 'darkviolet', 'length': 0.8, 'width': 2.5},   
+    #         4: {'color': 'goldenrod', 'length': 1.0, 'width': 3},     
+    #         6: {'color': 'maroon', 'length': 1.1, 'width': 4}     
+    #     }
+    #     return properties.get(runs, None)
+
+    # def draw_cricket_field_with_wagon_wheel(final_df):
+    #     fig, ax = plt.subplots(figsize=(10, 10))
+    #     ax.set_aspect('equal')
+    #     ax.axis('off')
+        
+    #     # Draw base field elements with lighter outer green
+    #     # boundary = plt.Circle((0, 0), 1, fill=True, color='#228B22', alpha=0.7) 
+    #     boundary = plt.Circle((0, 0), 1, fill=True, color='#228B22', alpha=0.7)# Lighter green
+    #     boundary_line = plt.Circle((0, 0), 1, fill=False, color='black', linewidth=4)
+    #     boundary_glow = plt.Circle((0, 0), 1, fill=False, color='black', linewidth=4, alpha=1)
+    #     inner_circle = plt.Circle((0, 0), 0.5, fill=True, color='#90EE90')
+    #     inner_circle_line = plt.Circle((0, 0), 0.5, fill=False, color='white', linewidth=1)
+        
+    #     # Add title
+    #     plt.title('WAGON WHEEL', pad=2, color='white', size=8, fontweight='bold')
+        
+    #     # Draw sector lines
+    #     angles = np.linspace(0, 2*np.pi, 9)[:-1]
+    #     for angle in angles:
+    #         x = np.cos(angle)
+    #         y = np.sin(angle)
+    #         ax.plot([0, x], [0, y], color='white', alpha=0.2, linewidth=1)
+        
+    #     # Draw pitch rectangle
+    #     pitch_width = 0.08
+    #     pitch_length = 0.16
+    #     pitch_rect = plt.Rectangle((-pitch_width/2, -pitch_length/2), 
+    #                             pitch_width, pitch_length, 
+    #                             color='tan', alpha=1)
+        
+    #     # Add base elements to plot
+    #     ax.add_patch(boundary)
+    #     ax.add_patch(boundary_glow)
+    #     ax.add_patch(boundary_line)
+    #     ax.add_patch(inner_circle)
+    #     ax.add_patch(inner_circle_line)
+    #     ax.add_patch(pitch_rect)
+        
+    #     # Group shots by zone to handle overlapping
+    #     for zone in range(1, 9):
+    #         zone_shots = final_df[final_df['wagonZone'] == zone]
+    #         zone_shots = zone_shots.sort_values('batsman_runs', ascending=False)
+            
+    #         num_shots = len(zone_shots)
+    #         if num_shots > 1:
+    #             offsets = np.linspace(-15, 15, num_shots)
+    #         else:
+    #             offsets = [0]
+            
+    #         for (_, shot), offset in zip(zone_shots.iterrows(), offsets):
+    #             angle = get_sector_angle(shot['wagonZone'], shot['batting_style'], offset)
+    #             props = get_line_properties(shot['batsman_runs'])
+                
+    #             x = props['length'] * np.cos(angle)
+    #             y = props['length'] * np.sin(angle)
+                
+    #             ax.plot([0, x], [0, y], 
+    #                 color=props['color'], 
+    #                 linewidth=props['width'], 
+    #                 alpha=0.9,  # Increased line opacity
+    #                 solid_capstyle='round')
+        
+    #     ax.set_xlim(-1.2, 1.2)
+    #     ax.set_ylim(-1.2, 1.2)
+    #     plt.tight_layout(pad=0)
+        
+    #     return fig
+    # left_col, right_col = st.columns([2, 4])
     def get_sector_angle(zone, batting_style, offset=0):
         base_angles = {
             1: 45,   # Third Man
@@ -2872,30 +2966,27 @@ else :
             8: 360   # Fine leg
         }
         angle = base_angles[zone] + offset
-        # if batting_style == 'LHB':
-        #     angle = (180 + angle) % 360
         return np.radians(angle)
-
+    
     def get_line_properties(runs):
         properties = {
-            1: {'color': 'darkgreen', 'length': 0.5, 'width': 2.5,'alpha':1},    
-            2: {'color': 'darkblue', 'length': 0.65, 'width': 2.5},    
-            3: {'color': 'darkviolet', 'length': 0.8, 'width': 2.5},   
-            4: {'color': 'goldenrod', 'length': 1.0, 'width': 3},     
-            6: {'color': 'maroon', 'length': 1.1, 'width': 4}     
+            1: {'color': 'darkgreen', 'length': 0.5, 'width': 3, 'alpha': 1},  # Increased width
+            2: {'color': 'darkblue', 'length': 0.65, 'width': 3},  # Increased width
+            3: {'color': 'darkviolet', 'length': 0.8, 'width': 3},  # Increased width
+            4: {'color': 'goldenrod', 'length': 1.0, 'width': 4},  # Increased width
+            6: {'color': 'maroon', 'length': 1.1, 'width': 5}  # Increased width
         }
-        return properties.get(runs, {'color': 'white', 'length': 0.4, 'width': 1,'alpha':1})
-
+        return properties.get(runs, None)
+    
     def draw_cricket_field_with_wagon_wheel(final_df):
-        fig, ax = plt.subplots(figsize=(10, 10))
+        fig, ax = plt.subplots(figsize=(12, 12))  # Increased size to (12, 12)
         ax.set_aspect('equal')
         ax.axis('off')
         
         # Draw base field elements with lighter outer green
-        # boundary = plt.Circle((0, 0), 1, fill=True, color='#228B22', alpha=0.7) 
-        boundary = plt.Circle((0, 0), 1, fill=True, color='#228B22', alpha=1)# Lighter green
-        boundary_line = plt.Circle((0, 0), 1, fill=False, color='black', linewidth=4)
-        boundary_glow = plt.Circle((0, 0), 1, fill=False, color='black', linewidth=4, alpha=1)
+        boundary = plt.Circle((0, 0), 1, fill=True, color='#228B22', alpha=0.5)  # Reduced alpha for lighter outer green
+        boundary_line = plt.Circle((0, 0), 1, fill=False, color='black', linewidth=6)  # Increased line thickness
+        boundary_glow = plt.Circle((0, 0), 1, fill=False, color='black', linewidth=6, alpha=1)  # Increased line thickness
         inner_circle = plt.Circle((0, 0), 0.5, fill=True, color='#90EE90')
         inner_circle_line = plt.Circle((0, 0), 0.5, fill=False, color='white', linewidth=1)
         
@@ -2903,18 +2994,16 @@ else :
         plt.title('WAGON WHEEL', pad=2, color='white', size=8, fontweight='bold')
         
         # Draw sector lines
-        angles = np.linspace(0, 2*np.pi, 9)[:-1]
+        angles = np.linspace(0, 2 * np.pi, 9)[:-1]
         for angle in angles:
             x = np.cos(angle)
             y = np.sin(angle)
-            ax.plot([0, x], [0, y], color='white', alpha=0.2, linewidth=1)
+            ax.plot([0, x], [0, y], color='white', alpha=0.2, linewidth=3)  # Increased line thickness for sector lines
         
         # Draw pitch rectangle
         pitch_width = 0.08
         pitch_length = 0.16
-        pitch_rect = plt.Rectangle((-pitch_width/2, -pitch_length/2), 
-                                pitch_width, pitch_length, 
-                                color='tan', alpha=1)
+        pitch_rect = plt.Rectangle((-pitch_width/2, -pitch_length/2), pitch_width, pitch_length, color='tan', alpha=1)
         
         # Add base elements to plot
         ax.add_patch(boundary)
@@ -2942,18 +3031,14 @@ else :
                 x = props['length'] * np.cos(angle)
                 y = props['length'] * np.sin(angle)
                 
-                ax.plot([0, x], [0, y], 
-                    color=props['color'], 
-                    linewidth=props['width'], 
-                    alpha=0.9,  # Increased line opacity
-                    solid_capstyle='round')
+                ax.plot([0, x], [0, y], color=props['color'], linewidth=props['width'], alpha=0.9, solid_capstyle='round')
         
         ax.set_xlim(-1.2, 1.2)
         ax.set_ylim(-1.2, 1.2)
         plt.tight_layout(pad=0)
         
         return fig
-    left_col, right_col = st.columns([2, 4])
+        left_col, right_col = st.columns([2.5, 4])
         
     with left_col:
         st.markdown("## WAGON WHEEL")
