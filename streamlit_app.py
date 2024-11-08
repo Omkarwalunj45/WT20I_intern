@@ -58,6 +58,7 @@ print(merged_df.head())
 
 pdf[['noballs', 'wides','byes','legbyes']] = pdf[['noballs', 'wides','byes','legbyes']].fillna(0).astype(int)
 pdf['valid_ball'] = pdf.apply(lambda x: 1 if (x['wides'] == 0 and x['noballs'] == 0) else 0, axis=1)
+pdfn['valid_ball'] = pdfn.apply(lambda x: 1 if (x['wides'] == 0 and x['noballs'] == 0) else 0, axis=1)
 # Group by 'bowler' and 'match_id' to sum the 'bowler_wkt'
 dismissals_count = bpdf.groupby(['bowler', 'match_id'])['bowler_wkt'].sum()
 bbi = dismissals_count.groupby('bowler').max().reset_index().rename(columns={'bowler_wkt': 'bbi'})
