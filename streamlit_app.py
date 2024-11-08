@@ -2774,7 +2774,7 @@ else :
     batsman_selected = st.selectbox("Select Batsman", options=temp_df["batsman"].unique())
         
     # Filter the data for the selected batsman
-    filtered_df = temp_df[temp_df["batsman"] == batsman_selected]
+    final_df = temp_df[temp_df["batsman"] == batsman_selected]
     # Calculate statistics
     total_runs = final_df["batsman_runs"].sum()
     total_balls = final_df['valid_ball'].sum()
