@@ -11,7 +11,7 @@ pdfn = pd.read_csv("Dataset/wwc_2024_2.csv",low_memory=False)
 idf = pd.read_csv("Dataset/lifesaver_bat.csv",low_memory=False)
 info_df=pd.read_csv("Dataset/player_info_k.csv",low_memory=False)
 bpdf=pd.read_csv("Dataset/Mydataset.csv")
-bpdfn = pd.read_csv("Dataset/wcc_2024_2.csv",low_memory=False)
+bpdfn = pd.read_excel("Dataset/wwc_2024_2.xlsx",low_memory=False)
 bidf=pd.read_csv("Dataset/lifesaver_bowl.csv",low_memory=False)
 info_df=info_df.rename(columns={'Player':'Player_name'})
 cols_conv=['season','match_id']
