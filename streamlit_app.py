@@ -2775,6 +2775,7 @@ else :
         
     # Filter the data for the selected batsman
     final_df = temp_df[temp_df["batsman"] == batsman_selected]
+    fdf=final_df
     # Calculate statistics
     total_runs = final_df["batsman_runs"].sum()
     total_balls = final_df['valid_ball'].sum()
@@ -2951,11 +2952,8 @@ else :
         ax.set_xlim(-1.2, 1.2)
         ax.set_ylim(-1.2, 1.2)
         plt.tight_layout(pad=0)
-        
         return fig
-    left_col, right_col = st.columns([2, 4])
-
-        
+    left_col, right_col = st.columns([2, 4])        
     with left_col:
         st.markdown("## WAGON WHEEL")
         fig = draw_cricket_field_with_wagon_wheel(final_df)
@@ -2963,7 +2961,7 @@ else :
     
     with right_col:
         st.markdown("## PITCH MAP")
-        # pitch_map_image = draw_pitch_map(final_df)
+        # pitch_map_image = draw_pitch_map(fdf)
         # # st.pyplot(fig, use_container_width=True)
         # st.image(pitch_map_image, use_column_width=True)
 
