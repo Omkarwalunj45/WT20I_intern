@@ -2939,7 +2939,6 @@ else :
             for (_, shot), offset in zip(zone_shots.iterrows(), offsets):
                 angle = get_sector_angle(shot['wagonZone'], shot['batting_style'], offset)
                 props = get_line_properties(shot['batsman_runs'])
-                
                 x = props['length'] * np.cos(angle)
                 y = props['length'] * np.sin(angle)
                 
