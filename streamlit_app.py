@@ -2951,10 +2951,10 @@ else :
                 # y = props['length'] * np.sin(angle)
                 
                 ax.plot([0, x], [0, y], 
-                    color=props['color'], 
-                    linewidth=props['width'], 
-                    alpha=0.9,  # Increased line opacity
-                    solid_capstyle='round')
+                color=props['color'], 
+                linewidth=props['width'], 
+                alpha=0.9,  # Increased line opacity
+                solid_capstyle='round')
         
         ax.set_xlim(-1.2, 1.2)
         ax.set_ylim(-1.2, 1.2)
