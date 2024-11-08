@@ -2939,8 +2939,16 @@ else :
             for (_, shot), offset in zip(zone_shots.iterrows(), offsets):
                 angle = get_sector_angle(shot['wagonZone'], shot['batting_style'], offset)
                 props = get_line_properties(shot['batsman_runs'])
-                x = props['length'] * np.cos(angle)
-                y = props['length'] * np.sin(angle)
+                if props:
+                    x = props['length'] * np.cos(angle)
+                    y = props['length'] * np.sin(angle)
+                    ax.plot([0, x], [0, y], 
+                            color=props['color'], 
+                            linewidth=props['width'], 
+                            alpha=0.9,  # Increased line opacity
+                            solid_capstyle='round')
+                # x = props['length'] * np.cos(angle)
+                # y = props['length'] * np.sin(angle)
                 
                 ax.plot([0, x], [0, y], 
                     color=props['color'], 
