@@ -228,6 +228,7 @@ def show_innings_scorecard(inning_data, title):
             last_name = row['Last Name']
             if any((batting_data['Last Name'] == last_name) & (batting_data['R'] != 0) & (batting_data['B'] != 0)):
                 to_remove.append(idx)
+    to_remove += batting_data[batting_data['Batsman'] == 'AC Jayangani'].index.tolist()
     
     # Step 3: Remove batsmen identified
     batting_data_filtered = batting_data.drop(to_remove).reset_index(drop=True)
@@ -254,7 +255,7 @@ def show_innings_scorecard(inning_data, title):
         if bowler not in bowling_order:
             bowling_order.append(bowler)
     
-    inning_data['adjusted_runs'] = inning_data.apply(lambda row: row['total_runs'] - (row['byes'] + row['legbyes'] + row['penalty']), axis=1)
+    inning_data['adjusted_runs'] = inning_data.apply(lambda row: row['total_runs'] - (row['byes'] + row['legbyes']), axis=1)
     bowling_data = inning_data.groupby(['bowler']).agg({
         'valid_ball': 'sum',
         'adjusted_runs': 'sum',
