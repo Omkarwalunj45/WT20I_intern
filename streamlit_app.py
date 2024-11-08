@@ -7,21 +7,47 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title='WT20I Performance Analysis Portal', layout='wide')
 st.title('WT20I Performance Analysis Portal')
 pdf = pd.read_csv("Dataset/Mydataset.csv",low_memory=False)
-pdfn = pd.read_csv("Dataset/fant.csv",low_memory=False)
+pdfn = pd.read_csv("Dataset/wcc_2024_2.csv",low_memory=False)
 idf = pd.read_csv("Dataset/lifesaver_bat.csv",low_memory=False)
 info_df=pd.read_csv("Dataset/player_info_k.csv",low_memory=False)
 bpdf=pd.read_csv("Dataset/Mydataset.csv")
-bpdfn = pd.read_csv("Dataset/fant.csv",low_memory=False)
+bpdfn = pd.read_csv("Dataset/wcc_2024_2.csv",low_memory=False)
 bidf=pd.read_csv("Dataset/lifesaver_bowl.csv",low_memory=False)
 info_df=info_df.rename(columns={'Player':'Player_name'})
 cols_conv=['season','match_id']
 pdfn[cols_conv] = pdfn[cols_conv].astype(str)
 bpdfn[cols_conv] = bpdfn[cols_conv].astype(str)
-pdf = pd.concat([pdf, pdfn], ignore_index=True, sort=False)
-#pdf = pdf.fillna(0)
-bpdf = pd.concat([bpdf, bpdfn], ignore_index=True, sort=False)
-#bpdf = pdf.fillna(0)
-pdf[['noballs', 'wides','byes','legbyes','penalty']] = pdf[['noballs', 'wides','byes','legbyes','penalty']].fillna(0).astype(int)
+pdfn=pdfn.drop(columns=['Unnamed: 0'])
+pdf=pdf.drop(columns=['penalty'])
+bdfn=bdfn.drop(columns=['Unnamed: 0'])
+bdf=bdf.drop(columns=['penalty'])
+if 'batting Style' in pdfn.columns and 'bowling Style' in pdfn.columns:
+    pdfn = pdfn.rename(columns={'batting Style': 'batting_style', 'bowling Style': 'bowling_style'})
+else:
+    print("Columns 'batting Style' and/or 'bowling Style' not found.")
+if 'batting Style' in bdfn.columns and 'bowling Style' in bdfn.columns:
+    bdfn = bdfn.rename(columns={'batting Style': 'batting_style', 'bowling Style': 'bowling_style'})
+else:
+    print("Columns 'batting Style' and/or 'bowling Style' not found.")
+
+# Ensure that 'common_columns' match the order and columns in df2
+common_columns = [col for col in pdf.columns if col in pdf.columns]
+
+# Combine df2 columns in order and add any additional columns from df1 at the end
+all_columns = common_columns + [col for col in pdfn.columns if col not in common_columns]
+
+# Reorder df1 columns to match df2's order, with extra df1 columns appended at the end
+pdfn = pdfn[all_columns]
+
+# Concatenate df1 and df2 along the rows, ensuring column alignment
+merged_df = pd.concat([pdfn, pdf], ignore_index=True)
+pdf=merged_df
+bpdf=merged_df
+# Display the merged DataFrame
+print("Merged DataFrame:")
+print(merged_df.head())
+
+pdf[['noballs', 'wides','byes','legbyes']] = pdf[['noballs', 'wides','byes','legbyes']].fillna(0).astype(int)
 pdf['valid_ball'] = pdf.apply(lambda x: 1 if (x['wides'] == 0 and x['noballs'] == 0) else 0, axis=1)
 # Group by 'bowler' and 'match_id' to sum the 'bowler_wkt'
 dismissals_count = bpdf.groupby(['bowler', 'match_id'])['bowler_wkt'].sum()
