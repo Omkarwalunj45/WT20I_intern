@@ -2778,7 +2778,7 @@ else :
 
     # Main section - Career Stat Type selection
     option = st.selectbox("Select Analysis Dimension", ("Batsman Analysis", "Bowler Analysis"))
-    temp_df=df
+    # temp_df=df
     batsman_selected = st.selectbox("Select Batsman", options=temp_df["batsman"].unique())
         
     # Filter the data for the selected batsman
