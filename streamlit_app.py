@@ -2762,44 +2762,21 @@ elif sidebar_option == "Strength vs Weakness":
 else :
     st.header("ICC WT20I 2024")
     df=pdfn
-    st.markdown("Match by Match Analysis")
+    temp_df=df
+    df['wagonZone'] = df['wagonZone'].str.extract('(\d+)').astype(int)
     st.sidebar.title("Match by Match Analysis")
-    match_id = st.sidebar.selectbox("Select Match ID", options=df["match_id"].unique())
-    match_data = df[df["match_id"] == match_id].iloc[0]
-    batting_team = match_data["batting_team"]
-    bowling_team = match_data["bowling_team"]
-    venue = match_data["venue"]
-    start_date = match_data["start_date"]
-
-    st.write(f"**{batting_team}** vs **{bowling_team}**")
-    st.write(f"**Venue:** {venue}")
-    st.write(f"**Start Date:** {start_date}")
-    temp_df = df[df["match_id"] == match_id]
-
     # Main section - Career Stat Type selection
     option = st.selectbox("Select Analysis Dimension", ("Batsman Analysis", "Bowler Analysis"))
-    # temp_df=df
     batsman_selected = st.selectbox("Select Batsman", options=temp_df["batsman"].unique())
         
     # Filter the data for the selected batsman
     filtered_df = temp_df[temp_df["batsman"] == batsman_selected]
-    
-    # Step 2: Select a bowler with 'All' option included
-    bowler_options = ["All"] + filtered_df["bowler"].unique().tolist()
-    bowler_selected = st.selectbox("Select Bowler", options=bowler_options)
-    
-    # Further filter based on the bowler selection
-    if bowler_selected == "All":
-        final_df = filtered_df  # Only filter by batsman
-    else:
-        final_df = filtered_df[filtered_df["bowler"] == bowler_selected]  # Filter by both batsman and bowler
-        
     # Calculate statistics
     total_runs = final_df["batsman_runs"].sum()
     total_balls = final_df['valid_ball'].sum()
     total_dismissals = final_df["is_wkt"].sum()
     strike_rate = (total_runs / total_balls) * 100 if total_balls > 0 else 0
-    avg_runs = total_runs / total_dismissals if total_dismissals > 0 else total_runs
+    avg_runs = total_runs / total_dismissals if total_dismissals > 0
 
     # Count for each scoring shot type
     total_zeros = final_df["is_dot"].sum()
@@ -2891,8 +2868,8 @@ else :
             8: 360   # Fine leg
         }
         angle = base_angles[zone] + offset
-        if batting_style == 'LHB':
-            angle = (180 + angle) % 360
+        # if batting_style == 'LHB':
+        #     angle = (180 + angle) % 360
         return np.radians(angle)
 
     def get_line_properties(runs):
