@@ -766,7 +766,7 @@ pdf['bowling_style'] = pdf['bowling_style'].replace(bowling_style_mapping)
 # Sidebar for selecting between "Player Profile" and "Matchup Analysis"
 sidebar_option = st.sidebar.radio(
     "Select an option:",
-    ("Player Profile", "Matchup Analysis","Strength vs Weakness","Team Builder")
+    ("Player Profile", "Matchup Analysis","Strength vs Weakness","ICC WT20I 2024 Analysis")
 )
 
 if sidebar_option == "Player Profile":
@@ -2757,4 +2757,228 @@ elif sidebar_option == "Strength vs Weakness":
             st.pyplot(plt)
 
 else :
-    st.header("Team Builder")
+    st.header("ICC WT20I 2024")
+    df=pdfn
+    st.markdown("Match by Match Analysis")
+    st.sidebar.title("Match by Match Analysis")
+    match_id = st.sidebar.selectbox("Select Match ID", options=df["match_id"].unique())
+    match_data = df[df["match_id"] == match_id].iloc[0]
+    batting_team = match_data["batting_team"]
+    bowling_team = match_data["bowling_team"]
+    venue = match_data["venue"]
+    start_date = match_data["start_date"]
+
+    st.write(f"**{batting_team}** vs **{bowling_team}**")
+    st.write(f"**Venue:** {venue}")
+    st.write(f"**Start Date:** {start_date}")
+    temp_df = df[df["match_id"] == match_id]
+
+    # Main section - Career Stat Type selection
+    option = st.selectbox("Select Analysis Dimension", ("Batsman Analysis", "Bowler Analysis"))
+    temp_df=df
+    batsman_selected = st.selectbox("Select Batsman", options=temp_df["batsman"].unique())
+        
+    # Filter the data for the selected batsman
+    filtered_df = temp_df[temp_df["batsman"] == batsman_selected]
+    
+    # Step 2: Select a bowler with 'All' option included
+    bowler_options = ["All"] + filtered_df["bowler"].unique().tolist()
+    bowler_selected = st.selectbox("Select Bowler", options=bowler_options)
+    
+    # Further filter based on the bowler selection
+    if bowler_selected == "All":
+        final_df = filtered_df  # Only filter by batsman
+    else:
+        final_df = filtered_df[filtered_df["bowler"] == bowler_selected]  # Filter by both batsman and bowler
+        
+    # Calculate statistics
+    total_runs = final_df["batsman_runs"].sum()
+    total_balls = final_df["ballfaced"].sum()
+    total_dismissals = final_df["is_wicket"].sum()
+    strike_rate = (total_runs / total_balls) * 100 if total_balls > 0 else 0
+    avg_runs = total_runs / total_dismissals if total_dismissals > 0 else total_runs
+
+    # Count for each scoring shot type
+    total_zeros = final_df["is_dot"].sum()
+    total_ones = final_df["is_one"].sum()
+    total_twos = final_df["is_two"].sum()
+    total_threes = final_df["is_three"].sum()
+    total_fours = final_df["is_four"].sum()
+    total_sixes = final_df["is_six"].sum()
+
+    # Calculate percentages
+    total_balls_for_percentage = total_zeros + total_ones + total_twos + total_threes + total_fours + total_sixes
+    
+    def calc_percentage(value, total):
+        return f"{(value / total * 100):.1f}%" if total > 0 else "0%"
+    percent_zeros = (total_zeros / total_balls) * 100 if total_balls > 0 else 0
+    percent_ones = (total_ones / total_balls) * 100 if total_balls > 0 else 0
+    percent_twos = (total_twos / total_balls) * 100 if total_balls > 0 else 0
+    percent_threes = (total_threes / total_balls) * 100 if total_balls > 0 else 0
+    percent_fours = (total_fours / total_balls) * 100 if total_balls > 0 else 0
+    percent_sixes = (total_sixes / total_balls) * 100 if total_balls > 0 else 0
+
+    with st.container():
+        # Create a compact stats box with a grey background and padding
+        st.markdown(
+            f"""
+            <style>
+                .stats-box {{
+                    background-color: #f0f0f0;
+                    padding: 15px;
+                    border-radius: 10px;
+                    font-family: Arial, sans-serif;
+                    color: #333;
+                }}
+                .stats-title {{
+                    font-size: 20px;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }}
+                .stats-details {{
+                    font-size: 16px;
+                    font-weight: bold;
+                }}
+                .compact-line {{
+                    font-size: 14px;
+                }}
+                .bold {{
+                    font-weight: bold;
+                }}
+            </style>
+            """, unsafe_allow_html=True)
+        st.markdown(f"""
+            <div class="stats-box">
+                <div class="stats-title">{batsman_selected} {f'vs {bowler_selected}' if bowler_selected != 'All' else '(All)'}</div>
+                <div class="stats-details">
+                    Runs: {int(total_runs)}  
+                </div>
+                <div class="stats-details">
+                    Balls: {int(total_balls)}  
+                </div>
+                <div class="stats-details">
+                    Wickets: {int(total_dismissals)} 🟥
+                </div>
+                <div class="stats-details">
+                    S/R: {strike_rate:.1f}  
+                </div>
+                <div class="stats-details">
+                    Avg: {avg_runs:.1f}
+                </div>
+                <div class="compact-line">
+                    <span class="bold">0s:</span> <span class="white-square"></span> ({percent_zeros:.1f}%) | 
+                    <span class="bold">1s:</span> {int(total_ones)} 🟩 ({percent_ones:.1f}%) | 
+                    <span class="bold">2s:</span> {int(total_twos)} 🟦 ({percent_twos:.1f}%) | 
+                    <span class="bold">3s:</span> {int(total_threes)} 🟪 ({percent_threes:.1f}%) | 
+                    <span class="bold">4s:</span> {int(total_fours)} 🟨 ({percent_fours:.1f}%) | 
+                    <span class="bold">6s:</span> {int(total_sixes)} 🟫 ({percent_sixes:.1f}%)
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
+    
+    def get_sector_angle(zone, batting_style, offset=0):
+        base_angles = {
+            1: 45,   # Third Man
+            2: 90,   # Point
+            3: 135,  # Covers
+            4: 180,  # Mid-off
+            5: 225,  # Mid-on
+            6: 270,  # Mid-wicket
+            7: 315,  # Square leg
+            8: 360   # Fine leg
+        }
+        angle = base_angles[zone] + offset
+        if batting_style == 'LHB':
+            angle = (180 + angle) % 360
+        return np.radians(angle)
+
+    def get_line_properties(runs):
+        properties = {
+            1: {'color': 'darkgreen', 'length': 0.5, 'width': 2.5,'alpha':1},    
+            2: {'color': 'darkblue', 'length': 0.65, 'width': 2.5},    
+            3: {'color': 'darkviolet', 'length': 0.8, 'width': 2.5},   
+            4: {'color': 'goldenrod', 'length': 1.0, 'width': 3},     
+            6: {'color': 'maroon', 'length': 1.1, 'width': 4}     
+        }
+        return properties.get(runs, {'color': 'white', 'length': 0.4, 'width': 1,'alpha':1})
+
+    def draw_cricket_field_with_wagon_wheel(final_df):
+        fig, ax = plt.subplots(figsize=(10, 10))
+        ax.set_aspect('equal')
+        ax.axis('off')
+        
+        # Draw base field elements with lighter outer green
+        # boundary = plt.Circle((0, 0), 1, fill=True, color='#228B22', alpha=0.7) 
+        boundary = plt.Circle((0, 0), 1, fill=True, color='#228B22', alpha=1)# Lighter green
+        boundary_line = plt.Circle((0, 0), 1, fill=False, color='black', linewidth=4)
+        boundary_glow = plt.Circle((0, 0), 1, fill=False, color='black', linewidth=4, alpha=1)
+        inner_circle = plt.Circle((0, 0), 0.5, fill=True, color='#90EE90')
+        inner_circle_line = plt.Circle((0, 0), 0.5, fill=False, color='white', linewidth=1)
+        
+        # Add title
+        plt.title('WAGON WHEEL', pad=2, color='white', size=8, fontweight='bold')
+        
+        # Draw sector lines
+        angles = np.linspace(0, 2*np.pi, 9)[:-1]
+        for angle in angles:
+            x = np.cos(angle)
+            y = np.sin(angle)
+            ax.plot([0, x], [0, y], color='white', alpha=0.2, linewidth=1)
+        
+        # Draw pitch rectangle
+        pitch_width = 0.08
+        pitch_length = 0.16
+        pitch_rect = plt.Rectangle((-pitch_width/2, -pitch_length/2), 
+                                pitch_width, pitch_length, 
+                                color='tan', alpha=1)
+        
+        # Add base elements to plot
+        ax.add_patch(boundary)
+        ax.add_patch(boundary_glow)
+        ax.add_patch(boundary_line)
+        ax.add_patch(inner_circle)
+        ax.add_patch(inner_circle_line)
+        ax.add_patch(pitch_rect)
+        
+        # Group shots by zone to handle overlapping
+        for zone in range(1, 9):
+            zone_shots = final_df[final_df['wagonZone'] == zone]
+            zone_shots = zone_shots.sort_values('batsman_runs', ascending=False)
+            
+            num_shots = len(zone_shots)
+            if num_shots > 1:
+                offsets = np.linspace(-15, 15, num_shots)
+            else:
+                offsets = [0]
+            
+            for (_, shot), offset in zip(zone_shots.iterrows(), offsets):
+                angle = get_sector_angle(shot['wagonZone'], shot['batting_style'], offset)
+                props = get_line_properties(shot['batsman_runs'])
+                
+                x = props['length'] * np.cos(angle)
+                y = props['length'] * np.sin(angle)
+                
+                ax.plot([0, x], [0, y], 
+                    color=props['color'], 
+                    linewidth=props['width'], 
+                    alpha=0.9,  # Increased line opacity
+                    solid_capstyle='round')
+        
+        ax.set_xlim(-1.2, 1.2)
+        ax.set_ylim(-1.2, 1.2)
+        plt.tight_layout(pad=0)
+        
+        return fig
+    left_col, right_col = st.columns([2, 4])
+        
+    with left_col:
+        st.markdown("## WAGON WHEEL")
+        fig = draw_cricket_field_with_wagon_wheel(final_df)
+        st.pyplot(fig, use_container_width=True)
+    
+    with right_col:
+        st.markdown("## PITCH MAP")
+        # pitch_map_image = draw_pitch_map(final_df)
+        # # st.pyplot(fig, use_container_width=True)
+        # st.image(pitch_map_image, use_column_width=True)
+
