@@ -30,6 +30,8 @@ pdf=pdf.drop(columns=['penalty'])
 bpdfn=bpdfn.drop(columns=['Unnamed: 0'])
 bpdf=bpdf.drop(columns=['penalty'])
 idf=idf[(idf['final_year']=='2024/25')]
+pdfn = pdfn.drop_duplicates(subset=['match_id', 'ball','inning'], keep='first')
+bpdfn = bpdfn.drop_duplicates(subset=['match_id', 'ball','inning'], keep='first')
 if 'batting Style' in pdfn.columns and 'bowling Style' in pdfn.columns:
     pdfn = pdfn.rename(columns={'batting Style': 'batting_style', 'bowling Style': 'bowling_style'})
 else:
