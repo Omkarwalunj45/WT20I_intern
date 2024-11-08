@@ -48,6 +48,9 @@ pdfn = pdfn[all_columns]
 # Concatenate df1 and df2 along the rows, ensuring column alignment
 merged_df = pd.concat([pdfn, pdf], ignore_index=True)
 pdf=merged_df
+pdfn['bowler'] = pdfn['bowler'].replace('AC Jayangani', 'Chamari Athapaththu')
+pdfn['batsman'] = pdfn['batsman'].replace('AC Jayangani', 'Chamari Athapaththu')
+pdfn['non_striker'] = pdfn['non_striker'].replace('AC Jayangani', 'Chamari Athapaththu')
 bpdf=merged_df
 # Display the merged DataFrame
 print("Merged DataFrame:")
