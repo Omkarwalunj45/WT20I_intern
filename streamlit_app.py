@@ -19,6 +19,8 @@ pdfn[cols_conv] = pdfn[cols_conv].astype(str)
 bpdfn[cols_conv] = bpdfn[cols_conv].astype(str)
 pdfn=pdfn.drop(columns=['Unnamed: 0'])
 pdf=pdf.drop(columns=['penalty'])
+bpdfn=bpdfn.drop(columns=['Unnamed: 0'])
+bpdf=bpdf.drop(columns=['penalty'])
 if 'batting Style' in pdfn.columns and 'bowling Style' in pdfn.columns:
     pdfn = pdfn.rename(columns={'batting Style': 'batting_style', 'bowling Style': 'bowling_style'})
 else:
