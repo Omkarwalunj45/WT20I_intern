@@ -2762,8 +2762,12 @@ elif sidebar_option == "Strength vs Weakness":
 else :
     st.header("ICC WT20I 2024")
     df=pdfn
+    df['wagonZone'] = df['wagonZone'].str.extract('(\d+)')
+    
+    # Replace NaN with -1 and convert the column to integers
+    df['wagonZone'] = df['wagonZone'].fillna(-1).astype(int)
     temp_df=df
-    df['wagonZone'] = df['wagonZone'].str.extract('(\d+)').astype(int)
+    
     st.sidebar.title("Match by Match Analysis")
     # Main section - Career Stat Type selection
     option = st.selectbox("Select Analysis Dimension", ("Batsman Analysis", "Bowler Analysis"))
