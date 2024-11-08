@@ -3038,7 +3038,7 @@ else :
         plt.tight_layout(pad=0)
         
         return fig
-        left_col, right_col = st.columns([2.5, 4])
+    left_col, right_col = st.columns([2.5, 4])
         
     with left_col:
         st.markdown("## WAGON WHEEL")
