@@ -2968,6 +2968,59 @@ else :
     
     with right_col:
         st.markdown("## PITCH MAP")
+        from PIL import Image
+        import seaborn as sns
+        
+        # Load the image
+        image = Image.open('pitch_map.png')
+        
+        # Define the mapping between Line and Length values
+        line_map = {
+            -2: 0,
+            -1: 1,
+            0: 2,
+            1: 3,
+            2: 4
+        }
+        
+        length_map = {
+            'Yorker': 0,
+            'Full': 1,
+            'Good Length': 2,
+            'Short of Good Length': 3,
+            'Short': 4
+        }
+        
+        # Function to create the pitch map
+        def create_pitch_map(final_df, batting_style):
+            # Determine the column order based on the batting hand
+            if batting_style == 'Right-hand bat':
+                column_order = [-2, -1, 0, 1, 2]
+            else:
+                column_order = [2, 1, 0, -1, -2]
+        
+            # Create a 5x5 heatmap
+            pitch_map = np.zeros((5, 5))
+        
+            # Populate the pitch map based on the data in final_df
+            for _, row in final_df.iterrows():
+                line_index = line_map[row['Line']]
+                length_index = length_map[row['Length']]
+                pitch_map[length_index, line_index] += 1
+        
+            # Create the pitch map visualization
+            fig, ax = plt.subplots(figsize=(8, 6))
+            ax.imshow(image)
+            sns.heatmap(pitch_map, annot=True, cmap='YlOrRd', cbar=False, ax=ax)
+            ax.set_xticks(np.arange(len(column_order)))
+            ax.set_xticklabels([str(x) for x in column_order])
+            ax.set_yticks(np.arange(len(list(length_map.keys()))))
+            ax.set_yticklabels(list(length_map.keys())[::-1])
+            ax.set_title("Pitch Map")
+            st.pyplot(fig)
+        
+        # Assuming you have the 'final_df' dataset with the 'Line' and 'Length' columns
+        create_pitch_map(final_df, 'Right-hand bat')
         # pitch_map_image = draw_pitch_map(fdf)
         # # st.pyplot(fig, use_container_width=True)
         # st.image(pitch_map_image, use_column_width=True)
