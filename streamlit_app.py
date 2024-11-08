@@ -2795,7 +2795,7 @@ else :
     # Calculate statistics
     total_runs = final_df["batsman_runs"].sum()
     total_balls = final_df['valid_ball'].sum()
-    total_dismissals = final_df["is_wicket"].sum()
+    total_dismissals = final_df["is_wkt"].sum()
     strike_rate = (total_runs / total_balls) * 100 if total_balls > 0 else 0
     avg_runs = total_runs / total_dismissals if total_dismissals > 0 else total_runs
 
