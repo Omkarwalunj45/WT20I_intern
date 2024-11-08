@@ -2833,7 +2833,7 @@ else :
             """, unsafe_allow_html=True)
         st.markdown(f"""
             <div class="stats-box">
-                <div class="stats-title">{batsman_selected} {f'vs {bowler_selected}' if bowler_selected != 'All' else '(All)'}</div>
+                <div class="stats-title">{batsman_selected}</div>
                 <div class="stats-details">
                     Runs: {int(total_runs)}  
                 </div>
