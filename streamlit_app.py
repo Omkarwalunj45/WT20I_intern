@@ -1137,7 +1137,7 @@ if sidebar_option == "Player Profile":
                     # Convert column names to uppercase and replace underscores with spaces
                     player_stats.columns = [col.upper().replace('_', ' ') for col in player_stats.columns]
                     player_stats=player_stats.rename(columns={'BBI X':'BBI'})
-                    player_stats.drop(columns=['BBI Y'])
+                    player_stats=player_stats.drop(columns=['BBI Y'])
                         
                         # Function to round float values if necessary (assuming round_up_floats exists)
                     player_stats = round_up_floats(player_stats)
