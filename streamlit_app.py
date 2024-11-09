@@ -2848,7 +2848,7 @@ else :
                     Balls: {int(total_balls)}  
                 </div>
                 <div class="stats-details">
-                    Wickets: {int(total_dismissals)} 🟥
+                    Dismissals: {int(total_dismissals)} 🟥
                 </div>
                 <div class="stats-details">
                     S/R: {strike_rate:.1f}  
