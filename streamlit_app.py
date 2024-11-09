@@ -3026,7 +3026,7 @@ else :
             st.pyplot(fig)
         
         # Assuming you have the 'final_df' dataset with the 'Line' and 'Length' columns
-        create_pitch_map(final_df, 'Right-hand bat')
+        # create_pitch_map(final_df, 'Right-hand bat')
         # pitch_map_image = draw_pitch_map(fdf)
         # # st.pyplot(fig, use_container_width=True)
         # st.image(pitch_map_image, use_column_width=True)
