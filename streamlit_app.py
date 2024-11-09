@@ -234,6 +234,8 @@ def show_innings_scorecard(inning_data, title):
             if any((batting_data['Last Name'] == last_name) & (batting_data['Wicket'] != '-') ):
                 to_remove.append(idx)
     to_remove += batting_data[batting_data['Batsman'] == 'AC Jayangani'].index.tolist()
+    to_remove += batting_data[batting_data['Batsman'] == 'H Madavi'].index.tolist()
+    to_remove += batting_data[batting_data['Batsman'] == 'SIP Fernando'].index.tolist()
     
     # Step 3: Remove batsmen identified
     batting_data_filtered = batting_data.drop(to_remove).reset_index(drop=True)
