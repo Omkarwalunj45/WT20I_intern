@@ -2974,8 +2974,8 @@ else :
     
     with right_col:
         # st.markdown("## PITCH MAP")
-        from PIL import Image
-        import seaborn as sns
+        # from PIL import Image
+        # import seaborn as sns
         
         # Load the image
         image = Image.open('pitch_map.png')
