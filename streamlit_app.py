@@ -32,6 +32,8 @@ bpdf=bpdf.drop(columns=['penalty'])
 idf=idf[(idf['final_year']=='2024/25')]
 pdfn = pdfn.drop_duplicates(subset=['match_id', 'ball','inning'], keep='first')
 bpdfn = bpdfn.drop_duplicates(subset=['match_id', 'ball','inning'], keep='first')
+idf=idf.drop(columns=['Unnamed: 0'])
+bidf=bidf.drop(columns=['Unnamed: 0'])
 if 'batting Style' in pdfn.columns and 'bowling Style' in pdfn.columns:
     pdfn = pdfn.rename(columns={'batting Style': 'batting_style', 'bowling Style': 'bowling_style'})
 else:
@@ -1134,6 +1136,8 @@ if sidebar_option == "Player Profile":
             else:   
                     # Convert column names to uppercase and replace underscores with spaces
                     player_stats.columns = [col.upper().replace('_', ' ') for col in player_stats.columns]
+                    player_stats=player_stats.rename(columns={'BBI X':'BBI'})
+                    player_stats.drop(columns=['BBI Y'])
                         
                         # Function to round float values if necessary (assuming round_up_floats exists)
                     player_stats = round_up_floats(player_stats)
