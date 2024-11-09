@@ -2973,7 +2973,7 @@ else :
         st.pyplot(fig, use_container_width=True)
     
     with right_col:
-        st.markdown("## PITCH MAP in progress")
+        st.markdown("## PITCH MAP In Progress")
         # from PIL import Image
         # import seaborn as sns
         
