@@ -2966,14 +2966,14 @@ else :
         ax.set_ylim(-1.2, 1.2)
         plt.tight_layout(pad=0)
         return fig
-    left_col, right_col = st.columns([2, 4])        
+    left_col, right_col = st.columns([2.8, 4])        
     with left_col:
         st.markdown("## WAGON WHEEL")
         fig = draw_cricket_field_with_wagon_wheel(final_df)
         st.pyplot(fig, use_container_width=True)
     
     with right_col:
-        st.markdown("## PITCH MAP")
+        # st.markdown("## PITCH MAP")
         from PIL import Image
         import seaborn as sns
         
