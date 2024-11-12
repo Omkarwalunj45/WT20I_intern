@@ -2974,6 +2974,35 @@ else :
     
     with right_col:
         st.markdown("## PITCH MAP In Progress")
+        import matplotlib.pyplot as plt
+        import numpy as np
+        
+        # Set up the figure and axes
+        fig, ax = plt.subplots(figsize=(10, 4))
+        
+        # Define the pitch dimensions
+        pitch_length = 22
+        pitch_width = 3.05
+        
+        # Plot the pitch outline
+        ax.plot([0, pitch_length], [0, 0], 'k-', linewidth=2)
+        ax.plot([0, pitch_length], [pitch_width, pitch_width], 'k-', linewidth=2)
+        ax.plot([0, 0], [0, pitch_width], 'k-', linewidth=2)
+        ax.plot([pitch_length, pitch_length], [0, pitch_width], 'k-', linewidth=2)
+        
+        # Plot the stumps
+        stump_height = 0.71
+        ax.plot([1.5, 1.5], [-0.5, stump_height], 'k-', linewidth=2)
+        ax.plot([3.5, 3.5], [-0.5, stump_height], 'k-', linewidth=2)
+        ax.plot([20.5, 20.5], [-0.5, stump_height], 'k-', linewidth=2)
+        ax.plot([22.5, 22.5], [-0.5, stump_height], 'k-', linewidth=2)
+        
+        # Add labels and grid
+        ax.set_xlabel('X-axis')
+        ax.set_ylabel('Y-axis')
+        ax.grid(True)
+        ax.set_aspect('equal')
+        plt.show()
         # from PIL import Image
         # import seaborn as sns
         
