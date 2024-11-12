@@ -3146,12 +3146,12 @@ else :
         
         # Define pitch zones with boundaries
         zones = {
-            'Full Toss': (8, 10),
-            'Yorker': (6, 8),
-            'Full': (4, 6),
-            'Good': (2, 4),
-            'Back of Length': (0, 2),
-            'Short': (-2, 0)
+            'Short': (8, 10),
+            'Back of Length': (6, 8),
+            'Good': (4, 6),
+            'Full': (2, 4),
+            'Yorker': (0, 2),
+            'Full Toss': (-2, 0)  
         }
         
         # Set up the 3D plot
