@@ -3198,14 +3198,12 @@ else :
         # Add pitch zones
         for zone_name, (y_min, y_max) in zones.items():
             fig.add_trace(go.Scatter3d(
-                x=[-0.5, 0.5, 0.5, -0.5],
-                y=[y_min, y_min, y_max, y_max],
-                z=[0, 0, 0, 0],
-                mode='lines',
-                fill='toself',
-                fillcolor='lightgray',
-                opacity=0.2,
+                x=[-0.5, 0.5, 0.5, -0.5, -0.5],
+                y=[y_min, y_min, y_max, y_max, y_min],
+                z=[0, 0, 0, 0, 0],
+                mode='lines+markers',
                 line=dict(color="gray", width=2),
+                marker=dict(size=0.1, opacity=0.2),
                 showlegend=False
             ))
             # Add zone label
@@ -3233,6 +3231,5 @@ else :
         
         # Streamlit display
         st.plotly_chart(fig)
-
 
     
