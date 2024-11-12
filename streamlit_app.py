@@ -3339,13 +3339,15 @@ else :
         }
         
         # Define mappings for line and length
+        # Define adjusted line positions with compact spacing
         line_positions = {
-            'Outside Off Stump': -0.25,
+            'Wide Outside Off Stump': -0.3,
+            'Outside Off Stump': -0.15,
             'On Stumps': 0,
-            'Outside Leg Stump': 0.25,
-            'Wide Outside Off Stump': -0.5,
-            'Wide Outside Leg Stump': 0.5
+            'Outside Leg Stump': 0.15,
+            'Wide Outside Leg Stump': 0.3
         }
+
         
         length_positions = {
             'Short': 9,
