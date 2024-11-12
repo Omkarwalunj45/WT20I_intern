@@ -3058,10 +3058,93 @@ else :
         # # Streamlit display
         # st.plotly_chart(fig)
 
+
+       ## 2D PITCHMAP 
+        # import streamlit as st
+        # import plotly.graph_objects as go
+        
+        # # Define pitch zones with boundaries in 2D
+        # zones = {
+        #     'Full Toss': (8, 10),
+        #     'Yorker': (6, 8),
+        #     'Full': (4, 6),
+        #     'Good': (2, 4),
+        #     'Back of Length': (0, 2),
+        #     'Short': (-2, 0)
+        # }
+        
+        # # Set up the 2D plot
+        # fig = go.Figure()
+        
+        # # Define stumps (3 vertical lines) and bails (horizontal lines at top)
+        # stump_positions = [-0.2, 0, 0.2]  # X-positions of the 3 stumps
+        # stump_height = 1.2                # Stump height
+        # bail_height = stump_height + 0.2  # Bail height above stumps
+        
+        # # Add stumps
+        # for x_pos in stump_positions:
+        #     fig.add_trace(go.Scatter(
+        #         x=[x_pos, x_pos],
+        #         y=[0, stump_height],
+        #         mode='lines',
+        #         line=dict(color='black', width=5),
+        #         showlegend=False,
+        #         name='Stump'
+        #     ))
+        
+        # # Add bails (horizontal lines across two stumps at the top)
+        # fig.add_trace(go.Scatter(
+        #     x=[stump_positions[0], stump_positions[1]],
+        #     y=[bail_height, bail_height],
+        #     mode='lines',
+        #     line=dict(color='black', width=3),
+        #     showlegend=False,
+        #     name='Bail'
+        # ))
+        # fig.add_trace(go.Scatter(
+        #     x=[stump_positions[1], stump_positions[2]],
+        #     y=[bail_height, bail_height],
+        #     mode='lines',
+        #     line=dict(color='black', width=3),
+        #     showlegend=False,
+        #     name='Bail'
+        # ))
+        
+        # # Add zones
+        # for zone_name, (y_min, y_max) in zones.items():
+        #     fig.add_shape(
+        #         type="rect",
+        #         x0=-1, y0=y_min, x1=1, y1=y_max,
+        #         line=dict(color="gray", width=2),
+        #         fillcolor="lightgray",
+        #         opacity=0.2
+        #     )
+        #     # Add zone label
+        #     fig.add_trace(go.Scatter(
+        #         x=[0],
+        #         y=[(y_min + y_max) / 2],
+        #         text=[zone_name],
+        #         mode="text",
+        #         showlegend=False
+        #     ))
+        
+        # # Layout settings
+        # fig.update_layout(
+        #     title="Cricket Pitch Length Zones (2D View)",
+        #     xaxis=dict(title='X-axis (Width of Pitch)', range=[-1, 1]),
+        #     yaxis=dict(title='Y-axis (Length of Pitch)', range=[-2, 10]),
+        #     width=600,
+        #     height=800,
+        #     showlegend=False
+        # )
+        
+        # # Streamlit display
+        # st.plotly_chart(fig)
+
         import streamlit as st
         import plotly.graph_objects as go
         
-        # Define pitch zones with boundaries in 2D
+        # Define pitch zones with boundaries
         zones = {
             'Full Toss': (8, 10),
             'Yorker': (6, 8),
@@ -3071,56 +3154,65 @@ else :
             'Short': (-2, 0)
         }
         
-        # Set up the 2D plot
+        # Set up the 3D plot
         fig = go.Figure()
         
-        # Define stumps (3 vertical lines) and bails (horizontal lines at top)
+        # Define stumps (3 vertical lines) and bails
         stump_positions = [-0.2, 0, 0.2]  # X-positions of the 3 stumps
-        stump_height = 1.2                # Stump height
-        bail_height = stump_height + 0.2  # Bail height above stumps
+        stump_height = 1.5                # Increased stump height for realism
+        stump_thickness = 3               # Reduced thickness for a more proportional look
+        bail_height = stump_height + 0.1  # Bail height slightly above stumps
         
         # Add stumps
         for x_pos in stump_positions:
-            fig.add_trace(go.Scatter(
+            fig.add_trace(go.Scatter3d(
                 x=[x_pos, x_pos],
-                y=[0, stump_height],
+                y=[0, 0],
+                z=[0, stump_height],
                 mode='lines',
-                line=dict(color='black', width=5),
+                line=dict(color='black', width=stump_thickness),
                 showlegend=False,
                 name='Stump'
             ))
         
         # Add bails (horizontal lines across two stumps at the top)
-        fig.add_trace(go.Scatter(
+        fig.add_trace(go.Scatter3d(
             x=[stump_positions[0], stump_positions[1]],
-            y=[bail_height, bail_height],
+            y=[0, 0],
+            z=[bail_height, bail_height],
             mode='lines',
-            line=dict(color='black', width=3),
+            line=dict(color='black', width=2),
             showlegend=False,
             name='Bail'
         ))
-        fig.add_trace(go.Scatter(
+        fig.add_trace(go.Scatter3d(
             x=[stump_positions[1], stump_positions[2]],
-            y=[bail_height, bail_height],
+            y=[0, 0],
+            z=[bail_height, bail_height],
             mode='lines',
-            line=dict(color='black', width=3),
+            line=dict(color='black', width=2),
             showlegend=False,
             name='Bail'
         ))
         
-        # Add zones
+        # Add pitch zones
         for zone_name, (y_min, y_max) in zones.items():
-            fig.add_shape(
-                type="rect",
-                x0=-1, y0=y_min, x1=1, y1=y_max,
+            fig.add_trace(go.Scatter3d(
+                x=[-0.5, 0.5, 0.5, -0.5],
+                y=[y_min, y_min, y_max, y_max],
+                z=[0, 0, 0, 0],
+                mode='lines',
+                fill='toself',
+                fillcolor='lightgray',
+                opacity=0.2,
                 line=dict(color="gray", width=2),
-                fillcolor="lightgray",
-                opacity=0.2
-            )
+                showlegend=False
+            ))
             # Add zone label
-            fig.add_trace(go.Scatter(
+            fig.add_trace(go.Scatter3d(
                 x=[0],
                 y=[(y_min + y_max) / 2],
+                z=[0.05],  # Slightly above the ground for visibility
                 text=[zone_name],
                 mode="text",
                 showlegend=False
@@ -3128,10 +3220,13 @@ else :
         
         # Layout settings
         fig.update_layout(
-            title="Cricket Pitch Length Zones (2D View)",
-            xaxis=dict(title='X-axis (Width of Pitch)', range=[-1, 1]),
-            yaxis=dict(title='Y-axis (Length of Pitch)', range=[-2, 10]),
-            width=600,
+            title="Cricket Pitch Length Zones with Stumps (3D View)",
+            scene=dict(
+                xaxis=dict(title='X-axis', range=[-1, 1]),
+                yaxis=dict(title='Y-axis', range=[-2, 10]),
+                zaxis=dict(title='Z-axis (Height)', range=[0, 2]),
+            ),
+            width=700,
             height=800,
             showlegend=False
         )
@@ -3140,62 +3235,4 @@ else :
         st.plotly_chart(fig)
 
 
-
-
-        # from PIL import Image
-        # import seaborn as sns
-        
-        # # Load the image
-        # image = Image.open('pitch_map.png')
-        
-        # # Define the mapping between Line and Length values
-        # line_map = {
-        #     -2: 0,
-        #     -1: 1,
-        #     0: 2,
-        #     1: 3,
-        #     2: 4
-        # }
-        
-        # length_map = {
-        #     'Yorker': 0,
-        #     'Full': 1,
-        #     'Good Length': 2,
-        #     'Short of Good Length': 3,
-        #     'Short': 4
-        # }
-        
-        # # Function to create the pitch map
-        # def create_pitch_map(final_df, batting_style):
-        #     # Determine the column order based on the batting hand
-        #     if batting_style == 'Right-hand bat':
-        #         column_order = [-2, -1, 0, 1, 2]
-        #     else:
-        #         column_order = [2, 1, 0, -1, -2]
-        
-        #     # Create a 5x5 heatmap
-        #     pitch_map = np.zeros((5, 5))
-        
-        #     # Populate the pitch map based on the data in final_df
-        #     for _, row in final_df.iterrows():
-        #         line_index = line_map[row['Line']]
-        #         length_index = length_map[row['Length']]
-        #         pitch_map[length_index, line_index] += 1
-        
-        #     # Create the pitch map visualization
-        #     fig, ax = plt.subplots(figsize=(8, 6))
-        #     ax.imshow(image)
-        #     sns.heatmap(pitch_map, annot=True, cmap='YlOrRd', cbar=False, ax=ax)
-        #     ax.set_xticks(np.arange(len(column_order)))
-        #     ax.set_xticklabels([str(x) for x in column_order])
-        #     ax.set_yticks(np.arange(len(list(length_map.keys()))))
-        #     ax.set_yticklabels(list(length_map.keys())[::-1])
-        #     ax.set_title("Pitch Map")
-        #     st.pyplot(fig)
-        
-        # Assuming you have the 'final_df' dataset with the 'Line' and 'Length' columns
-        # create_pitch_map(final_df, 'Right-hand bat')
-        # pitch_map_image = draw_pitch_map(fdf)
-        # # st.pyplot(fig, use_container_width=True)
-        # st.image(pitch_map_image, use_column_width=True)
-
+    
