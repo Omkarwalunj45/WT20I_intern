@@ -3158,9 +3158,9 @@ else :
         fig = go.Figure()
         
         # Define stumps (3 vertical lines) and bails
-        stump_positions = [-0.2, 0, 0.2]  # X-positions of the 3 stumps
-        stump_height = 0.8               # Increased stump height for realism
-        stump_thickness = 3               # Reduced thickness for a more proportional look
+        stump_positions = [-0.05, 0, 0.05]  # X-positions of the 3 stumps
+        stump_height = 0.4               # Increased stump height for realism
+        stump_thickness = 2               # Reduced thickness for a more proportional look
         bail_height = stump_height + 0.005 # Bail height slightly above stumps
         
         # Add stumps
