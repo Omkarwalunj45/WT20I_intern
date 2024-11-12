@@ -3004,10 +3004,64 @@ else :
         # ax.grid(True)
         # ax.set_aspect('equal')
         # plt.show()
+        #ABSOLUTE GOLD
+        # import streamlit as st
+        # import plotly.graph_objects as go
+        
+        # # Define pitch zones with boundaries
+        # zones = {
+        #     'Full Toss': (8, 10),
+        #     'Yorker': (6, 8),
+        #     'Full': (4, 6),
+        #     'Good': (2, 4),
+        #     'Back of Length': (0, 2),
+        #     'Short': (-2, 0)
+        # }
+        
+        # # Set up the 3D plot
+        # fig = go.Figure()
+        
+        # # Add stumps
+        # fig.add_trace(go.Scatter3d(
+        #     x=[0, 0, 0],
+        #     y=[0, 0, 0],
+        #     z=[0, 2, 4],
+        #     mode='lines',
+        #     line=dict(color='black', width=5),
+        #     name='Stumps'
+        # ))
+        
+        # # Add zones
+        # for zone_name, (z_min, z_max) in zones.items():
+        #     fig.add_trace(go.Scatter3d(
+        #         x=[-1, 1, 1, -1, -1],
+        #         y=[z_min, z_min, z_max, z_max, z_min],
+        #         z=[0, 0, 0, 0, 0],
+        #         mode='lines+text',
+        #         line=dict(color='gray', width=2),
+        #         text=[zone_name],
+        #         textposition="top center",
+        #         name=zone_name,
+        #         showlegend=False
+        #     ))
+        
+        # # Layout settings
+        # fig.update_layout(
+        #     scene=dict(
+        #         xaxis=dict(title='X-axis', nticks=4, range=[-2, 2]),
+        #         yaxis=dict(title='Y-axis (Length Zones)', nticks=6, range=[-4, 10]),
+        #         zaxis=dict(title='Z-axis (Height)', range=[-2, 5])
+        #     ),
+        #     title="Cricket Pitch Length Zones",
+        # )
+        
+        # # Streamlit display
+        # st.plotly_chart(fig)
+
         import streamlit as st
         import plotly.graph_objects as go
         
-        # Define pitch zones with boundaries
+        # Define pitch zones with boundaries in 2D
         zones = {
             'Full Toss': (8, 10),
             'Yorker': (6, 8),
@@ -3017,45 +3071,77 @@ else :
             'Short': (-2, 0)
         }
         
-        # Set up the 3D plot
+        # Set up the 2D plot
         fig = go.Figure()
         
+        # Define stumps (3 vertical lines) and bails (horizontal lines at top)
+        stump_positions = [-0.2, 0, 0.2]  # X-positions of the 3 stumps
+        stump_height = 1.2                # Stump height
+        bail_height = stump_height + 0.2  # Bail height above stumps
+        
         # Add stumps
-        fig.add_trace(go.Scatter3d(
-            x=[0, 0, 0],
-            y=[0, 0, 0],
-            z=[0, 2, 4],
+        for x_pos in stump_positions:
+            fig.add_trace(go.Scatter(
+                x=[x_pos, x_pos],
+                y=[0, stump_height],
+                mode='lines',
+                line=dict(color='black', width=5),
+                showlegend=False,
+                name='Stump'
+            ))
+        
+        # Add bails (horizontal lines across two stumps at the top)
+        fig.add_trace(go.Scatter(
+            x=[stump_positions[0], stump_positions[1]],
+            y=[bail_height, bail_height],
             mode='lines',
-            line=dict(color='black', width=5),
-            name='Stumps'
+            line=dict(color='black', width=3),
+            showlegend=False,
+            name='Bail'
+        ))
+        fig.add_trace(go.Scatter(
+            x=[stump_positions[1], stump_positions[2]],
+            y=[bail_height, bail_height],
+            mode='lines',
+            line=dict(color='black', width=3),
+            showlegend=False,
+            name='Bail'
         ))
         
         # Add zones
-        for zone_name, (z_min, z_max) in zones.items():
-            fig.add_trace(go.Scatter3d(
-                x=[-1, 1, 1, -1, -1],
-                y=[z_min, z_min, z_max, z_max, z_min],
-                z=[0, 0, 0, 0, 0],
-                mode='lines+text',
-                line=dict(color='gray', width=2),
+        for zone_name, (y_min, y_max) in zones.items():
+            fig.add_shape(
+                type="rect",
+                x0=-1, y0=y_min, x1=1, y1=y_max,
+                line=dict(color="gray", width=2),
+                fillcolor="lightgray",
+                opacity=0.2
+            )
+            # Add zone label
+            fig.add_trace(go.Scatter(
+                x=[0],
+                y=[(y_min + y_max) / 2],
                 text=[zone_name],
-                textposition="top center",
-                name=zone_name,
+                mode="text",
                 showlegend=False
             ))
         
         # Layout settings
         fig.update_layout(
-            scene=dict(
-                xaxis=dict(title='X-axis', nticks=4, range=[-2, 2]),
-                yaxis=dict(title='Y-axis (Length Zones)', nticks=6, range=[-4, 10]),
-                zaxis=dict(title='Z-axis (Height)', range=[-2, 5])
-            ),
-            title="Cricket Pitch Length Zones",
+            title="Cricket Pitch Length Zones (2D View)",
+            xaxis=dict(title='X-axis (Width of Pitch)', range=[-1, 1]),
+            yaxis=dict(title='Y-axis (Length of Pitch)', range=[-2, 10]),
+            width=600,
+            height=800,
+            showlegend=False
         )
         
         # Streamlit display
         st.plotly_chart(fig)
+
+
+
+
         # from PIL import Image
         # import seaborn as sns
         
