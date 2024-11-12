@@ -3363,5 +3363,6 @@ else :
         )
         
         # Streamlit display
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, key="unique_chart_1")
+
 
