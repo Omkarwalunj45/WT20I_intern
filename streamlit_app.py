@@ -3230,3 +3230,138 @@ else :
         
         # # Streamlit display
         # st.plotly_chart(fig)
+
+
+        import streamlit as st
+        import plotly.graph_objects as go
+        
+        # Define pitch zones with boundaries
+        zones = {
+            'Short': (8, 10),
+            'Back of Length': (6, 8),
+            'Good': (4, 6),
+            'Full': (2, 4),
+            'Yorker': (0, 2),
+            'Full Toss': (-2, 0)
+        }
+        
+        # Line positions for different lines
+        line_positions = {
+            'On Stumps': 0,
+            'Outside Off Stump': -0.3,
+            'Wide Outside Off Stump': -0.6,
+            'Outside Leg Stump': 0.3,
+            'Wide Outside Leg Stump': 0.6
+        }
+        
+        # Color mapping based on runs
+        color_mapping = {
+            0: 'white',
+            1: 'green',
+            2: 'blue',
+            3: 'violet',
+            4: 'yellow',
+            6: 'brown'
+        }
+        
+        # Set up the 3D plot
+        fig = go.Figure()
+        
+        # Define stumps (3 vertical lines) and bails
+        stump_positions = [-0.05, 0, 0.05]  # X-positions of the 3 stumps
+        stump_height = 0.4                 # Stump height
+        stump_thickness = 2                # Thickness of stumps
+        bail_height = stump_height + 0.005 # Bail height slightly above stumps
+        
+        # Add stumps
+        for x_pos in stump_positions:
+            fig.add_trace(go.Scatter3d(
+                x=[x_pos, x_pos],
+                y=[0, 0],
+                z=[0, stump_height],
+                mode='lines',
+                line=dict(color='black', width=stump_thickness),
+                showlegend=False,
+                name='Stump'
+            ))
+        
+        # Add bails
+        fig.add_trace(go.Scatter3d(
+            x=[stump_positions[0], stump_positions[1]],
+            y=[0, 0],
+            z=[bail_height, bail_height],
+            mode='lines',
+            line=dict(color='black', width=2),
+            showlegend=False,
+            name='Bail'
+        ))
+        fig.add_trace(go.Scatter3d(
+            x=[stump_positions[1], stump_positions[2]],
+            y=[0, 0],
+            z=[bail_height, bail_height],
+            mode='lines',
+            line=dict(color='black', width=2),
+            showlegend=False,
+            name='Bail'
+        ))
+        
+        # Add pitch zones
+        for zone_name, (y_min, y_max) in zones.items():
+            fig.add_trace(go.Scatter3d(
+                x=[-0.5, 0.5, 0.5, -0.5, -0.5],
+                y=[y_min, y_min, y_max, y_max, y_min],
+                z=[0, 0, 0, 0, 0],
+                mode='lines+markers',
+                line=dict(color="gray", width=2),
+                marker=dict(size=0.1, opacity=0.2),
+                showlegend=False
+            ))
+            # Zone label slightly off the pitch
+            fig.add_trace(go.Scatter3d(
+                x=[0.7],  # Offset to the side of the pitch
+                y=[(y_min + y_max) / 2],
+                z=[0.05],
+                text=[zone_name],
+                mode="text",
+                showlegend=False
+            ))
+        
+        # Plot each ball based on line, length, wicket status, and runs
+        for _, row in final_df.iterrows():
+            # Get coordinates for line and length
+            line_x = line_positions.get(row['line'], 0)  # Default to 'On Stumps' if not found
+            length_y = next((y_mid for zone, (y_min, y_max) in zones.items()
+                             if row['length'] == zone and (y_mid := (y_min + y_max) / 2)), 0)
+            
+            # Determine color based on wicket status and runs
+            if row['is_wkt'] == 1:
+                color = 'red'
+            else:
+                color = color_mapping.get(row['batsman_runs'], 'white')
+            
+            # Plot the ball as a scatter point
+            fig.add_trace(go.Scatter3d(
+                x=[line_x],
+                y=[length_y],
+                z=[0],
+                mode='markers',
+                marker=dict(size=6, color=color),
+                showlegend=False
+            ))
+        
+        # Layout settings
+        fig.update_layout(
+            title="Cricket Pitch Length Zones with Ball Positions",
+            scene=dict(
+                xaxis=dict(title='X-axis', range=[-1, 1]),
+                yaxis=dict(title='Y-axis', range=[-2, 10]),
+                zaxis=dict(title='Z-axis (Height)', range=[0, 1]),
+            ),
+            width=700,
+            height=800,
+            showlegend=False
+        )
+        
+        # Streamlit display
+        st.plotly_chart(fig)
+
