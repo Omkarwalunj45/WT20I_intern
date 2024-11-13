@@ -3260,7 +3260,7 @@ else :
                 yaxis=dict(title='Y-axis', range=[-2, 10]),
                 zaxis=dict(title='Z-axis (Height)', range=[0, 2]),
             ),
-            width=700,
+            width=800,
             height=800,
             showlegend=False
         )
