@@ -3311,24 +3311,44 @@ else :
         
         # Set up the 3D plot
         fig = go.Figure()
-        
-        # Define stumps and bails
+        # Define stumps (3 vertical lines) and bails
         stump_positions = [-0.05, 0, 0.05]  # X-positions of the 3 stumps
-        stump_height = 0.4
-        stump_thickness = 2
-        bail_height = stump_height + 0.005
+        stump_height = 0.2  # Increased stump height for realism
+        stump_thickness = 2  # Reduced thickness for a more proportional look
+        bail_height = stump_height + 0.002  # Bail height slightly above stumps
         
-        # Add stumps as cylinders
-        for stump_x in stump_positions:
+        # Add stumps
+        for x_pos in stump_positions:
             fig.add_trace(go.Scatter3d(
-                x=[stump_x, stump_x],
-                y=[10, 10],  # Place stumps at the end of the pitch
+                x=[x_pos, x_pos],
+                y=[0, 0],
                 z=[0, stump_height],
                 mode='lines',
-                line=dict(color='brown', width=stump_thickness),
-                showlegend=False
+                line=dict(color='black', width=stump_thickness),
+                showlegend=False,
+                name='Stump'
             ))
         
+        # Add bails (horizontal lines across two stumps at the top)
+        fig.add_trace(go.Scatter3d(
+            x=[stump_positions[0], stump_positions[1]],
+            y=[0, 0],
+            z=[bail_height, bail_height],
+            mode='lines',
+            line=dict(color='black', width=2),
+            showlegend=False,
+            name='Bail'
+        ))
+        fig.add_trace(go.Scatter3d(
+            x=[stump_positions[1], stump_positions[2]],
+            y=[0, 0],
+            z=[bail_height, bail_height],
+            mode='lines',
+            line=dict(color='black', width=2),
+            showlegend=False,
+            name='Bail'
+        ))
+    
         # Add pitch zones
         for zone_name, (y_min, y_max) in zones.items():
             fig.add_trace(go.Scatter3d(
