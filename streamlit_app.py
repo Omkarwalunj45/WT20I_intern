@@ -3269,7 +3269,8 @@ else :
         
     else:
         # Filter data for the selected bowler
-        final_df = temp_df[temp_df["bowler"] == batsman_selected]
+        bowler_selected = batsman_selected
+        final_df = temp_df[temp_df["bowler"] == bowler_selected]
         
         # Calculate bowler's metrics
         total_runs_conceded = final_df["total_runs"].sum()
