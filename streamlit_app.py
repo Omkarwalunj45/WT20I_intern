@@ -3361,203 +3361,202 @@ else :
                     </div>
                 </div>
             """, unsafe_allow_html=True)
-
-        # def get_sector_angle(zone, batting_style, offset=0):
-        #     base_angles = {
-        #         1: 45,   # Third Man
-        #         2: 90,   # Point
-        #         3: 135,  # Covers
-        #         4: 180,  # Mid-off
-        #         5: 225,  # Mid-on
-        #         6: 270,  # Mid-wicket
-        #         7: 315,  # Square leg
-        #         8: 360   # Fine leg
-        #     }
-        #     angle = base_angles[zone] + offset
-        #     return np.radians(angle)
-        
-        # def get_line_properties_by_shot_type(shot_type):
-        #     properties = {
-        #         'drive': {'color': 'blue', 'length': 0.75, 'width': 3},
-        #         'pull': {'color': 'darkred', 'length': 0.85, 'width': 3.5},
-        #         'cut': {'color': 'darkgreen', 'length': 0.65, 'width': 3},
-        #         'sweep': {'color': 'purple', 'length': 0.9, 'width': 3.5},
-        #         'default': {'color': 'gray', 'length': 0.6, 'width': 2}
-        #     }
-        #     return properties.get(shot_type, properties['default'])
-        
-        # def draw_bowler_heatmap(final_df, bowler_name):
-        #     fig, ax = plt.subplots(figsize=(12, 12))
-        #     ax.set_aspect('equal')
-        #     ax.axis('off')
-        
-        #     # Draw base field elements with lighter green for the boundary
-        #     boundary = plt.Circle((0, 0), 1, fill=True, color='#228B22', alpha=0.5)
-        #     boundary_line = plt.Circle((0, 0), 1, fill=False, color='black', linewidth=4)
-        #     inner_circle = plt.Circle((0, 0), 0.5, fill=True, color='#90EE90')
-        #     inner_circle_line = plt.Circle((0, 0), 0.5, fill=False, color='white', linewidth=1)
-        
-        #     plt.title(f"Bowler Heat Map: {bowler_name}", pad=2, color='white', size=8, fontweight='bold')
-        
-        #     # Draw sector lines for visualization
-        #     angles = np.linspace(0, 2*np.pi, 9)[:-1]
-        #     for angle in angles:
-        #         x = np.cos(angle)
-        #         y = np.sin(angle)
-        #         ax.plot([0, x], [0, y], color='white', alpha=0.2, linewidth=1)
-        
-        #     # Draw pitch rectangle
-        #     pitch_width = 0.08
-        #     pitch_length = 0.16
-        #     pitch_rect = plt.Rectangle((-pitch_width/2, -pitch_length/2), pitch_width, pitch_length, color='tan', alpha=1)
-        
-        #     ax.add_patch(boundary)
-        #     ax.add_patch(boundary_line)
-        #     ax.add_patch(inner_circle)
-        #     ax.add_patch(inner_circle_line)
-        #     ax.add_patch(pitch_rect)
-        
-        #     # Group data by zones for analysis
-        #     for zone in range(1, 9):
-        #         zone_shots = final_df[final_df['wagonZone'] == zone]
-        #         num_shots = len(zone_shots)
-        #         if num_shots > 1:
-        #             offsets = np.linspace(-15, 15, num_shots)
-        #         else:
-        #             offsets = [0]
-        
-        #         for (_, shot), offset in zip(zone_shots.iterrows(), offsets):
-        #             angle = get_sector_angle(shot['wagonZone'], shot['batting_style'], offset)
-        #             shot_props = get_line_properties_by_shot_type(shot.get('shot_type', 'default'))
-                    
-        #             x = shot_props['length'] * np.cos(angle)
-        #             y = shot_props['length'] * np.sin(angle)
-        #             ax.plot([0, x], [0, y], 
-        #                     color=shot_props['color'], 
-        #                     linewidth=shot_props['width'], 
-        #                     alpha=0.7, 
-        #                     solid_capstyle='round')
-        
-        #     ax.set_xlim(-1.2, 1.2)
-        #     ax.set_ylim(-1.2, 1.2)
-        #     plt.tight_layout(pad=0)
-        #     return fig
-        
-        # # Streamlit code to display the heatmap
-        # left_col, right_col = st.columns([2.8, 4])
-        # with left_col:
-        #     st.markdown(f"## {bowler_selected}'s WAGON WHEEL for RUNS GIVEN")
-        #     fig = draw_bowler_heatmap(final_df, bowler_selected)
-        #     st.pyplot(fig, use_container_width=True)
-        
-        # with right_col:
-        #     st.markdown("## PITCH MAP")
-
-        def get_sector_angle(zone, batting_style, offset=0):
-            base_angles = {
-                1: 45,   # Third Man
-                2: 90,   # Point
-                3: 135,  # Covers
-                4: 180,  # Mid-off
-                5: 225,  # Mid-on
-                6: 270,  # Mid-wicket
-                7: 315,  # Square leg
-                8: 360   # Fine leg
+            
+            import streamlit as st
+            import plotly.graph_objects as go
+            import pandas as pd
+            import numpy as np
+            
+            st.markdown("## PITCH MAP VS LEFT-HANDED AND RIGHT-HANDED BATSMEN")
+            
+            # Define pitch zones with boundaries
+            zones = {
+                'Short': (8, 10),
+                'Back of Length': (6, 8),
+                'Good': (4, 6),
+                'Full': (2, 4),
+                'Yorker': (0, 2),
+                'Full Toss': (-2, 0)
             }
-            angle = base_angles[zone] + offset
-            # if batting_style == 'LHB':
-            #     angle = (180 + angle) % 360
-            return np.radians(angle)
-    
-        def get_line_properties(runs):
-            properties = {
-                1: {'color': 'darkgreen', 'length': 0.5, 'width': 3,'alpha':1},    
-                2: {'color': 'darkblue', 'length': 0.65, 'width': 3.5},    
-                3: {'color': 'darkviolet', 'length': 0.8, 'width': 3.8},   
-                4: {'color': 'goldenrod', 'length': 1.0, 'width': 4.5},     
-                6: {'color': 'maroon', 'length': 1.1, 'width': 5}     
+            
+            # Define adjusted line positions with compact spacing
+            line_positions = {
+                'Wide Outside Off Stump': -0.3,
+                'Outside Off Stump': -0.15,
+                'On Stumps': 0,
+                'Outside Leg Stump': 0.15,
+                'Wide Outside Leg Stump': 0.3
             }
-            return properties.get(runs, None)
-    
-        def draw_cricket_field_with_wagon_wheel(final_df):
-            fig, ax = plt.subplots(figsize=(12, 12))
-            ax.set_aspect('equal')
-            ax.axis('off')
             
-            # Draw base field elements with lighter outer green
-            # boundary = plt.Circle((0, 0), 1, fill=True, color='#228B22', alpha=0.7) 
-            boundary = plt.Circle((0, 0), 1, fill=True, color='#228B22', alpha=0.5)# Lighter green
-            boundary_line = plt.Circle((0, 0), 1, fill=False, color='black', linewidth=4)
-            boundary_glow = plt.Circle((0, 0), 1, fill=False, color='black', linewidth=4, alpha=1)
-            inner_circle = plt.Circle((0, 0), 0.5, fill=True, color='#90EE90')
-            inner_circle_line = plt.Circle((0, 0), 0.5, fill=False, color='white', linewidth=1)
+            length_positions = {
+                'Short': 9,
+                'Back of Length': 7,
+                'Good Length': 5,
+                'Full': 3,
+                'Yorker': 1,
+                'Full Toss': -1
+            }
             
-            # Add title
-            plt.title('WAGON WHEEL', pad=2, color='white', size=8, fontweight='bold')
+            # Function to apply a small random offset to length while keeping line accurate
+            def apply_length_offset(y_value, offset_range=(-0.95, 0.95), boundary=(-2, 10)):
+                offset = np.random.uniform(offset_range[0], offset_range[1])
+                if boundary[0] <= y_value + offset <= boundary[1]:
+                    return y_value + offset
+                return y_value
             
-            # Draw sector lines
-            angles = np.linspace(0, 2*np.pi, 9)[:-1]
-            for angle in angles:
-                x = np.cos(angle)
-                y = np.sin(angle)
-                ax.plot([0, x], [0, y], color='white', alpha=0.2, linewidth=1)
+            def apply_line_offset(x_value, offset_range=(-0.05, 0.05), boundary=(-0.5, 0.5)):
+                offset = np.random.uniform(offset_range[0], offset_range[1])
+                if boundary[0] <= x_value + offset <= boundary[1]:
+                    return x_value + offset
+                return x_value
             
-            # Draw pitch rectangle
-            pitch_width = 0.08
-            pitch_length = 0.16
-            pitch_rect = plt.Rectangle((-pitch_width/2, -pitch_length/2), 
-                                    pitch_width, pitch_length, 
-                                    color='tan', alpha=1)
+            # Set up two columns for LHB and RHB views
+            col1, col2 = st.columns(2)
             
-            # Add base elements to plot
-            ax.add_patch(boundary)
-            ax.add_patch(boundary_glow)
-            ax.add_patch(boundary_line)
-            ax.add_patch(inner_circle)
-            ax.add_patch(inner_circle_line)
-            ax.add_patch(pitch_rect)
+            # Filter data for Left-Handed and Right-Handed Batsmen
+            lhb_data = final_df[final_df['batting_style'] == 'Left-hand bat']
+            rhb_data = final_df[final_df['batting_style'] == 'Right-hand bat']
             
-            # Group shots by zone to handle overlapping
-            for zone in range(1, 9):
-                zone_shots = final_df[final_df['wagonZone'] == zone]
-                zone_shots = zone_shots.sort_values('batsman_runs', ascending=False)
+            # Function to create a 3D pitch map based on handedness
+            def create_pitch_map(data, handedness):
+                fig = go.Figure()
+            
+                # Define stumps and bails
+                stump_positions = [-0.05, 0, 0.05]
+                stump_height = 0.3
+                stump_thickness = 2
+                bail_height = stump_height + 0.002
+            
+                # Add stumps
+                for x_pos in stump_positions:
+                    fig.add_trace(go.Scatter3d(
+                        x=[x_pos, x_pos],
+                        y=[0, 0],
+                        z=[0, stump_height],
+                        mode='lines',
+                        line=dict(color='black', width=stump_thickness),
+                        showlegend=False
+                    ))
+            
+                # Add bails
+                fig.add_trace(go.Scatter3d(
+                    x=[stump_positions[0], stump_positions[1]],
+                    y=[0, 0],
+                    z=[bail_height, bail_height],
+                    mode='lines',
+                    line=dict(color='black', width=2),
+                    showlegend=False
+                ))
+                fig.add_trace(go.Scatter3d(
+                    x=[stump_positions[1], stump_positions[2]],
+                    y=[0, 0],
+                    z=[bail_height, bail_height],
+                    mode='lines',
+                    line=dict(color='black', width=2),
+                    showlegend=False
+                ))
+            
+                # Add pitch zones
+                for zone_name, (y_min, y_max) in zones.items():
+                    fig.add_trace(go.Scatter3d(
+                        x=[-0.5, 0.5, 0.5, -0.5, -0.5],
+                        y=[y_min, y_min, y_max, y_max, y_min],
+                        z=[0, 0, 0, 0, 0],
+                        mode='lines+markers',
+                        line=dict(color="gray", width=2),
+                        marker=dict(size=0.1, opacity=0.2),
+                        showlegend=False
+                    ))
+            
+                # Add length labels on the side of the pitch
+                for length, y_position in length_positions.items():
+                    fig.add_trace(go.Scatter3d(
+                        x=[0.6],  # Adjust X position to be to the side of the pitch
+                        y=[y_position],
+                        z=[0],
+                        mode='text',
+                        text=[length],
+                        textposition="middle right",
+                        textfont=dict(size=10, color="black"),
+                        showlegend=False
+                    ))
+            
+                # Set mirroring factor based on handedness
+                mirror_factor = -1 if handedness == 'LHB' else 1
+            
+                # Plot points for each ball, excluding dot balls
+                for index, row in data.iterrows():
+                    if row['batsman_runs'] == 0:
+                        continue
+            
+                    # Determine base X and Y positions from line and length
+                    x_base = line_positions.get(row['line'], 0) * mirror_factor
+                    y_base = length_positions.get(row['length'], 5)
+            
+                    # Apply offset to length (y) while keeping line (x) accurate
+                    x_pos = apply_line_offset(x_base, boundary=(-0.5, 0.5))
+                    y_pos = apply_length_offset(y_base, boundary=(-2, 10))
+                    z_pos = 0
+            
+                    # Set color and animation based on wicket status
+                    if row['is_wkt'] == 1:
+                        color = 'red'
+                        size = 8
+                        opacity = [1, 0.5, 1, 0.8, 1]
+                    else:
+                        batsman_runs = row['batsman_runs']
+                        color = {
+                            1: 'green',
+                            2: 'blue',
+                            3: 'violet',
+                            4: 'yellow',
+                            6: 'orange'
+                        }.get(batsman_runs, 'gray')
+                        size = 5
+                        opacity = [1]
+            
+                    fig.add_trace(go.Scatter3d(
+                        x=[x_pos],
+                        y=[y_pos],
+                        z=[z_pos],
+                        mode='markers',
+                        marker=dict(size=size, color=color, opacity=opacity[0]),
+                        hoverinfo="text",
+                        text=f"Runs: {row['batsman_runs']} - {'Wicket' if row['is_wkt'] else 'Run'}"
+                    ))
+            
+                    # Twinkle effect for wickets
+                    if row['is_wkt'] == 1:
+                        fig.add_trace(go.Scatter3d(
+                            x=[x_pos],
+                            y=[y_pos],
+                            z=[z_pos],
+                            mode='markers',
+                            marker=dict(size=size, color=color, opacity=opacity),
+                            name='Twinkling Wicket'
+                        ))
+            
+                fig.update_layout(
+                    scene=dict(
+                        xaxis=dict(title='X-axis', range=[-1, 1]),
+                        yaxis=dict(title='Y-axis', range=[-2, 10]),
+                        zaxis=dict(title='Z-axis (Height)', range=[0, 2]),
+                    ),
+                    width=350,
+                    height=700,
+                    showlegend=False
+                )
                 
-                num_shots = len(zone_shots)
-                if num_shots > 1:
-                    offsets = np.linspace(-15, 15, num_shots)
-                else:
-                    offsets = [0]
-                
-                for (_, shot), offset in zip(zone_shots.iterrows(), offsets):
-                    angle = get_sector_angle(shot['wagonZone'], shot['batting_style'], offset)
-                    props = get_line_properties(shot['batsman_runs'])
-                    if props:
-                        x = props['length'] * np.cos(angle)
-                        y = props['length'] * np.sin(angle)
-                        ax.plot([0, x], [0, y], 
-                                color=props['color'], 
-                                linewidth=props['width'], 
-                                alpha=0.9,  # Increased line opacity
-                                solid_capstyle='round')
-                    # x = props['length'] * np.cos(angle)
-                    # y = props['length'] * np.sin(angle)
-                    
-                    # ax.plot([0, x], [0, y], 
-                    # color=props['color'], 
-                    # linewidth=props['width'], 
-                    # alpha=0.9,  # Increased line opacity
-                    # solid_capstyle='round')
+                return fig
             
-            ax.set_xlim(-1.2, 1.2)
-            ax.set_ylim(-1.2, 1.2)
-            plt.tight_layout(pad=0)
-            return fig
-        left_col, right_col = st.columns([2.8, 4])        
-        with left_col:
-            st.markdown("## WAGON WHEEL")
-            fig = draw_cricket_field_with_wagon_wheel(final_df)
-            st.pyplot(fig, use_container_width=True)
+            # Display each plot in the respective column
+            with col1:
+                st.write("### Against Left-Handed Batsmen")
+                st.plotly_chart(create_pitch_map(lhb_data, 'LHB'))
+            
+            with col2:
+                st.write("### Against Right-Handed Batsmen")
+                st.plotly_chart(create_pitch_map(rhb_data, 'RHB'))
+
         
-        with right_col:
-            st.markdown("## PITCH MAP")
                     
