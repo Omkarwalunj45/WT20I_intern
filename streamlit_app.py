@@ -3242,15 +3242,12 @@ def create_heatmap(grid, title, annotations):
     
     # Update layout for vertical orientation and labels
     fig.update_layout(
-        title=title,
         xaxis=dict(showgrid=False, tickvals=list(range(5)), ticktext=line_labels, title="Line"),
         yaxis=dict(showgrid=False, tickvals=list(range(5)), ticktext=length_labels, title="Length"),
         height=700, width=300  # Adjusted size for compact display
     )
     return fig
 
-# Streamlit app layout
-st.title("Ball and Run Percentage Heatmaps (Vertical Pitches)")
 
 # Organize layouts in two columns to make them appear side-by-side
 col1, col2 = st.columns(2)
