@@ -3190,13 +3190,13 @@ else :
         }
         
         # Function to apply a small random offset to length while keeping line accurate
-        def apply_length_offset(y_value, offset_range=(-0.30, 0.30), boundary=(-2, 10)):
+        def apply_length_offset(y_value, offset_range=(-0.45, 0.45), boundary=(-2, 10)):
             offset = np.random.uniform(offset_range[0], offset_range[1])
             if boundary[0] <= y_value + offset <= boundary[1]:
                 return y_value + offset
             return y_value
 
-        def apply_line_offset(x_value, offset_range=(-0.09, 0.09), boundary=(-0.5,0.5)):
+        def apply_line_offset(x_value, offset_range=(-0.07, 0.07), boundary=(-0.5,0.5)):
             offset = np.random.uniform(offset_range[0], offset_range[1])
             if boundary[0] <= x_value + offset <= boundary[1]:
                 return x_value + offset
