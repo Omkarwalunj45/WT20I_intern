@@ -3447,7 +3447,7 @@ else :
         left_col, right_col = st.columns([2.8, 4])
         with left_col:
             st.markdown(f"## {bowler_selected}'s WAGON WHEEL for RUNS GIVEN")
-            fig = draw_bowler_heatmap(final_df, bowler_name)
+            fig = draw_bowler_heatmap(final_df, bowler_selected)
             st.pyplot(fig, use_container_width=True)
         
         with right_col:
