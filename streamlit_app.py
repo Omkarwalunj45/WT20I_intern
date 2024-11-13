@@ -3303,7 +3303,7 @@ else :
         }
         
         # Function to apply a small random offset while checking pitch boundaries
-        def apply_offset(value, offset_range=(-0.45, 0.45), boundary=(-0.5, 0.5)):
+        def apply_offset(value, offset_range=(-0.65, 0.65), boundary=(-0.5, 0.5)):
             offset = np.random.uniform(offset_range[0], offset_range[1])
             if boundary[0] <= value + offset <= boundary[1]:
                 return value + offset
@@ -3313,7 +3313,7 @@ else :
         fig = go.Figure()
         # Define stumps (3 vertical lines) and bails
         stump_positions = [-0.05, 0, 0.05]  # X-positions of the 3 stumps
-        stump_height = 0.4  # Increased stump height for realism
+        stump_height = 0.3  # Increased stump height for realism
         stump_thickness = 2  # Reduced thickness for a more proportional look
         bail_height = stump_height + 0.002  # Bail height slightly above stumps
         
