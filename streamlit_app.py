@@ -3482,7 +3482,7 @@ else :
                     ))
             
                 # Set mirroring factor based on handedness
-                mirror_factor = -1 if handedness == 'LHB' else 1
+                mirror_factor = -1 if handedness == 'Left-handed bat' else 1
             
                 # Plot points for each ball, excluding dot balls
                 for index, row in data.iterrows():
