@@ -3522,15 +3522,17 @@ else :
                         size = 5
                         opacity = [1, 0.5, 1, 0.8, 1]
             
+                    # Set opacity as a single value instead of a list
                     fig.add_trace(go.Scatter3d(
                         x=[x_pos],
                         y=[y_pos],
                         z=[z_pos],
                         mode='markers',
-                        marker=dict(size=size, color=color, opacity=opacity[0]),
+                        marker=dict(size=size, color=color, opacity=opacity),  # Directly use opacity, not opacity[0]
                         hoverinfo="text",
                         text=f"Runs: {row['batsman_runs']} - {'Wicket' if row['is_wkt'] else 'Run'}"
                     ))
+
             
                     # Twinkle effect for wickets
                     if row['is_wkt'] == 1:
