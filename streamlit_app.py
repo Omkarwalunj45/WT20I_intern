@@ -2974,189 +2974,7 @@ else :
         st.pyplot(fig, use_container_width=True)
     
     with right_col:
-        st.markdown("## PITCH MAP In Progress")
-
-        # import streamlit as st
-        # import plotly.graph_objects as go
-        # import pandas as pd
-        # import numpy as np
-        
-        # # Define pitch zones with boundaries
-        # zones = {
-        #     'Short': (8, 10),
-        #     'Back of Length': (6, 8),
-        #     'Good': (4, 6),
-        #     'Full': (2, 4),
-        #     'Yorker': (0, 2),
-        #     'Full Toss': (-2, 0)
-        # }
-        
-        # # Define adjusted line positions with compact spacing
-        # line_positions = {
-        #     'Wide Outside Off Stump': -0.3,
-        #     'Outside Off Stump': -0.15,
-        #     'On Stumps': 0,
-        #     'Outside Leg Stump': 0.15,
-        #     'Wide Outside Leg Stump': 0.3
-        # }
-        
-        # length_positions = {
-        #     'Short': 9,
-        #     'Back of Length': 7,
-        #     'Good Length': 5,
-        #     'Full': 3,
-        #     'Yorker': 1,
-        #     'Full Toss': -1
-        # }
-        
-        # # Function to apply a small random offset to length while keeping line accurate
-        # def apply_length_offset(y_value, offset_range=(-0.95, 0.95), boundary=(-2, 10)):
-        #     offset = np.random.uniform(offset_range[0], offset_range[1])
-        #     if boundary[0] <= y_value + offset <= boundary[1]:
-        #         return y_value + offset
-        #     return y_value
-
-        # def apply_line_offset(x_value, offset_range=(-0.05, 0.05), boundary=(-0.5,0.5)):
-        #     offset = np.random.uniform(offset_range[0], offset_range[1])
-        #     if boundary[0] <= x_value + offset <= boundary[1]:
-        #         return x_value + offset
-        #     return x_value
-        
-        # # Set up the 3D plot
-        # fig = go.Figure()
-        
-        # # Define stumps and bails
-        # stump_positions = [-0.05, 0, 0.05]
-        # stump_height = 0.3
-        # stump_thickness = 2
-        # bail_height = stump_height + 0.002
-        
-        # # Add stumps
-        # for x_pos in stump_positions:
-        #     fig.add_trace(go.Scatter3d(
-        #         x=[x_pos, x_pos],
-        #         y=[0, 0],
-        #         z=[0, stump_height],
-        #         mode='lines',
-        #         line=dict(color='black', width=stump_thickness),
-        #         showlegend=False
-        #     ))
-        
-        # # Add bails
-        # fig.add_trace(go.Scatter3d(
-        #     x=[stump_positions[0], stump_positions[1]],
-        #     y=[0, 0],
-        #     z=[bail_height, bail_height],
-        #     mode='lines',
-        #     line=dict(color='black', width=2),
-        #     showlegend=False
-        # ))
-        # fig.add_trace(go.Scatter3d(
-        #     x=[stump_positions[1], stump_positions[2]],
-        #     y=[0, 0],
-        #     z=[bail_height, bail_height],
-        #     mode='lines',
-        #     line=dict(color='black', width=2),
-        #     showlegend=False
-        # ))
-        
-        # # Add pitch zones
-        # for zone_name, (y_min, y_max) in zones.items():
-        #     fig.add_trace(go.Scatter3d(
-        #         x=[-0.5, 0.5, 0.5, -0.5, -0.5],
-        #         y=[y_min, y_min, y_max, y_max, y_min],
-        #         z=[0, 0, 0, 0, 0],
-        #         mode='lines+markers',
-        #         line=dict(color="gray", width=2),
-        #         marker=dict(size=0.1, opacity=0.2),
-        #         showlegend=False
-        #     ))
-        
-        # # Sample batting style (replace with data from `final_df`)
-        # batting_style = final_df['batting_style'].iloc[0] if 'batting_style' in final_df else 'Right-hand bat'
-        # st.write(f"Batting Style: {batting_style}")
-        
-        # # Set a mirroring factor based on batting style
-        # mirror_factor = -1 if batting_style == 'Left-hand bat' else 1
-        
-        # # Plot points for each ball, excluding dot balls
-        # for index, row in final_df.iterrows():
-        #     # Skip plotting if batsman_runs is 0 (dot ball)
-        #     if row['batsman_runs'] == 0:
-        #         continue
-        
-        #     # Determine base X and Y positions from line and length
-        #     x_base = line_positions.get(row['line'], 0) * mirror_factor  # Accurate line
-        #     y_base = length_positions.get(row['length'], 5)  # Default to good length if length is not mapped
-        
-        #     # Apply offset to length (y) while keeping line (x) accurate
-        #     x_pos = apply_line_offset(x_base, boundary=(-0.5, 0.5))
-        #     y_pos = apply_length_offset(y_base, boundary=(-2, 10))
-        #     z_pos = 0  # Place balls at ground level on the pitch surface
-        
-        #     # Set color and animation based on wicket status
-        #     if row['is_wkt'] == 1:
-        #         color = 'red'  # Wicket color
-        #         size = 8
-        #         opacity = [1, 0.5, 1, 0.8, 1]  # Twinkle effect sequence
-        #     else:
-        #         batsman_runs = row['batsman_runs']
-        #         if batsman_runs == 1:
-        #             color = 'green'
-        #         elif batsman_runs == 2:
-        #             color = 'blue'
-        #         elif batsman_runs == 3:
-        #             color = 'violet'
-        #         elif batsman_runs == 4:
-        #             color = 'yellow'
-        #         elif batsman_runs == 6:
-        #             color = 'orange'
-        #         else:
-        #             color = 'gray'
-        #         size = 5
-        #         opacity = [1]  # Static for non-wicket balls
-        
-        #     # Plot each ball on the pitch using `Scatter3d`
-        #     fig.add_trace(go.Scatter3d(
-        #         x=[x_pos],
-        #         y=[y_pos],
-        #         z=[z_pos],
-        #         mode='markers',
-        #         marker=dict(
-        #             size=size,
-        #             color=color,
-        #             opacity=opacity[0]  # Start with full opacity
-        #         ),
-        #         hoverinfo="text",
-        #         text=f"Runs: {row['batsman_runs']} - {'Wicket' if row['is_wkt'] else 'Run'}"
-        #     ))
-        
-        #     # Add twinkle effect for wickets by animating opacity
-        #     if row['is_wkt'] == 1:
-        #         fig.add_trace(go.Scatter3d(
-        #             x=[x_pos],
-        #             y=[y_pos],
-        #             z=[z_pos],
-        #             mode='markers',
-        #             marker=dict(size=size, color=color, opacity=opacity),
-        #             name='Twinkling Wicket'
-        #         ))
-        
-        # # Layout settings
-        # fig.update_layout(
-        #     scene=dict(
-        #         xaxis=dict(title='X-axis', range=[-1, 1]),
-        #         yaxis=dict(title='Y-axis', range=[-2, 10]),
-        #         zaxis=dict(title='Z-axis (Height)', range=[0, 2]),
-        #     ),
-        #     width=800,
-        #     height=800,
-        #     showlegend=False
-        # )
-        
-        # # Streamlit display
-        # st.plotly_chart(fig)
-
+        st.markdown("## PITCH MAP")
         import streamlit as st
         import plotly.graph_objects as go
         import pandas as pd
@@ -3351,4 +3169,79 @@ else :
         # Streamlit display
         st.plotly_chart(fig)
 
+
+    import streamlit as st
+    import plotly.graph_objects as go
+    import numpy as np
+    
+    # Define a 5x5 grid
+    grid_size = 5
+    
+    # Create a matrix with different values to represent different zones
+    pitch_matrix = np.zeros((grid_size, grid_size))
+    
+    # Define zones for the 5x5 pitch grid, using indices to represent positions
+    # Each row here can represent a different length
+    # Rows: Yorker, Full, Good, Back of Length, Short
+    # Columns: Wide Outside Off, Outside Off, Stumps, Outside Leg, Wide Outside Leg
+    zone_labels = [
+        ['Yorker-Wide Off', 'Yorker-Off', 'Yorker-Stumps', 'Yorker-Leg', 'Yorker-Wide Leg'],
+        ['Full-Wide Off', 'Full-Off', 'Full-Stumps', 'Full-Leg', 'Full-Wide Leg'],
+        ['Good-Wide Off', 'Good-Off', 'Good-Stumps', 'Good-Leg', 'Good-Wide Leg'],
+        ['Back-Length-Wide Off', 'Back-Length-Off', 'Back-Length-Stumps', 'Back-Length-Leg', 'Back-Length-Wide Leg'],
+        ['Short-Wide Off', 'Short-Off', 'Short-Stumps', 'Short-Leg', 'Short-Wide Leg']
+    ]
+    
+    # Create a color mapping for each zone
+    zone_colors = {
+        'Yorker': 'rgba(255, 205, 210, 0.5)',  # light red
+        'Full': 'rgba(255, 245, 157, 0.5)',    # light yellow
+        'Good': 'rgba(200, 230, 201, 0.5)',    # light green
+        'Back of Length': 'rgba(179, 229, 252, 0.5)',  # light blue
+        'Short': 'rgba(255, 183, 77, 0.5)'     # light orange
+    }
+    
+    # Set up Plotly figure
+    fig = go.Figure()
+    
+    # Loop through each cell in the matrix and create a scatter plot for the grid
+    for i in range(grid_size):
+        for j in range(grid_size):
+            # Extract zone label and determine color based on zone
+            zone_label = zone_labels[i][j]
+            length = zone_label.split('-')[0]  # Extract length part
+            color = zone_colors.get(length, 'rgba(200, 200, 200, 0.5)')  # Default color if not matched
+    
+            # Plot each cell as a scatter point with appropriate color and label
+            fig.add_trace(go.Scatter(
+                x=[j], y=[i],
+                mode='markers+text',
+                marker=dict(size=50, color=color, line=dict(color='black', width=1)),
+                text=zone_label,
+                textposition='middle center',
+                showlegend=False
+            ))
+    
+    # Update layout to make the grid look like a pitch
+    fig.update_layout(
+        title="5x5 Pitch Grid",
+        xaxis=dict(
+            tickvals=[0, 1, 2, 3, 4],
+            ticktext=['Wide Off', 'Off', 'Stumps', 'Leg', 'Wide Leg'],
+            showgrid=False
+        ),
+        yaxis=dict(
+            tickvals=[0, 1, 2, 3, 4],
+            ticktext=['Yorker', 'Full', 'Good', 'Back of Length', 'Short'],
+            showgrid=False
+        ),
+        xaxis_title="Line",
+        yaxis_title="Length",
+        width=600,
+        height=600,
+        margin=dict(l=50, r=50, b=50, t=50)
+    )
+    
+    # Display in Streamlit
+    st.plotly_chart(fig)
 
