@@ -3553,11 +3553,17 @@ else :
             # Display each plot in the respective column
             with col1:
                 st.write("### Against Left-Handed Batsmen")
-                st.plotly_chart(create_pitch_map(lhb_data, 'Left-hand bat'))
-            
+                if lhb_data.empty:
+                    st.write("No data for Left-Handed Batsmen")
+                else:
+                    st.plotly_chart(create_pitch_map(lhb_data, 'Left-hand bat'))
             with col2:
                 st.write("### Against Right-Handed Batsmen")
-                st.plotly_chart(create_pitch_map(rhb_data, 'Right-hand bat'))
+                if rhb_data.empty:
+                    st.write("No data for Right-Handed Batsmen")
+                else:
+                    st.plotly_chart(create_pitch_map(rhb_data, 'Right-hand bat'))
+                            
 
         
                     
