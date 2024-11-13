@@ -3010,7 +3010,7 @@ else :
         }
         
         # Function to apply a small random offset while checking pitch boundaries
-        def apply_offset(value, offset_range=(-0.15, 0.15), boundary=(-0.5, 0.5)):
+        def apply_offset(value, offset_range=(-0.08, 0.08), boundary=(-0.5, 0.5)):
             offset = np.random.uniform(offset_range[0], offset_range[1])
             if boundary[0] <= value + offset <= boundary[1]:
                 return value + offset
