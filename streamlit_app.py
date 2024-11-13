@@ -3128,7 +3128,6 @@ else :
         #         hoverinfo="text",
         #         text=f"Runs: {row['batsman_runs']} - {'Wicket' if row['is_wkt'] else 'Run'}"
         #     ))
-        
         #     # Add twinkle effect for wickets by animating opacity
         #     if row['is_wkt'] == 1:
         #         fig.add_trace(go.Scatter3d(
@@ -3196,7 +3195,7 @@ else :
                 return y_value + offset
             return y_value
 
-        def apply_line_offset(x_value, offset_range=(-0.07, 0.07), boundary=(-0.5,0.5)):
+        def apply_line_offset(x_value, offset_range=(-0.00, 0.00), boundary=(-0.5,0.5)):
             offset = np.random.uniform(offset_range[0], offset_range[1])
             if boundary[0] <= x_value + offset <= boundary[1]:
                 return x_value + offset
