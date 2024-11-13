@@ -3503,7 +3503,7 @@ else :
                     if row['is_wkt'] == 1:
                         color = 'red'
                         size = 8
-                        opacity = [1, 0.5, 1, 0.8, 1]
+                        opacity = [1.5]
                     else:
                         batsman_runs = row['batsman_runs']
                         color = {
@@ -3514,7 +3514,7 @@ else :
                             6: 'orange'
                         }.get(batsman_runs, 'gray')
                         size = 5
-                        opacity = [1]
+                        opacity = [1, 0.5, 1, 0.8, 1]
             
                     fig.add_trace(go.Scatter3d(
                         x=[x_pos],
