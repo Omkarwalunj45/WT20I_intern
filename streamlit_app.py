@@ -232,7 +232,7 @@ def show_innings_scorecard(inning_data, title):
         if row['R'] == 0 and row['B'] == 0 and row['Wicket'] == '-':
             # If last name appears again with non-zero R and B, mark for removal
             last_name = row['Last Name']
-            if any((batting_data['Last Name'] == last_name) & ((batting_data['B'] == 0)):
+            if any((batting_data['Last Name'] == last_name) & ((batting_data['B'] == 0))):
                 to_remove.append(idx)
     to_remove += batting_data[batting_data['Batsman'] == 'AC Jayangani'].index.tolist()
     to_remove += batting_data[batting_data['Batsman'] == 'H Madavi'].index.tolist()
