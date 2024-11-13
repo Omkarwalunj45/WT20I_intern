@@ -3245,7 +3245,7 @@ def create_heatmap(grid, title, annotations):
         title=title,
         xaxis=dict(showgrid=False, tickvals=list(range(5)), ticktext=line_labels, title="Line"),
         yaxis=dict(showgrid=False, tickvals=list(range(5)), ticktext=length_labels, title="Length"),
-        height=400, width=300  # Adjusted size for compact display
+        height=700, width=300  # Adjusted size for compact display
     )
     return fig
 
