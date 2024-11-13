@@ -3009,21 +3009,27 @@ else :
         #     'Full Toss': -1
         # }
         
-        # # Function to apply a small random offset while checking pitch boundaries
-        # def apply_offset(value, offset_range=(-0.08, 0.08), boundary=(-0.5, 0.5)):
+        # # Function to apply a small random offset to length while keeping line accurate
+        # def apply_length_offset(y_value, offset_range=(-0.95, 0.95), boundary=(-2, 10)):
         #     offset = np.random.uniform(offset_range[0], offset_range[1])
-        #     if boundary[0] <= value + offset <= boundary[1]:
-        #         return value + offset
-        #     return value
+        #     if boundary[0] <= y_value + offset <= boundary[1]:
+        #         return y_value + offset
+        #     return y_value
+
+        # def apply_line_offset(x_value, offset_range=(-0.05, 0.05), boundary=(-0.5,0.5)):
+        #     offset = np.random.uniform(offset_range[0], offset_range[1])
+        #     if boundary[0] <= x_value + offset <= boundary[1]:
+        #         return x_value + offset
+        #     return x_value
         
         # # Set up the 3D plot
         # fig = go.Figure()
         
-        # # Define stumps (3 vertical lines) and bails
-        # stump_positions = [-0.05, 0, 0.05]  # X-positions of the 3 stumps
-        # stump_height = 0.3  # Increased stump height for realism
-        # stump_thickness = 2  # Reduced thickness for a more proportional look
-        # bail_height = stump_height + 0.002  # Bail height slightly above stumps
+        # # Define stumps and bails
+        # stump_positions = [-0.05, 0, 0.05]
+        # stump_height = 0.3
+        # stump_thickness = 2
+        # bail_height = stump_height + 0.002
         
         # # Add stumps
         # for x_pos in stump_positions:
@@ -3033,19 +3039,17 @@ else :
         #         z=[0, stump_height],
         #         mode='lines',
         #         line=dict(color='black', width=stump_thickness),
-        #         showlegend=False,
-        #         name='Stump'
+        #         showlegend=False
         #     ))
         
-        # # Add bails (horizontal lines across two stumps at the top)
+        # # Add bails
         # fig.add_trace(go.Scatter3d(
         #     x=[stump_positions[0], stump_positions[1]],
         #     y=[0, 0],
         #     z=[bail_height, bail_height],
         #     mode='lines',
         #     line=dict(color='black', width=2),
-        #     showlegend=False,
-        #     name='Bail'
+        #     showlegend=False
         # ))
         # fig.add_trace(go.Scatter3d(
         #     x=[stump_positions[1], stump_positions[2]],
@@ -3053,8 +3057,7 @@ else :
         #     z=[bail_height, bail_height],
         #     mode='lines',
         #     line=dict(color='black', width=2),
-        #     showlegend=False,
-        #     name='Bail'
+        #     showlegend=False
         # ))
         
         # # Add pitch zones
@@ -3083,12 +3086,12 @@ else :
         #         continue
         
         #     # Determine base X and Y positions from line and length
-        #     x_base = line_positions.get(row['line'], 0) * mirror_factor  # Adjust for hand preference
+        #     x_base = line_positions.get(row['line'], 0) * mirror_factor  # Accurate line
         #     y_base = length_positions.get(row['length'], 5)  # Default to good length if length is not mapped
         
-        #     # Apply offset while ensuring it remains within pitch boundaries
-        #     x_pos = apply_offset(x_base, boundary=(-0.45, 0.45))
-        #     y_pos = apply_offset(y_base, boundary=(-2, 10))
+        #     # Apply offset to length (y) while keeping line (x) accurate
+        #     x_pos = apply_line_offset(x_base, boundary=(-0.5, 0.5))
+        #     y_pos = apply_length_offset(y_base, boundary=(-2, 10))
         #     z_pos = 0  # Place balls at ground level on the pitch surface
         
         #     # Set color and animation based on wicket status
@@ -3109,7 +3112,7 @@ else :
         #         elif batsman_runs == 6:
         #             color = 'orange'
         #         else:
-        #             color = 'gray'  # Default color for unexpected run values
+        #             color = 'gray'
         #         size = 5
         #         opacity = [1]  # Static for non-wicket balls
         
@@ -3124,10 +3127,10 @@ else :
         #             color=color,
         #             opacity=opacity[0]  # Start with full opacity
         #         ),
-        #         name='Wicket' if row['is_wkt'] == 1 else 'Non-Wicket',
         #         hoverinfo="text",
         #         text=f"Runs: {row['batsman_runs']} - {'Wicket' if row['is_wkt'] else 'Run'}"
         #     ))
+        
         #     # Add twinkle effect for wickets by animating opacity
         #     if row['is_wkt'] == 1:
         #         fig.add_trace(go.Scatter3d(
@@ -3153,7 +3156,6 @@ else :
         
         # # Streamlit display
         # st.plotly_chart(fig)
-
 
         import streamlit as st
         import plotly.graph_objects as go
@@ -3194,7 +3196,7 @@ else :
             if boundary[0] <= y_value + offset <= boundary[1]:
                 return y_value + offset
             return y_value
-
+        
         def apply_line_offset(x_value, offset_range=(-0.05, 0.05), boundary=(-0.5,0.5)):
             offset = np.random.uniform(offset_range[0], offset_range[1])
             if boundary[0] <= x_value + offset <= boundary[1]:
@@ -3248,6 +3250,19 @@ else :
                 mode='lines+markers',
                 line=dict(color="gray", width=2),
                 marker=dict(size=0.1, opacity=0.2),
+                showlegend=False
+            ))
+        
+        # Add length labels on the side of the pitch
+        for length, y_position in length_positions.items():
+            fig.add_trace(go.Scatter3d(
+                x=[0.6],  # Adjust X position to be to the side of the pitch
+                y=[y_position],
+                z=[0],
+                mode='text',
+                text=[length],
+                textposition="middle right",
+                textfont=dict(size=10, color="black"),
                 showlegend=False
             ))
         
