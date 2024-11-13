@@ -3173,102 +3173,102 @@ else :
     
     
     
-    import streamlit as st
-    import plotly.graph_objects as go
-    import pandas as pd
-    import numpy as np
-    
-    # Assuming final_df already exists in your environment with 'line', 'length', and 'batsman_runs' columns
-    
-    # Set up line and length mapping
-    line_positions = {
-        'Wide Outside Off Stump': 0,
-        'Outside Off Stump': 1,
-        'On Stumps': 2,
-        'Outside Leg Stump': 3,
-        'Wide Outside Leg Stump': 4
-    }
-    
-    length_positions = {
-        'Short': 0,
-        'Back of Length': 1,
-        'Good Length': 2,
-        'Full': 3,
-        'Yorker': 4
-    }
-    
-    # Initialize 5x5 grids for ball frequency and run accumulation
-    ball_count_grid = np.zeros((5, 5))
-    run_count_grid = np.zeros((5, 5))
-    
-    # Fill the grids based on final_df data
-    for _, row in final_df.iterrows():
-        line = row['line']
-        length = row['length']
-        runs = row['batsman_runs']
-    
-        # Identify the correct cell for ball count and run count
-        line_idx = line_positions.get(line, 2)  # Default to 'On Stumps' if line not found
-        length_idx = length_positions.get(length, 2)  # Default to 'Good Length' if length not found
+        import streamlit as st
+        import plotly.graph_objects as go
+        import pandas as pd
+        import numpy as np
         
-        # Update ball frequency and run counts
-        ball_count_grid[length_idx, line_idx] += 1
-        run_count_grid[length_idx, line_idx] += runs
-    
-    # Calculate percentage values for ball and run grids
-    total_balls = ball_count_grid.sum()
-    total_runs = run_count_grid.sum()
-    ball_percentage_grid = (ball_count_grid / total_balls) * 100
-    run_percentage_grid = (run_count_grid / total_runs) * 100
-    
-    # Labels for line and length positions
-    line_labels = ['Wide Outside Off', 'Outside Off', 'On Stumps', 'Outside Leg', 'Wide Outside Leg']
-    length_labels = ['Short', 'Back of Length', 'Good Length', 'Full', 'Yorker']
-    
-    # Function to create heatmap figure for a 5x5 grid
-    def create_heatmap(grid, title, annotations):
-        fig = go.Figure(
-            data=go.Heatmap(
-                z=grid,
-                colorscale='Reds',
-                colorbar=dict(title=f'{title} (%)')
-            )
-        )
-        # Add black text annotations to show percentages
-        for i in range(5):
-            for j in range(5):
-                fig.add_annotation(
-                    x=j, y=i,
-                    text=f'{annotations[i, j]:.1f}%',
-                    showarrow=False,
-                    font=dict(color="black", size=12)
+        # Assuming final_df already exists in your environment with 'line', 'length', and 'batsman_runs' columns
+        
+        # Set up line and length mapping
+        line_positions = {
+            'Wide Outside Off Stump': 0,
+            'Outside Off Stump': 1,
+            'On Stumps': 2,
+            'Outside Leg Stump': 3,
+            'Wide Outside Leg Stump': 4
+        }
+        
+        length_positions = {
+            'Short': 0,
+            'Back of Length': 1,
+            'Good Length': 2,
+            'Full': 3,
+            'Yorker': 4
+        }
+        
+        # Initialize 5x5 grids for ball frequency and run accumulation
+        ball_count_grid = np.zeros((5, 5))
+        run_count_grid = np.zeros((5, 5))
+        
+        # Fill the grids based on final_df data
+        for _, row in final_df.iterrows():
+            line = row['line']
+            length = row['length']
+            runs = row['batsman_runs']
+        
+            # Identify the correct cell for ball count and run count
+            line_idx = line_positions.get(line, 2)  # Default to 'On Stumps' if line not found
+            length_idx = length_positions.get(length, 2)  # Default to 'Good Length' if length not found
+            
+            # Update ball frequency and run counts
+            ball_count_grid[length_idx, line_idx] += 1
+            run_count_grid[length_idx, line_idx] += runs
+        
+        # Calculate percentage values for ball and run grids
+        total_balls = ball_count_grid.sum()
+        total_runs = run_count_grid.sum()
+        ball_percentage_grid = (ball_count_grid / total_balls) * 100
+        run_percentage_grid = (run_count_grid / total_runs) * 100
+        
+        # Labels for line and length positions
+        line_labels = ['Wide Outside Off', 'Outside Off', 'On Stumps', 'Outside Leg', 'Wide Outside Leg']
+        length_labels = ['Short', 'Back of Length', 'Good Length', 'Full', 'Yorker']
+        
+        # Function to create heatmap figure for a 5x5 grid
+        def create_heatmap(grid, title, annotations):
+            fig = go.Figure(
+                data=go.Heatmap(
+                    z=grid,
+                    colorscale='Reds',
+                    colorbar=dict(title=f'{title} (%)')
                 )
+            )
+            # Add black text annotations to show percentages
+            for i in range(5):
+                for j in range(5):
+                    fig.add_annotation(
+                        x=j, y=i,
+                        text=f'{annotations[i, j]:.1f}%',
+                        showarrow=False,
+                        font=dict(color="black", size=12)
+                    )
+            
+            # Update layout for vertical orientation and labels
+            fig.update_layout(
+                xaxis=dict(showgrid=False, tickvals=list(range(5)), ticktext=line_labels, title="Line"),
+                yaxis=dict(showgrid=False, tickvals=list(range(5)), ticktext=length_labels, title="Length"),
+                height=700, width=300  # Adjusted size for compact display
+            )
+            return fig
         
-        # Update layout for vertical orientation and labels
-        fig.update_layout(
-            xaxis=dict(showgrid=False, tickvals=list(range(5)), ticktext=line_labels, title="Line"),
-            yaxis=dict(showgrid=False, tickvals=list(range(5)), ticktext=length_labels, title="Length"),
-            height=700, width=300  # Adjusted size for compact display
-        )
-        return fig
-    
-    
-    # Organize layouts in two columns to make them appear side-by-side
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.write("### Ball Percentage")
-        ball_fig = create_heatmap(ball_percentage_grid, "Ball Percentage", ball_percentage_grid)
-        st.plotly_chart(ball_fig, use_container_width=True)
-    
-    with col2:
-        st.write("### Run Percentage")
-        run_fig = create_heatmap(run_percentage_grid, "Run Percentage", run_percentage_grid)
-        st.plotly_chart(run_fig, use_container_width=True)
+        
+        # Organize layouts in two columns to make them appear side-by-side
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.write("### Ball Percentage")
+            ball_fig = create_heatmap(ball_percentage_grid, "Ball Percentage", ball_percentage_grid)
+            st.plotly_chart(ball_fig, use_container_width=True)
+        
+        with col2:
+            st.write("### Run Percentage")
+            run_fig = create_heatmap(run_percentage_grid, "Run Percentage", run_percentage_grid)
+            st.plotly_chart(run_fig, use_container_width=True)
 
         
-else:
-    st.write("##Bowling Analysis")
+    else:
+        st.write("##Bowling Analysis")
         
 #     # Filter the data for the selected batsman
 #     final_df = temp_df[temp_df["batsman"] == batsman_selected]
