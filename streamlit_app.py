@@ -3195,7 +3195,7 @@ else :
                 return y_value + offset
             return y_value
 
-        def apply_line_offset(x_value, offset_range=(-0.00, 0.00), boundary=(-0.5,0.5)):
+        def apply_line_offset(x_value, offset_range=(-0.05, 0.05), boundary=(-0.5,0.5)):
             offset = np.random.uniform(offset_range[0], offset_range[1])
             if boundary[0] <= x_value + offset <= boundary[1]:
                 return x_value + offset
