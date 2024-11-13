@@ -3169,79 +3169,60 @@ else :
         # Streamlit display
         st.plotly_chart(fig)
 
-
     import streamlit as st
     import plotly.graph_objects as go
     import numpy as np
     
-    # Define a 5x5 grid
+    # Define the 5x5 grid for the pitch layout
     grid_size = 5
     
-    # Create a matrix with different values to represent different zones
+    # Create an empty matrix with zeros just for visual structure
     pitch_matrix = np.zeros((grid_size, grid_size))
     
-    # Define zones for the 5x5 pitch grid, using indices to represent positions
-    # Each row here can represent a different length
-    # Rows: Yorker, Full, Good, Back of Length, Short
-    # Columns: Wide Outside Off, Outside Off, Stumps, Outside Leg, Wide Outside Leg
-    zone_labels = [
-        ['Yorker-Wide Off', 'Yorker-Off', 'Yorker-Stumps', 'Yorker-Leg', 'Yorker-Wide Leg'],
-        ['Full-Wide Off', 'Full-Off', 'Full-Stumps', 'Full-Leg', 'Full-Wide Leg'],
-        ['Good-Wide Off', 'Good-Off', 'Good-Stumps', 'Good-Leg', 'Good-Wide Leg'],
-        ['Back-Length-Wide Off', 'Back-Length-Off', 'Back-Length-Stumps', 'Back-Length-Leg', 'Back-Length-Wide Leg'],
-        ['Short-Wide Off', 'Short-Off', 'Short-Stumps', 'Short-Leg', 'Short-Wide Leg']
-    ]
+    # Define labels for lengths and lines (for visual reference on the side)
+    length_labels = ["Short", "Back of Length", "Good", "Full", "Yorker"]
+    line_labels = ["Wide Outside Off", "Outside Off", "On Stumps", "Outside Leg", "Wide Outside Leg"]
     
-    # Create a color mapping for each zone
-    zone_colors = {
-        'Yorker': 'rgba(255, 205, 210, 0.5)',  # light red
-        'Full': 'rgba(255, 245, 157, 0.5)',    # light yellow
-        'Good': 'rgba(200, 230, 201, 0.5)',    # light green
-        'Back of Length': 'rgba(179, 229, 252, 0.5)',  # light blue
-        'Short': 'rgba(255, 183, 77, 0.5)'     # light orange
-    }
+    # Create the heatmap for the grid without any colors
+    fig = go.Figure(data=go.Heatmap(
+        z=pitch_matrix,
+        showscale=False,  # Hide color scale
+        colorscale=[[0, 'white'], [1, 'white']],  # Plain white color for cells
+        hoverinfo='none'  # Disable hover info
+    ))
     
-    # Set up Plotly figure
-    fig = go.Figure()
-    
-    # Loop through each cell in the matrix and create a scatter plot for the grid
-    for i in range(grid_size):
-        for j in range(grid_size):
-            # Extract zone label and determine color based on zone
-            zone_label = zone_labels[i][j]
-            length = zone_label.split('-')[0]  # Extract length part
-            # color = zone_colors.get(length, 'rgba(200, 200, 200, 0.5)')  # Default color if not matched
-    
-            # Plot each cell as a scatter point with appropriate color and label
-            fig.add_trace(go.Scatter(
-                x=[j], y=[i],
-                mode='markers+text',
-                marker=dict(size=50, color=color, line=dict(color='black', width=1)),
-                text=zone_label,
-                textposition='middle center',
-                showlegend=False
-            ))
-    
-    # Update layout to make the grid look like a pitch
+    # Update the layout to add clear black grid lines and axis labels
     fig.update_layout(
         title="5x5 Pitch Grid",
         xaxis=dict(
-            tickvals=[0, 1, 2, 3, 4],
-            ticktext=['Wide Off', 'Off', 'Stumps', 'Leg', 'Wide Leg'],
-            showgrid=False
+            tickvals=list(range(grid_size)),
+            ticktext=line_labels,
+            showgrid=False,
+            zeroline=False,
+            ticks="",
+            title="Line"
         ),
         yaxis=dict(
-            tickvals=[0, 1, 2, 3, 4],
-            ticktext=['Yorker', 'Full', 'Good', 'Back of Length', 'Short'],
-            showgrid=False
+            tickvals=list(range(grid_size)),
+            ticktext=length_labels[::-1],  # Reverse order for correct positioning
+            showgrid=False,
+            zeroline=False,
+            ticks="",
+            title="Length"
         ),
-        xaxis_title="Line",
-        yaxis_title="Length",
-        width=600,
-        height=600,
+        width=500,
+        height=500,
         margin=dict(l=50, r=50, b=50, t=50)
     )
     
-    # Display in Streamlit
+    # Add black borders for each cell
+    for i in range(grid_size):
+        for j in range(grid_size):
+            fig.add_shape(
+                type="rect",
+                x0=j - 0.5, y0=i - 0.5, x1=j + 0.5, y1=i + 0.5,
+                line=dict(color="black", width=2)
+            )
+    
+    # Display the figure in Streamlit
     st.plotly_chart(fig)
-
