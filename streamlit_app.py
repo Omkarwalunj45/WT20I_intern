@@ -3169,60 +3169,88 @@ else :
         # Streamlit display
         st.plotly_chart(fig)
 
+
     import streamlit as st
     import plotly.graph_objects as go
+    import pandas as pd
     import numpy as np
     
-    # Define the 5x5 grid for the pitch layout
-    grid_size = 5
+    # Assuming final_df already exists in your environment with 'line', 'length', and 'batsman_runs' columns
     
-    # Create an empty matrix with zeros just for visual structure
-    pitch_matrix = np.zeros((grid_size, grid_size))
+    # Set up line and length mapping
+    line_positions = {
+        'Wide Outside Off Stump': 0,
+        'Outside Off Stump': 1,
+        'On Stumps': 2,
+        'Outside Leg Stump': 3,
+        'Wide Outside Leg Stump': 4
+    }
     
-    # Define labels for lengths and lines (for visual reference on the side)
-    length_labels = ["Short", "Back of Length", "Good", "Full", "Yorker"]
-    line_labels = ["Wide Outside Off", "Outside Off", "On Stumps", "Outside Leg", "Wide Outside Leg"]
+    length_positions = {
+        'Short': 0,
+        'Back of Length': 1,
+        'Good Length': 2,
+        'Full': 3,
+        'Yorker': 4
+    }
     
-    # Create the heatmap for the grid without any colors
-    fig = go.Figure(data=go.Heatmap(
-        z=pitch_matrix,
-        showscale=False,  # Hide color scale
-        colorscale=[[0, 'white'], [1, 'white']],  # Plain white color for cells
-        hoverinfo='none'  # Disable hover info
-    ))
+    # Initialize 5x5 grids for ball frequency and run accumulation
+    ball_count_grid = np.zeros((5, 5))
+    run_count_grid = np.zeros((5, 5))
     
-    # Update the layout to add clear black grid lines and axis labels
-    fig.update_layout(
-        title="5x5 Pitch Grid",
-        xaxis=dict(
-            tickvals=list(range(grid_size)),
-            ticktext=line_labels,
-            showgrid=False,
-            zeroline=False,
-            ticks="",
-            title="Line"
-        ),
-        yaxis=dict(
-            tickvals=list(range(grid_size)),
-            ticktext=length_labels[::-1],  # Reverse order for correct positioning
-            showgrid=False,
-            zeroline=False,
-            ticks="",
-            title="Length"
-        ),
-        width=500,
-        height=500,
-        margin=dict(l=50, r=50, b=50, t=50)
-    )
+    # Fill the grids based on final_df data
+    for _, row in final_df.iterrows():
+        line = row['line']
+        length = row['length']
+        runs = row['batsman_runs']
     
-    # Add black borders for each cell
-    for i in range(grid_size):
-        for j in range(grid_size):
-            fig.add_shape(
-                type="rect",
-                x0=j - 0.5, y0=i - 0.5, x1=j + 0.5, y1=i + 0.5,
-                line=dict(color="black", width=2)
+        # Identify the correct cell for ball count and run count
+        line_idx = line_positions.get(line, 2)  # Default to 'On Stumps' if line not found
+        length_idx = length_positions.get(length, 2)  # Default to 'Good Length' if length not found
+        
+        # Update ball frequency and run counts
+        ball_count_grid[length_idx, line_idx] += 1
+        run_count_grid[length_idx, line_idx] += runs
+    
+    # Calculate percentage values for ball and run grids
+    total_balls = ball_count_grid.sum()
+    total_runs = run_count_grid.sum()
+    ball_percentage_grid = (ball_count_grid / total_balls) * 100
+    run_percentage_grid = (run_count_grid / total_runs) * 100
+    
+    # Function to create heatmap figure for a 5x5 grid
+    def create_heatmap(grid, title, annotations):
+        fig = go.Figure(
+            data=go.Heatmap(
+                z=grid,
+                colorscale='Reds',
+                colorbar=dict(title=f'{title} (%)')
             )
+        )
+        # Add black text annotations to show percentages
+        for i in range(5):
+            for j in range(5):
+                fig.add_annotation(
+                    x=j, y=i,
+                    text=f'{annotations[i, j]:.1f}%',
+                    showarrow=False,
+                    font=dict(color="black", size=12)
+                )
+        
+        fig.update_layout(
+            title=title,
+            xaxis=dict(showgrid=False, showticklabels=False),
+            yaxis=dict(showgrid=False, showticklabels=False)
+        )
+        return fig
     
-    # Display the figure in Streamlit
-    st.plotly_chart(fig)
+    # Streamlit app layout
+    st.title("Ball and Run Percentage Heatmaps")
+    
+    # Display Ball Percentage Heatmap
+    ball_fig = create_heatmap(ball_percentage_grid, "Ball Percentage", ball_percentage_grid)
+    st.plotly_chart(ball_fig, use_container_width=True)
+    
+    # Display Run Percentage Heatmap
+    run_fig = create_heatmap(run_percentage_grid, "Run Percentage", run_percentage_grid)
+    st.plotly_chart(run_fig, use_container_width=True)
