@@ -3190,11 +3190,17 @@ else :
         }
         
         # Function to apply a small random offset to length while keeping line accurate
-        def apply_length_offset(y_value, offset_range=(-0.08, 0.08), boundary=(-2, 10)):
+        def apply_length_offset(y_value, offset_range=(-0.20, 0.20), boundary=(-2, 10)):
             offset = np.random.uniform(offset_range[0], offset_range[1])
             if boundary[0] <= y_value + offset <= boundary[1]:
                 return y_value + offset
             return y_value
+
+        # def apply_line_offset(y_value, offset_range=(-0.08, 0.08), boundary=(-2, 10)):
+        #     offset = np.random.uniform(offset_range[0], offset_range[1])
+        #     if boundary[0] <= y_value + offset <= boundary[1]:
+        #         return y_value + offset
+        #     return y_value
         
         # Set up the 3D plot
         fig = go.Figure()
