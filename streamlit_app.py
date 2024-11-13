@@ -3190,17 +3190,17 @@ else :
         }
         
         # Function to apply a small random offset to length while keeping line accurate
-        def apply_length_offset(y_value, offset_range=(-0.20, 0.20), boundary=(-2, 10)):
+        def apply_length_offset(y_value, offset_range=(-0.30, 0.30), boundary=(-2, 10)):
             offset = np.random.uniform(offset_range[0], offset_range[1])
             if boundary[0] <= y_value + offset <= boundary[1]:
                 return y_value + offset
             return y_value
 
-        # def apply_line_offset(y_value, offset_range=(-0.08, 0.08), boundary=(-2, 10)):
-        #     offset = np.random.uniform(offset_range[0], offset_range[1])
-        #     if boundary[0] <= y_value + offset <= boundary[1]:
-        #         return y_value + offset
-        #     return y_value
+        def apply_line_offset(x_value, offset_range=(-0.09, 0.09), boundary=(-0.5,0.5)):
+            offset = np.random.uniform(offset_range[0], offset_range[1])
+            if boundary[0] <= y_value + offset <= boundary[1]:
+                return x_value + offset
+            return x_value
         
         # Set up the 3D plot
         fig = go.Figure()
@@ -3270,6 +3270,7 @@ else :
             y_base = length_positions.get(row['length'], 5)  # Default to good length if length is not mapped
         
             # Apply offset to length (y) while keeping line (x) accurate
+            x_pos = apply_line_offset(x_base, boundary=(-0.5, 0.5))
             y_pos = apply_length_offset(y_base, boundary=(-2, 10))
             z_pos = 0  # Place balls at ground level on the pitch surface
         
