@@ -3269,6 +3269,170 @@ else :
         # st.plotly_chart(fig)
 
 
+        # import streamlit as st
+        # import plotly.graph_objects as go
+        # import pandas as pd
+        # import numpy as np
+        
+        # # Define pitch zones with boundaries
+        # zones = {
+        #     'Short': (8, 10),
+        #     'Back of Length': (6, 8),
+        #     'Good': (4, 6),
+        #     'Full': (2, 4),
+        #     'Yorker': (0, 2),
+        #     'Full Toss': (-2, 0)
+        # }
+        
+        # # Define adjusted line positions with compact spacing
+        # line_positions = {
+        #     'Wide Outside Off Stump': -0.3,
+        #     'Outside Off Stump': -0.15,
+        #     'On Stumps': 0,
+        #     'Outside Leg Stump': 0.15,
+        #     'Wide Outside Leg Stump': 0.3
+        # }
+        
+        # length_positions = {
+        #     'Short': 9,
+        #     'Back of Length': 7,
+        #     'Good Length': 5,
+        #     'Full': 3,
+        #     'Yorker': 1,
+        #     'Full Toss': -1
+        # }
+        
+        # # Function to apply a small random offset while checking pitch boundaries
+        # def apply_offset(value, offset_range=(-0.45, 0.45), boundary=(-0.5, 0.5)):
+        #     offset = np.random.uniform(offset_range[0], offset_range[1])
+        #     if boundary[0] <= value + offset <= boundary[1]:
+        #         return value + offset
+        #     return value
+        
+        # # Set up the 3D plot
+        # fig = go.Figure()
+        # # Define stumps (3 vertical lines) and bails
+        # stump_positions = [-0.05, 0, 0.05]  # X-positions of the 3 stumps
+        # stump_height = 0.3  # Increased stump height for realism
+        # stump_thickness = 2  # Reduced thickness for a more proportional look
+        # bail_height = stump_height + 0.002  # Bail height slightly above stumps
+        
+        # # Add stumps
+        # for x_pos in stump_positions:
+        #     fig.add_trace(go.Scatter3d(
+        #         x=[x_pos, x_pos],
+        #         y=[0, 0],
+        #         z=[0, stump_height],
+        #         mode='lines',
+        #         line=dict(color='black', width=stump_thickness),
+        #         showlegend=False,
+        #         name='Stump'
+        #     ))
+        
+        # # Add bails (horizontal lines across two stumps at the top)
+        # fig.add_trace(go.Scatter3d(
+        #     x=[stump_positions[0], stump_positions[1]],
+        #     y=[0, 0],
+        #     z=[bail_height, bail_height],
+        #     mode='lines',
+        #     line=dict(color='black', width=2),
+        #     showlegend=False,
+        #     name='Bail'
+        # ))
+        # fig.add_trace(go.Scatter3d(
+        #     x=[stump_positions[1], stump_positions[2]],
+        #     y=[0, 0],
+        #     z=[bail_height, bail_height],
+        #     mode='lines',
+        #     line=dict(color='black', width=2),
+        #     showlegend=False,
+        #     name='Bail'
+        # ))
+    
+        # # Add pitch zones
+        # for zone_name, (y_min, y_max) in zones.items():
+        #     fig.add_trace(go.Scatter3d(
+        #         x=[-0.5, 0.5, 0.5, -0.5, -0.5],
+        #         y=[y_min, y_min, y_max, y_max, y_min],
+        #         z=[0, 0, 0, 0, 0],
+        #         mode='lines+markers',
+        #         line=dict(color="gray", width=2),
+        #         marker=dict(size=0.1, opacity=0.2),
+        #         showlegend=False
+        #     ))
+        
+        # # Add length labels
+        # for label, y_pos in length_positions.items():
+        #     fig.add_trace(go.Scatter3d(
+        #         x=[-0.7],  # Place labels slightly outside the pitch
+        #         y=[y_pos],
+        #         z=[0],
+        #         mode='text',
+        #         text=[label],
+        #         textposition="middle right",
+        #         showlegend=False
+        #     ))
+        
+        # # Plot points for each ball, excluding dot balls
+        # for index, row in final_df.iterrows():
+        #     # Skip plotting if batsman_runs is 0 (dot ball)
+        #     if row['batsman_runs'] == 0:
+        #         continue
+        
+        #     # Determine base X and Y positions from line and length
+        #     x_base = line_positions.get(row['line'], 0)  # Default to center if line is not mapped
+        #     y_base = length_positions.get(row['length'], 5)  # Default to good length if length is not mapped
+        
+        #     # Apply offset while ensuring it remains within pitch boundaries
+        #     x_pos = apply_offset(x_base, boundary=(-0.5, 0.5))
+        #     y_pos = apply_offset(y_base, boundary=(-2, 10))
+        #     z_pos = 0  # Place balls at ground level on the pitch surface
+        
+        #     # Choose color based on `is_wkt` and `batsman_runs`
+        #     if row['is_wkt'] == 1:
+        #         color = 'red'  # Wicket color
+        #     else:
+        #         # Set color based on `batsman_runs` for non-wicket balls
+        #         batsman_runs = row['batsman_runs']
+        #         if batsman_runs == 1:
+        #             color = 'green'
+        #         elif batsman_runs == 2:
+        #             color = 'blue'
+        #         elif batsman_runs == 3:
+        #             color = 'violet'
+        #         elif batsman_runs == 4:
+        #             color = 'yellow'
+        #         elif batsman_runs == 6:
+        #             color = 'brown'
+        #         else:
+        #             color = 'gray'  # Default color for unexpected run values
+        
+        #     # Plot each ball on the pitch using `Scatter3d`
+        #     fig.add_trace(go.Scatter3d(
+        #         x=[x_pos],
+        #         y=[y_pos],
+        #         z=[z_pos],  # Ground level
+        #         mode='markers',
+        #         marker=dict(size=5, color=color),
+        #         name='Wicket' if row['is_wkt'] == 1 else 'Non-Wicket'
+        #     ))
+        
+        # # Layout settings
+        # fig.update_layout(
+        #     scene=dict(
+        #         xaxis=dict(title='X-axis', range=[-1, 1]),
+        #         yaxis=dict(title='Y-axis', range=[-2, 10]),
+        #         zaxis=dict(title='Z-axis (Height)', range=[0, 2]),
+        #     ),
+        #     width=800,
+        #     height=800,
+        #     showlegend=False
+        # )
+        
+        # # Streamlit display
+        # st.plotly_chart(fig)
+
+
         import streamlit as st
         import plotly.graph_objects as go
         import pandas as pd
@@ -3284,13 +3448,22 @@ else :
             'Full Toss': (-2, 0)
         }
         
-        # Define adjusted line positions with compact spacing
-        line_positions = {
+        # Define line positions for right-hand batters
+        line_positions_right = {
             'Wide Outside Off Stump': -0.3,
             'Outside Off Stump': -0.15,
             'On Stumps': 0,
             'Outside Leg Stump': 0.15,
             'Wide Outside Leg Stump': 0.3
+        }
+        
+        # Define line positions for left-hand batters (mirror of right-hand)
+        line_positions_left = {
+            'Wide Outside Off Stump': 0.3,
+            'Outside Off Stump': 0.15,
+            'On Stumps': 0,
+            'Outside Leg Stump': -0.15,
+            'Wide Outside Leg Stump': -0.3
         }
         
         length_positions = {
@@ -3309,13 +3482,24 @@ else :
                 return value + offset
             return value
         
+        # Load the data
+        # Assuming `final_df` has a column 'batting_style' indicating 'Right-hand bat' or 'Left-hand bat'
+        
         # Set up the 3D plot
         fig = go.Figure()
+        
+        # Display batting style above the pitch
+        batting_style = final_df['batting_style'].iloc[0]  # Assuming the same batting style for all rows
+        st.write(f"**Batting Style:** {batting_style}")
+        
+        # Select line positions based on batting style
+        line_positions = line_positions_right if batting_style == 'Right-hand bat' else line_positions_left
+        
         # Define stumps (3 vertical lines) and bails
-        stump_positions = [-0.05, 0, 0.05]  # X-positions of the 3 stumps
-        stump_height = 0.3  # Increased stump height for realism
-        stump_thickness = 2  # Reduced thickness for a more proportional look
-        bail_height = stump_height + 0.002  # Bail height slightly above stumps
+        stump_positions = [-0.05, 0, 0.05]
+        stump_height = 0.3
+        stump_thickness = 2
+        bail_height = stump_height + 0.002
         
         # Add stumps
         for x_pos in stump_positions:
@@ -3329,7 +3513,7 @@ else :
                 name='Stump'
             ))
         
-        # Add bails (horizontal lines across two stumps at the top)
+        # Add bails
         fig.add_trace(go.Scatter3d(
             x=[stump_positions[0], stump_positions[1]],
             y=[0, 0],
@@ -3348,7 +3532,7 @@ else :
             showlegend=False,
             name='Bail'
         ))
-    
+        
         # Add pitch zones
         for zone_name, (y_min, y_max) in zones.items():
             fig.add_trace(go.Scatter3d(
@@ -3364,7 +3548,7 @@ else :
         # Add length labels
         for label, y_pos in length_positions.items():
             fig.add_trace(go.Scatter3d(
-                x=[-0.7],  # Place labels slightly outside the pitch
+                x=[-0.7],
                 y=[y_pos],
                 z=[0],
                 mode='text',
@@ -3380,38 +3564,24 @@ else :
                 continue
         
             # Determine base X and Y positions from line and length
-            x_base = line_positions.get(row['line'], 0)  # Default to center if line is not mapped
-            y_base = length_positions.get(row['length'], 5)  # Default to good length if length is not mapped
+            x_base = line_positions.get(row['line'], 0)
+            y_base = length_positions.get(row['length'], 5)
         
             # Apply offset while ensuring it remains within pitch boundaries
             x_pos = apply_offset(x_base, boundary=(-0.5, 0.5))
             y_pos = apply_offset(y_base, boundary=(-2, 10))
-            z_pos = 0  # Place balls at ground level on the pitch surface
+            z_pos = 0
         
             # Choose color based on `is_wkt` and `batsman_runs`
-            if row['is_wkt'] == 1:
-                color = 'red'  # Wicket color
-            else:
-                # Set color based on `batsman_runs` for non-wicket balls
-                batsman_runs = row['batsman_runs']
-                if batsman_runs == 1:
-                    color = 'green'
-                elif batsman_runs == 2:
-                    color = 'blue'
-                elif batsman_runs == 3:
-                    color = 'violet'
-                elif batsman_runs == 4:
-                    color = 'yellow'
-                elif batsman_runs == 6:
-                    color = 'brown'
-                else:
-                    color = 'gray'  # Default color for unexpected run values
+            color = 'red' if row['is_wkt'] == 1 else {
+                1: 'green', 2: 'blue', 3: 'violet', 4: 'yellow', 6: 'brown'
+            }.get(row['batsman_runs'], 'gray')
         
-            # Plot each ball on the pitch using `Scatter3d`
+            # Plot each ball
             fig.add_trace(go.Scatter3d(
                 x=[x_pos],
                 y=[y_pos],
-                z=[z_pos],  # Ground level
+                z=[z_pos],
                 mode='markers',
                 marker=dict(size=5, color=color),
                 name='Wicket' if row['is_wkt'] == 1 else 'Non-Wicket'
