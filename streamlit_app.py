@@ -3361,216 +3361,216 @@ else :
                     </div>
                 </div>
             """, unsafe_allow_html=True)
-            
-            import streamlit as st
-            import plotly.graph_objects as go
-            import pandas as pd
-            import numpy as np
-            
-            st.markdown("## PITCH MAP VS LEFT-HANDED AND RIGHT-HANDED BATSMEN")
-            
-            # Define pitch zones with boundaries
-            zones = {
-                'Short': (8, 10),
-                'Back of Length': (6, 8),
-                'Good': (4, 6),
-                'Full': (2, 4),
-                'Yorker': (0, 2),
-                'Full Toss': (-2, 0)
-            }
-            
-            # Define adjusted line positions with compact spacing
-            line_positions = {
-                'Wide Outside Off Stump': -0.3,
-                'Outside Off Stump': -0.15,
-                'On Stumps': 0,
-                'Outside Leg Stump': 0.15,
-                'Wide Outside Leg Stump': 0.3
-            }
-            
-            length_positions = {
-                'Short': 9,
-                'Back of Length': 7,
-                'Good Length': 5,
-                'Full': 3,
-                'Yorker': 1,
-                'Full Toss': -1
-            }
-            
-            # Function to apply a small random offset to length while keeping line accurate
-            def apply_length_offset(y_value, offset_range=(-0.95, 0.95), boundary=(-2, 10)):
-                offset = np.random.uniform(offset_range[0], offset_range[1])
-                if boundary[0] <= y_value + offset <= boundary[1]:
-                    return y_value + offset
-                return y_value
-            
-            def apply_line_offset(x_value, offset_range=(-0.05, 0.05), boundary=(-0.5, 0.5)):
-                offset = np.random.uniform(offset_range[0], offset_range[1])
-                if boundary[0] <= x_value + offset <= boundary[1]:
-                    return x_value + offset
-                return x_value
-            
-            # Set up two columns for LHB and RHB views
-            col1, col2 = st.columns(2)
-            final_df = temp_df[temp_df["bowler"] == bowler_selected]
-            # Filter data for Left-Handed and Right-Handed Batsmen
-            lhb_data = final_df[final_df['batting_style'] == 'Left-hand bat']
-            rhb_data = final_df[final_df['batting_style'] == 'Right-hand bat']
-            
-            # Function to create a 3D pitch map based on handedness
-            def create_pitch_map(data, handedness):
-                fig = go.Figure()
-            
-                # Define stumps and bails
-                stump_positions = [-0.05, 0, 0.05]
-                stump_height = 0.3
-                stump_thickness = 2
-                bail_height = stump_height + 0.002
-            
-                # Add stumps
-                for x_pos in stump_positions:
-                    fig.add_trace(go.Scatter3d(
-                        x=[x_pos, x_pos],
-                        y=[0, 0],
-                        z=[0, stump_height],
-                        mode='lines',
-                        line=dict(color='black', width=stump_thickness),
-                        showlegend=False
-                    ))
-            
-                # Add bails
+
+        import streamlit as st
+        import plotly.graph_objects as go
+        import pandas as pd
+        import numpy as np
+        
+        st.markdown("## PITCH MAP VS LEFT-HANDED AND RIGHT-HANDED BATSMEN")
+        
+        # Define pitch zones with boundaries
+        zones = {
+            'Short': (8, 10),
+            'Back of Length': (6, 8),
+            'Good': (4, 6),
+            'Full': (2, 4),
+            'Yorker': (0, 2),
+            'Full Toss': (-2, 0)
+        }
+        
+        # Define adjusted line positions with compact spacing
+        line_positions = {
+            'Wide Outside Off Stump': -0.3,
+            'Outside Off Stump': -0.15,
+            'On Stumps': 0,
+            'Outside Leg Stump': 0.15,
+            'Wide Outside Leg Stump': 0.3
+        }
+        
+        length_positions = {
+            'Short': 9,
+            'Back of Length': 7,
+            'Good Length': 5,
+            'Full': 3,
+            'Yorker': 1,
+            'Full Toss': -1
+        }
+        
+        # Function to apply a small random offset to length while keeping line accurate
+        def apply_length_offset(y_value, offset_range=(-0.95, 0.95), boundary=(-2, 10)):
+            offset = np.random.uniform(offset_range[0], offset_range[1])
+            if boundary[0] <= y_value + offset <= boundary[1]:
+                return y_value + offset
+            return y_value
+        
+        def apply_line_offset(x_value, offset_range=(-0.05, 0.05), boundary=(-0.5, 0.5)):
+            offset = np.random.uniform(offset_range[0], offset_range[1])
+            if boundary[0] <= x_value + offset <= boundary[1]:
+                return x_value + offset
+            return x_value
+        
+        # Set up two columns for LHB and RHB views
+        col1, col2 = st.columns(2)
+        
+        # Filter data for Left-Handed and Right-Handed Batsmen
+        final_df = temp_df[temp_df["bowler"] == bowler_selected]
+        lhb_data = final_df[final_df['batting_style'] == 'Left-hand bat']
+        rhb_data = final_df[final_df['batting_style'] == 'Right-hand bat']
+        
+        # Function to create a 3D pitch map based on handedness
+        def create_pitch_map(data, handedness):
+            fig = go.Figure()
+        
+            # Define stumps and bails
+            stump_positions = [-0.05, 0, 0.05]
+            stump_height = 0.3
+            stump_thickness = 2
+            bail_height = stump_height + 0.002
+        
+            # Add stumps
+            for x_pos in stump_positions:
                 fig.add_trace(go.Scatter3d(
-                    x=[stump_positions[0], stump_positions[1]],
+                    x=[x_pos, x_pos],
                     y=[0, 0],
-                    z=[bail_height, bail_height],
+                    z=[0, stump_height],
                     mode='lines',
-                    line=dict(color='black', width=2),
+                    line=dict(color='black', width=stump_thickness),
                     showlegend=False
                 ))
+        
+            # Add bails
+            fig.add_trace(go.Scatter3d(
+                x=[stump_positions[0], stump_positions[1]],
+                y=[0, 0],
+                z=[bail_height, bail_height],
+                mode='lines',
+                line=dict(color='black', width=2),
+                showlegend=False
+            ))
+            fig.add_trace(go.Scatter3d(
+                x=[stump_positions[1], stump_positions[2]],
+                y=[0, 0],
+                z=[bail_height, bail_height],
+                mode='lines',
+                line=dict(color='black', width=2),
+                showlegend=False
+            ))
+        
+            # Add pitch zones
+            for zone_name, (y_min, y_max) in zones.items():
                 fig.add_trace(go.Scatter3d(
-                    x=[stump_positions[1], stump_positions[2]],
-                    y=[0, 0],
-                    z=[bail_height, bail_height],
-                    mode='lines',
-                    line=dict(color='black', width=2),
+                    x=[-0.5, 0.5, 0.5, -0.5, -0.5],
+                    y=[y_min, y_min, y_max, y_max, y_min],
+                    z=[0, 0, 0, 0, 0],
+                    mode='lines+markers',
+                    line=dict(color="gray", width=2),
+                    marker=dict(size=0.1, opacity=0.2),
                     showlegend=False
                 ))
-            
-                # Add pitch zones
-                for zone_name, (y_min, y_max) in zones.items():
-                    fig.add_trace(go.Scatter3d(
-                        x=[-0.5, 0.5, 0.5, -0.5, -0.5],
-                        y=[y_min, y_min, y_max, y_max, y_min],
-                        z=[0, 0, 0, 0, 0],
-                        mode='lines+markers',
-                        line=dict(color="gray", width=2),
-                        marker=dict(size=0.1, opacity=0.2),
-                        showlegend=False
-                    ))
-            
-                # Add length labels on the side of the pitch
-                for length, y_position in length_positions.items():
-                    fig.add_trace(go.Scatter3d(
-                        x=[0.6],  # Adjust X position to be to the side of the pitch
-                        y=[y_position],
-                        z=[0],
-                        mode='text',
-                        text=[length],
-                        textposition="middle right",
-                        textfont=dict(size=10, color="black"),
-                        showlegend=False
-                    ))
-            
-                # Set mirroring factor based on handedness
-                if handedness == 'Left-hand bat':
-                    mirror_factor = -1
-                elif handedness == 'Right-hand bat':
-                    mirror_factor = 1
+        
+            # Add length labels on the side of the pitch
+            for length, y_position in length_positions.items():
+                fig.add_trace(go.Scatter3d(
+                    x=[0.6],  # Adjust X position to be to the side of the pitch
+                    y=[y_position],
+                    z=[0],
+                    mode='text',
+                    text=[length],
+                    textposition="middle right",
+                    textfont=dict(size=10, color="black"),
+                    showlegend=False
+                ))
+        
+            # Set mirroring factor based on handedness
+            if handedness == 'Left-hand bat':
+                mirror_factor = -1
+            elif handedness == 'Right-hand bat':
+                mirror_factor = 1
+            else:
+                mirror_factor = 0  # Default case if handedness is neither "Left-hand bat" nor "Right-hand bat"
+        
+            # Plot points for each ball, excluding dot balls
+            for index, row in data.iterrows():
+                if row['batsman_runs'] == 0:
+                    continue
+        
+                # Determine base X and Y positions from line and length
+                x_base = line_positions.get(row['line'], 0) * mirror_factor
+                y_base = length_positions.get(row['length'], 5)
+        
+                # Apply offset to length (y) while keeping line (x) accurate
+                x_pos = apply_line_offset(x_base, boundary=(-0.5, 0.5))
+                y_pos = apply_length_offset(y_base, boundary=(-2, 10))
+                z_pos = 0
+        
+                # Set color and animation based on wicket status
+                if row['is_wkt'] == 1:
+                    color = 'red'
+                    size = 8
+                    opacity = 1  # Set opacity to a single value
                 else:
-                    # Default case if handedness is neither "Left-hand bat" nor "Right-hand bat"
-                    mirror_factor = 0  # You can adjust this as needed, or raise an error
-                
-            
-                # Plot points for each ball, excluding dot balls
-                for index, row in data.iterrows():
-                    if row['batsman_runs'] == 0:
-                        continue
-            
-                    # Determine base X and Y positions from line and length
-                    x_base = line_positions.get(row['line'], 0) * mirror_factor
-                    y_base = length_positions.get(row['length'], 5)
-            
-                    # Apply offset to length (y) while keeping line (x) accurate
-                    x_pos = apply_line_offset(x_base, boundary=(-0.5, 0.5))
-                    y_pos = apply_length_offset(y_base, boundary=(-2, 10))
-                    z_pos = 0
-            
-                    # Set color and animation based on wicket status
-                    if row['is_wkt'] == 1:
-                        color = 'red'
-                        size = 8
-                        opacity = [1.5]
-                    else:
-                        batsman_runs = row['batsman_runs']
-                        color = {
-                            1: 'green',
-                            2: 'blue',
-                            3: 'violet',
-                            4: 'yellow',
-                            6: 'orange'
-                        }.get(batsman_runs, 'gray')
-                        size = 5
-                        opacity = [1, 0.5, 1, 0.8, 1]
-            
-                    # Set opacity as a single value instead of a list
+                    batsman_runs = row['batsman_runs']
+                    color = {
+                        1: 'green',
+                        2: 'blue',
+                        3: 'violet',
+                        4: 'yellow',
+                        6: 'orange'
+                    }.get(batsman_runs, 'gray')
+                    size = 5
+                    opacity = 1  # Set opacity to a single value for non-wicket balls
+        
+                # Set opacity as a single value instead of a list
+                fig.add_trace(go.Scatter3d(
+                    x=[x_pos],
+                    y=[y_pos],
+                    z=[z_pos],
+                    mode='markers',
+                    marker=dict(size=size, color=color, opacity=opacity),  # Directly use opacity, not opacity[0]
+                    hoverinfo="text",
+                    text=f"Runs: {row['batsman_runs']} - {'Wicket' if row['is_wkt'] else 'Run'}"
+                ))
+        
+                # Twinkle effect for wickets
+                if row['is_wkt'] == 1:
                     fig.add_trace(go.Scatter3d(
                         x=[x_pos],
                         y=[y_pos],
                         z=[z_pos],
                         mode='markers',
-                        marker=dict(size=size, color=color, opacity=opacity),  # Directly use opacity, not opacity[0]
-                        hoverinfo="text",
-                        text=f"Runs: {row['batsman_runs']} - {'Wicket' if row['is_wkt'] else 'Run'}"
+                        marker=dict(size=size, color=color, opacity=opacity),
+                        name='Twinkling Wicket'
                     ))
+        
+            fig.update_layout(
+                scene=dict(
+                    xaxis=dict(title='X-axis', range=[-1, 1]),
+                    yaxis=dict(title='Y-axis', range=[-2, 10]),
+                    zaxis=dict(title='Z-axis (Height)', range=[0, 2]),
+                ),
+                width=350,
+                height=700,
+                showlegend=False
+            )
+            
+            return fig
+        
+        # Display each plot in the respective column
+        with col1:
+            st.write("### Against Left-Handed Batsmen")
+            if lhb_data.empty:
+                st.write("No data for Left-Handed Batsmen")
+            else:
+                st.plotly_chart(create_pitch_map(lhb_data, 'Left-hand bat'))
+        
+        with col2:
+            st.write("### Against Right-Handed Batsmen")
+            if rhb_data.empty:
+                st.write("No data for Right-Handed Batsmen")
+            else:
+                st.plotly_chart(create_pitch_map(rhb_data, 'Right-hand bat'))
 
-            
-                    # Twinkle effect for wickets
-                    if row['is_wkt'] == 1:
-                        fig.add_trace(go.Scatter3d(
-                            x=[x_pos],
-                            y=[y_pos],
-                            z=[z_pos],
-                            mode='markers',
-                            marker=dict(size=size, color=color, opacity=opacity),
-                            name='Twinkling Wicket'
-                        ))
-            
-                fig.update_layout(
-                    scene=dict(
-                        xaxis=dict(title='X-axis', range=[-1, 1]),
-                        yaxis=dict(title='Y-axis', range=[-2, 10]),
-                        zaxis=dict(title='Z-axis (Height)', range=[0, 2]),
-                    ),
-                    width=350,
-                    height=700,
-                    showlegend=False
-                )
-                
-                return fig
-            
-            # Display each plot in the respective column
-            with col1:
-                st.write("### Against Left-Handed Batsmen")
-                if lhb_data.empty:
-                    st.write("No data for Left-Handed Batsmen")
-                else:
-                    st.plotly_chart(create_pitch_map(lhb_data, 'Left-hand bat'))
-            with col2:
-                st.write("### Against Right-Handed Batsmen")
-                if rhb_data.empty:
-                    st.write("No data for Right-Handed Batsmen")
-                else:
-                    st.plotly_chart(create_pitch_map(rhb_data, 'Right-hand bat'))
                             
 
         
