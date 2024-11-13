@@ -3482,7 +3482,13 @@ else :
                     ))
             
                 # Set mirroring factor based on handedness
-                mirror_factor = -1 if handedness == 'Left-handed bat' else 1
+                if handedness == 'Left-hand bat':
+                    mirror_factor = -1
+                elif handedness == 'Right-hand bat':
+                    mirror_factor = 1
+                else:
+                    # Default case if handedness is neither "Left-hand bat" nor "Right-hand bat"
+                    mirror_factor = 0  # You can adjust this as needed, or raise an error
                 
             
                 # Plot points for each ball, excluding dot balls
