@@ -3570,7 +3570,96 @@ else :
             else:
                 st.plotly_chart(create_pitch_map(rhb_data, 'Right-hand bat'))
 
-                            
 
+        import numpy as np
+        import plotly.graph_objects as go
+        import streamlit as st
         
+        # Assuming final_df already exists with the following columns: 'line', 'length', 'batsman_runs', 'is_wkt'
+        
+        # Set up line and length mapping
+        line_positions = {
+            'Wide Outside Off Stump': 0,
+            'Outside Off Stump': 1,
+            'On Stumps': 2,
+            'Outside Leg Stump': 3,
+            'Wide Outside Leg Stump': 4
+        }
+        
+        length_positions = {
+            'Short': 0,
+            'Back of Length': 1,
+            'Good Length': 2,
+            'Full': 3,
+            'Yorker': 4
+        }
+        
+        # Initialize 5x5 grids for wicket count and run accumulation
+        wicket_count_grid = np.zeros((5, 5))
+        run_count_grid_bowler = np.zeros((5, 5))
+        
+        # Fill the grids based on final_df data
+        for _, row in final_df.iterrows():
+            line = row['line']
+            length = row['length']
+            runs = row['batsman_runs']
+            is_wkt = row['is_wkt']
+        
+            # Identify the correct cell for wicket count and run count
+            line_idx = line_positions.get(line, 2)  # Default to 'On Stumps' if line not found
+            length_idx = length_positions.get(length, 2)  # Default to 'Good Length' if length not found
+        
+            if is_wkt == 1:
+                # Update wicket count in the grid for the given line and length
+                wicket_count_grid[length_idx, line_idx] += 1
+            
+            # Update run count in the grid for the given line and length
+            run_count_grid_bowler[length_idx, line_idx] += runs
+        
+        # Labels for line and length positions
+        line_labels = ['Wide Outside Off', 'Outside Off', 'On Stumps', 'Outside Leg', 'Wide Outside Leg']
+        length_labels = ['Short', 'Back of Length', 'Good Length', 'Full', 'Yorker']
+        
+        # Function to create heatmap figure for a 5x5 grid
+        def create_heatmap(grid, title, annotations):
+            fig = go.Figure(
+                data=go.Heatmap(
+                    z=grid,
+                    colorscale='Reds',
+                    colorbar=dict(title=f'{title}')
+                )
+            )
+            # Add black text annotations to show values
+            for i in range(5):
+                for j in range(5):
+                    fig.add_annotation(
+                        x=j, y=i,
+                        text=f'{annotations[i, j]}',
+                        showarrow=False,
+                        font=dict(color="black", size=12)
+                    )
+            
+            # Update layout for vertical orientation and labels
+            fig.update_layout(
+                xaxis=dict(showgrid=False, tickvals=list(range(5)), ticktext=line_labels, title="Line"),
+                yaxis=dict(showgrid=False, tickvals=list(range(5)), ticktext=length_labels, title="Length"),
+                height=700, width=300  # Adjusted size for compact display
+            )
+            return fig
+        
+        # Organize layouts in two columns to make them appear side-by-side
+        col1, col2 = st.columns(2)
+        
+        # First Column - Wicket Heatmap
+        with col1:
+            st.write("### Wicket Distribution")
+            wicket_fig = create_heatmap(wicket_count_grid, "Wickets", wicket_count_grid)
+            st.plotly_chart(wicket_fig, use_container_width=True)
+        
+        # Second Column - Run Distribution for Bowler
+        with col2:
+            st.write("### Runs Given")
+            run_fig_bowler = create_heatmap(run_count_grid_bowler, "Runs", run_count_grid_bowler)
+            st.plotly_chart(run_fig_bowler, use_container_width=True)
+
                     
