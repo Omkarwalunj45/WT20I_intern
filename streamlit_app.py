@@ -3210,7 +3210,7 @@ else :
             # Extract zone label and determine color based on zone
             zone_label = zone_labels[i][j]
             length = zone_label.split('-')[0]  # Extract length part
-            color = zone_colors.get(length, 'rgba(200, 200, 200, 0.5)')  # Default color if not matched
+            # color = zone_colors.get(length, 'rgba(200, 200, 200, 0.5)')  # Default color if not matched
     
             # Plot each cell as a scatter point with appropriate color and label
             fig.add_trace(go.Scatter(
