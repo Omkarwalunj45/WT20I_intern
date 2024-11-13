@@ -3266,7 +3266,7 @@ else :
                 continue
         
             # Determine base X and Y positions from line and length
-            x_pos = line_positions.get(row['line'], 0) * mirror_factor  # Accurate line
+            x_base = line_positions.get(row['line'], 0) * mirror_factor  # Accurate line
             y_base = length_positions.get(row['length'], 5)  # Default to good length if length is not mapped
         
             # Apply offset to length (y) while keeping line (x) accurate
