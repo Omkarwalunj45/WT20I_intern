@@ -3171,7 +3171,7 @@ else :
         }
         
         # Function to apply a small random offset to avoid overlap and make all balls visible
-        def apply_offset(value, offset_range=(-0.80, 0.80)):
+        def apply_offset(value, offset_range=(-0.35, 0.35)):
             return value + np.random.uniform(offset_range[0], offset_range[1])
         
         # Set up the 3D plot
