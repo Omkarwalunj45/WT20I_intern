@@ -3087,8 +3087,8 @@ else :
             y_base = length_positions.get(row['length'], 5)  # Default to good length if length is not mapped
         
             # Apply offset while ensuring it remains within pitch boundaries
-            x_pos = apply_offset(x_base, boundary=(-0.7, 0.7))
-            y_pos = apply_offset(y_base, boundary=(-2, 10))
+            # x_pos = apply_offset(x_base, boundary=(-0.45, 0.45))
+            # y_pos =s apply_offset(y_base, boundary=(-2, 10))
             z_pos = 0  # Place balls at ground level on the pitch surface
         
             # Set color and animation based on wicket status
