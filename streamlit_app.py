@@ -3734,7 +3734,7 @@ else :
                 elif batsman_runs == 4:
                     color = 'yellow'
                 elif batsman_runs == 6:
-                    color = 'brown'
+                    color = 'pink'
                 else:
                     color = 'gray'  # Default color for unexpected run values
                 size = 5
