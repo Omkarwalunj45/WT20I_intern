@@ -3412,7 +3412,7 @@ else :
             
             # Set up two columns for LHB and RHB views
             col1, col2 = st.columns(2)
-            
+            final_df = temp_df[temp_df["bowler"] == bowler_selected]
             # Filter data for Left-Handed and Right-Handed Batsmen
             lhb_data = final_df[final_df['batting_style'] == 'Left-hand bat']
             rhb_data = final_df[final_df['batting_style'] == 'Right-hand bat']
