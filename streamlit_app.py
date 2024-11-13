@@ -3010,7 +3010,7 @@ else :
         }
         
         # Function to apply a small random offset while checking pitch boundaries
-        def apply_offset(value, offset_range=(-0.45, 0.45), boundary=(-0.5, 0.5)):
+        def apply_offset(value, offset_range=(-0.0, 0.0), boundary=(-0.5, 0.5)):
             offset = np.random.uniform(offset_range[0], offset_range[1])
             if boundary[0] <= value + offset <= boundary[1]:
                 return value + offset
@@ -3087,8 +3087,8 @@ else :
             y_base = length_positions.get(row['length'], 5)  # Default to good length if length is not mapped
         
             # Apply offset while ensuring it remains within pitch boundaries
-            # x_pos = apply_offset(x_base, boundary=(-0.45, 0.45))
-            # y_pos =s apply_offset(y_base, boundary=(-2, 10))
+            x_pos = apply_offset(x_base, boundary=(-0.45, 0.45))
+            y_pos = apply_offset(y_base, boundary=(-2, 10))
             z_pos = 0  # Place balls at ground level on the pitch surface
         
             # Set color and animation based on wicket status
