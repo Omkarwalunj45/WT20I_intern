@@ -1538,6 +1538,7 @@ elif sidebar_option == "Matchup Analysis":
             result_df = result_df.rename(columns={'match_id': 'MATCH ID'})
             
             
+            
             result_df.columns = [col.upper().replace('_', ' ') for col in result_df.columns]
             result_df['FINAL YEAR']=result_df['FINAL YEAR'].apply(standardize_season)
             
