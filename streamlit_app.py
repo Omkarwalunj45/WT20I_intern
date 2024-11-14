@@ -3116,82 +3116,86 @@ else :
             # Set a mirroring factor based on batting style
             mirror_factor = -1 if batting_style == 'Left-hand bat' else 1
             
-            # Plot points for each ball, excluding dot balls
-            for index, row in final_df.iterrows():
-                # Skip plotting if batsman_runs is 0 (dot ball)
-                if row['batsman_runs'] == 0:
-                    continue
-            
+            # Separate the data into wicket and non-wicket balls
+            wicket_data = final_df[final_df['is_wkt'] == 1]
+            non_wicket_data = final_df[final_df['is_wkt'] == 0]
+        
+            # Plot wicket balls first
+            for index, row in wicket_data.iterrows():
                 # Determine base X and Y positions from line and length
-                x_base = line_positions.get(row['line'], 0) * mirror_factor  # Accurate line
-                y_base = length_positions.get(row['length'], 5)  # Default to good length if length is not mapped
-            
+                x_base = line_positions.get(row['line'], 0) * mirror_factor
+                y_base = length_positions.get(row['length'], 5)
+        
                 # Apply offset to length (y) while keeping line (x) accurate
                 x_pos = apply_line_offset(x_base, boundary=(-0.5, 0.5))
                 y_pos = apply_length_offset(y_base, boundary=(-2, 10))
-                z_pos = 0  # Place balls at ground level on the pitch surface
-            
-                # Set color and animation based on wicket status
-                if row['is_wkt'] == 1:
-                    color = 'red'  # Wicket color
-                    size = 8
-                    opacity = [1, 0.5, 1, 0.8, 1]  # Twinkle effect sequence
-                else:
-                    batsman_runs = row['batsman_runs']
-                    if batsman_runs == 1:
-                        color = 'green'
-                    elif batsman_runs == 2:
-                        color = 'blue'
-                    elif batsman_runs == 3:
-                        color = 'violet'
-                    elif batsman_runs == 4:
-                        color = 'yellow'
-                    elif batsman_runs == 6:
-                        color = 'orange'
-                    else:
-                        color = 'gray'
-                    size = 5
-                    opacity = [1]  # Static for non-wicket balls
-            
-                # Plot each ball on the pitch using `Scatter3d`
+                z_pos = 0
+        
+                # Set color and size for wickets
+                color = 'red'
+                size = 5
+                opacity = 1  # Set opacity to a single value
+        
+                # Plot the wicket ball
                 fig.add_trace(go.Scatter3d(
                     x=[x_pos],
                     y=[y_pos],
                     z=[z_pos],
                     mode='markers',
-                    marker=dict(
-                        size=size,
-                        color=color,
-                        opacity=opacity[0]  # Start with full opacity
-                    ),
+                    marker=dict(size=size, color=color, opacity=opacity),
                     hoverinfo="text",
-                    text=f"Runs: {row['batsman_runs']} - {'Wicket' if row['is_wkt'] else 'Run'}"
+                    text=f"Runs: {row['batsman_runs']} - Wicket"
                 ))
-            
-                # Add twinkle effect for wickets by animating opacity
-                if row['is_wkt'] == 1:
-                    fig.add_trace(go.Scatter3d(
-                        x=[x_pos],
-                        y=[y_pos],
-                        z=[z_pos],
-                        mode='markers',
-                        marker=dict(size=size, color=color, opacity=opacity),
-                        name='Twinkling Wicket'
-                    ))
-            
-            # Layout settings
+        
+            # Plot non-wicket balls next
+            for index, row in non_wicket_data.iterrows():
+                # Determine base X and Y positions from line and length
+                x_base = line_positions.get(row['line'], 0) * mirror_factor
+                y_base = length_positions.get(row['length'], 5)
+        
+                # Apply offset to length (y) while keeping line (x) accurate
+                x_pos = apply_line_offset(x_base, boundary=(-0.5, 0.5))
+                y_pos = apply_length_offset(y_base, boundary=(-2, 10))
+                z_pos = 0
+        
+                # Set color based on runs
+                batsman_runs = row['batsman_runs']
+                color = {
+                    1: 'green',
+                    2: 'blue',
+                    3: 'violet',
+                    4: 'yellow',
+                    6: 'orange'
+                }.get(batsman_runs, 'gray')
+                size = 5
+                opacity = 1  # Set opacity to a single value for non-wicket balls
+        
+                # Plot the non-wicket ball
+                fig.add_trace(go.Scatter3d(
+                    x=[x_pos],
+                    y=[y_pos],
+                    z=[z_pos],
+                    mode='markers',
+                    marker=dict(size=size, color=color, opacity=opacity),
+                    hoverinfo="text",
+                    text=f"Runs: {row['batsman_runs']} - {'Run'}"
+                ))
+        
+            # Twinkle effect for wickets (already added in the wicket balls loop)
+        
             fig.update_layout(
                 scene=dict(
                     xaxis=dict(title='X-axis', range=[-1, 1]),
                     yaxis=dict(title='Y-axis', range=[-2, 10]),
                     zaxis=dict(title='Z-axis (Height)', range=[0, 2]),
+                    camera=dict(
+                        eye=dict(x=1, y=2.5, z=2.5)  # Adjust these values to control orientation
+                    )
                 ),
-                width=700,
-                height=800,
+                width=500,
+                height=700,
                 showlegend=False
             )
-            
-            # Streamlit display
             st.plotly_chart(fig)
         
         import numpy as np
