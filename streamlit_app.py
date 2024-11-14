@@ -2811,31 +2811,42 @@ else :
         percent_threes = (total_threes / total_balls) * 100 if total_balls > 0 else 0
         percent_fours = (total_fours / total_balls) * 100 if total_balls > 0 else 0
         percent_sixes = (total_sixes / total_balls) * 100 if total_balls > 0 else 0
-        import pandas as pd
+        final_df = final_df[final_df['shot_type'].apply(lambda x: isinstance(x, str))]
+
+        # Calculate total runs scored by each shot type
+        shot_runs = final_df.groupby('shot_type')['batsman_runs'].sum()
         
-        # Assuming final_df contains 'shot_type' and 'batsman_runs' columns, and 'total_runs' is defined
-        # Filter rows where 'shot_type' is a valid string and 'batsman_runs' is not NaN
-        valid_shots_df = final_df[final_df['shot_type'].apply(lambda x: isinstance(x, str))]
+        # Calculate the percentage of total runs contributed by each shot type
+        shot_percentage = (shot_runs / total_runs) * 100
         
-        # Calculate total runs scored with each shot type
-        shot_runs = valid_shots_df.groupby('shot_type')['batsman_runs'].sum()
+        # Check if shot_percentage has any values before getting max
+        if not shot_percentage.empty:
+            max_shot = shot_percentage.idxmax()  # Find the shot type with the highest percentage of total runs
+        else:
+            max_shot = "N/A"  # Fallback if no valid shot data
+        # # Assuming final_df contains 'shot_type' and 'batsman_runs' columns, and 'total_runs' is defined
+        # # Filter rows where 'shot_type' is a valid string and 'batsman_runs' is not NaN
+        # valid_shots_df = final_df[final_df['shot_type'].apply(lambda x: isinstance(x, str))]
         
-        # Calculate the percentage of total runs scored with each shot type
-        shot_totals = final_df.groupby('shot_type')['batsman_runs'].sum()
+        # # Calculate total runs scored with each shot type
+        # shot_runs = valid_shots_df.groupby('shot_type')['batsman_runs'].sum()
+        
+        # # Calculate the percentage of total runs scored with each shot type
+        # shot_totals = final_df.groupby('shot_type')['batsman_runs'].sum()
         
         # Calculate the most productive shot (shot with the highest runs contribution)
-        if total_runs > 0:
-            # Calculate total runs scored by each shot type as a percentage
-            shot_runs = final_df.groupby('shot_type')['batsman_runs'].sum()
-            shot_percentage = (shot_runs / total_runs) * 100
+        # if total_runs > 0:
+        #     # Calculate total runs scored by each shot type as a percentage
+        #     shot_runs = final_df.groupby('shot_type')['batsman_runs'].sum()
+        #     shot_percentage = (shot_runs / total_runs) * 100
         
-            # Check if shot_percentage is not empty
-            if not shot_percentage.empty:
-                max_shot = shot_percentage.idxmax()  # Get the shot type with the highest percentage
-            else:
-                max_shot = "N/A"  # Fallback in case shot_percentage is empty
-        else:
-            max_shot = "N/A"
+        #     # Check if shot_percentage is not empty
+        #     if not shot_percentage.empty:
+        #         max_shot = shot_percentage.idxmax()  # Get the shot type with the highest percentage
+        #     else:
+        #         max_shot = "N/A"  # Fallback in case shot_percentage is empty
+        # else:
+        #     max_shot = "N/A"
         total_balls=len(final_df)
         tdf=final_df
         c0= tdf[tdf['control']==0]
