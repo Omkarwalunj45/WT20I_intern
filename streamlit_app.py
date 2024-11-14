@@ -2908,11 +2908,7 @@ else :
         
             # Add the "Most Productive Shot" only if total_runs >= 80
             if total_runs >= 80:
-                stats_content += f"""<div class="highlight">Most Productive Shot: {max_shot}</div>"""
-        
-            # Add False Shot % to stats content
-            stats_content += f"""<div class="highlight">False Shot %: {false_shot_percentage:.1f}%</div></div>"""
-        
+                stats_content += f"""<div class="highlight">Most Productive Shot: {max_shot}</div>"""       
             # Render the stats content
             st.markdown(stats_content, unsafe_allow_html=True)
 
