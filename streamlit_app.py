@@ -3522,7 +3522,7 @@ else :
                 # Set color and animation based on wicket status
                 if row['is_wkt'] == 1:
                     color = 'red'
-                    size = 8
+                    size = 5
                     opacity = 1  # Set opacity to a single value
                 else:
                     batsman_runs = row['batsman_runs']
