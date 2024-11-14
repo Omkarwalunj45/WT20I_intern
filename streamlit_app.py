@@ -2821,7 +2821,14 @@ else :
         shot_runs = valid_shots_df.groupby('shot_type')['batsman_runs'].sum()
         
         # Calculate the percentage of total runs scored with each shot type
-        shot_percentage = (shot_runs / total_runs) * 100
+        shot_totals = final_df.groupby('shot_type')['batsman_runs'].sum()
+        
+        # Calculate the most productive shot (shot with the highest runs contribution)
+        if total_runs > 0:
+            shot_percentages = (shot_totals / total_runs) * 100
+            max_shot = shot_percentages.idxmax()  # Get the shot type with max percentage
+        else:
+            max_shot = "No Data"  # Handle cases with zero total runs
         
         # Find the shot type with the maximum percentage of total runs, if total_runs >= 80
         if total_runs >= 80:
