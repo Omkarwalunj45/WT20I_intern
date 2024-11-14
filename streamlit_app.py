@@ -3188,11 +3188,8 @@ else :
                     xaxis=dict(title='X-axis', range=[-1, 1]),
                     yaxis=dict(title='Y-axis', range=[-2, 10]),
                     zaxis=dict(title='Z-axis (Height)', range=[0, 2]),
-                    camera=dict(
-                        eye=dict(x=1, y=2.5, z=2.5)  # Adjust these values to control orientation
-                    )
                 ),
-                width=700,
+                width=1000,
                 height=800,
                 showlegend=False
             )
@@ -3582,8 +3579,8 @@ else :
                     yaxis=dict(title='Y-axis', range=[-2, 10]),
                     zaxis=dict(title='Z-axis (Height)', range=[0, 2]),
                 ),
-                width=1000,
-                height=800,
+                width=1200,
+                height=1000,
                 showlegend=False
             )
             return fig
