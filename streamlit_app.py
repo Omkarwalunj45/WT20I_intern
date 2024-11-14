@@ -3287,7 +3287,7 @@ else :
         # Filter data for the selected bowler
         bowler_selected = batsman_selected
         final_df = temp_df[temp_df["bowler"] == bowler_selected]
-        if not final_df.empty():
+        if not final_df.empty:
             # Calculate bowler's metrics
             total_runs_conceded = final_df["total_runs"].sum()
             total_balls_bowled = final_df["valid_ball"].sum()  # Only valid balls count towards economy
@@ -3693,6 +3693,6 @@ else :
                 run_fig_bowler = create_heatmap(run_count_grid_bowler, "Runs", run_count_grid_bowler)
                 st.plotly_chart(run_fig_bowler, use_container_width=True)
         else:
-            st.write("##No Bowling Data Available")
+            st.write("## No Bowling Data Available")
 
                     
