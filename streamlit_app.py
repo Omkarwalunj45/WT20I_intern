@@ -2897,7 +2897,7 @@ else :
                         <span class="bold">4s:</span> {int(total_fours)} 🟨 ({percent_fours:.1f}%) | 
                         <span class="bold">6s:</span> {int(total_sixes)} 🟫 ({percent_sixes:.1f}%)
                     </div>
-                    if {int(total_runs)} >= 80:
+                    if total_runs >= 80:
                         <div class="highlight">Most Productive Shot: {max_shot}</div>
                     <div class="highlight">False Shot %: {false_shot_percentage:.1f}%</div>
                 </div>
