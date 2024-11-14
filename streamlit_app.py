@@ -3541,7 +3541,7 @@ else :
                     yaxis=dict(title='Y-axis', range=[-2, 10]),
                     zaxis=dict(title='Z-axis (Height)', range=[0, 2]),
                     camera=dict(
-                            eye=dict(x=0, y=10, z=0.5)  # Adjust these values to control orientation
+                            eye=dict(x=0, y=1, z=1.5)  # Adjust these values to control orientation
                         )
                 ),
                 width=350,
