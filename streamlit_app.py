@@ -2825,18 +2825,17 @@ else :
         
         # Calculate the most productive shot (shot with the highest runs contribution)
         if total_runs > 0:
-            shot_percentages = (shot_totals / total_runs) * 100
-            max_shot = shot_percentages.idxmax()  # Get the shot type with max percentage
-        else:
-            max_shot = "No Data"  # Handle cases with zero total runs
+            # Calculate total runs scored by each shot type as a percentage
+            shot_runs = final_df.groupby('shot_type')['batsman_runs'].sum()
+            shot_percentage = (shot_runs / total_runs) * 100
         
-        # Find the shot type with the maximum percentage of total runs, if total_runs >= 80
-        if total_runs >= 80:
-            max_shot = shot_percentage.idxmax()
-            max_shot_percentage = shot_percentage[max_shot]
-            result = f"The shot with the highest percentage of runs is '{max_shot}' with {max_shot_percentage:.2f}% of the total runs."
+            # Check if shot_percentage is not empty
+            if not shot_percentage.empty:
+                max_shot = shot_percentage.idxmax()  # Get the shot type with the highest percentage
+            else:
+                max_shot = "N/A"  # Fallback in case shot_percentage is empty
         else:
-            result = "Total runs are less than 80, so analysis is not performed."
+            max_shot = "N/A"
         total_balls=len(final_df)
         tdf=final_df
         c0= tdf[tdf['control']==0]
