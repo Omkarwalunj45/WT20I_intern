@@ -3581,7 +3581,7 @@ else :
                         eye=dict(x=1, y=2.5, z=2.5)  # Adjust these values to control orientation
                     )
                 ),
-                width=350,
+                width=500,
                 height=700,
                 showlegend=False
             )
