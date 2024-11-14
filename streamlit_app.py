@@ -2811,7 +2811,30 @@ else :
         percent_threes = (total_threes / total_balls) * 100 if total_balls > 0 else 0
         percent_fours = (total_fours / total_balls) * 100 if total_balls > 0 else 0
         percent_sixes = (total_sixes / total_balls) * 100 if total_balls > 0 else 0
-    
+        import pandas as pd
+        
+        # Assuming final_df contains 'shot_type' and 'batsman_runs' columns, and 'total_runs' is defined
+        # Filter rows where 'shot_type' is a valid string and 'batsman_runs' is not NaN
+        valid_shots_df = final_df[final_df['shot_type'].apply(lambda x: isinstance(x, str))]
+        
+        # Calculate total runs scored with each shot type
+        shot_runs = valid_shots_df.groupby('shot_type')['batsman_runs'].sum()
+        
+        # Calculate the percentage of total runs scored with each shot type
+        shot_percentage = (shot_runs / total_runs) * 100
+        
+        # Find the shot type with the maximum percentage of total runs, if total_runs >= 80
+        if total_runs >= 80:
+            max_shot = shot_percentage.idxmax()
+            max_shot_percentage = shot_percentage[max_shot]
+            result = f"The shot with the highest percentage of runs is '{max_shot}' with {max_shot_percentage:.2f}% of the total runs."
+        else:
+            result = "Total runs are less than 80, so analysis is not performed."
+        total_balls=len(final_df)
+        tdf=final_df
+        c0= tdf[tdf['control']==0]
+        fshot=len(c0)
+        false_shot_percentage=(fshot/total_balls)*100
         with st.container():
             # Create a compact stats box with a grey background and padding
             st.markdown(
@@ -2867,6 +2890,8 @@ else :
                         <span class="bold">4s:</span> {int(total_fours)} 🟨 ({percent_fours:.1f}%) | 
                         <span class="bold">6s:</span> {int(total_sixes)} 🟫 ({percent_sixes:.1f}%)
                     </div>
+                    <div class="highlight">Most Productive Shot: {max_shot}</div>
+                    <div class="highlight">False Shot %: {false_shot_percentage:.1f}%</div>
                 </div>
             """, unsafe_allow_html=True)
         
