@@ -3505,11 +3505,12 @@ else :
             else:
                 mirror_factor = 0  # Default case if handedness is neither "Left-hand bat" nor "Right-hand bat"
         
-            # Plot points for each ball, excluding dot balls
-            for index, row in data.iterrows():
-                if row['batsman_runs'] == 0:
-                    continue
+            # Separate the data into wicket and non-wicket balls
+            wicket_data = data[data['is_wkt'] == 1]
+            non_wicket_data = data[data['is_wkt'] == 0]
         
+            # Plot wicket balls first
+            for index, row in wicket_data.iterrows():
                 # Determine base X and Y positions from line and length
                 x_base = line_positions.get(row['line'], 0) * mirror_factor
                 y_base = length_positions.get(row['length'], 5)
@@ -3519,44 +3520,57 @@ else :
                 y_pos = apply_length_offset(y_base, boundary=(-2, 10))
                 z_pos = 0
         
-                # Set color and animation based on wicket status
-                if row['is_wkt'] == 1:
-                    color = 'red'
-                    size = 5
-                    opacity = 1  # Set opacity to a single value
-                else:
-                    batsman_runs = row['batsman_runs']
-                    color = {
-                        1: 'green',
-                        2: 'blue',
-                        3: 'violet',
-                        4: 'yellow',
-                        6: 'orange'
-                    }.get(batsman_runs, 'gray')
-                    size = 5
-                    opacity = 1  # Set opacity to a single value for non-wicket balls
+                # Set color and size for wickets
+                color = 'red'
+                size = 5
+                opacity = 1  # Set opacity to a single value
         
-                # Set opacity as a single value instead of a list
+                # Plot the wicket ball
                 fig.add_trace(go.Scatter3d(
                     x=[x_pos],
                     y=[y_pos],
                     z=[z_pos],
                     mode='markers',
-                    marker=dict(size=size, color=color, opacity=opacity),  # Directly use opacity, not opacity[0]
+                    marker=dict(size=size, color=color, opacity=opacity),
                     hoverinfo="text",
-                    text=f"Runs: {row['batsman_runs']} - {'Wicket' if row['is_wkt'] else 'Run'}"
+                    text=f"Runs: {row['batsman_runs']} - Wicket"
                 ))
         
-                # Twinkle effect for wickets
-                if row['is_wkt'] == 1:
-                    fig.add_trace(go.Scatter3d(
-                        x=[x_pos],
-                        y=[y_pos],
-                        z=[z_pos],
-                        mode='markers',
-                        marker=dict(size=size, color=color, opacity=opacity),
-                        name='Twinkling Wicket'
-                    ))
+            # Plot non-wicket balls next
+            for index, row in non_wicket_data.iterrows():
+                # Determine base X and Y positions from line and length
+                x_base = line_positions.get(row['line'], 0) * mirror_factor
+                y_base = length_positions.get(row['length'], 5)
+        
+                # Apply offset to length (y) while keeping line (x) accurate
+                x_pos = apply_line_offset(x_base, boundary=(-0.5, 0.5))
+                y_pos = apply_length_offset(y_base, boundary=(-2, 10))
+                z_pos = 0
+        
+                # Set color based on runs
+                batsman_runs = row['batsman_runs']
+                color = {
+                    1: 'green',
+                    2: 'blue',
+                    3: 'violet',
+                    4: 'yellow',
+                    6: 'orange'
+                }.get(batsman_runs, 'gray')
+                size = 5
+                opacity = 1  # Set opacity to a single value for non-wicket balls
+        
+                # Plot the non-wicket ball
+                fig.add_trace(go.Scatter3d(
+                    x=[x_pos],
+                    y=[y_pos],
+                    z=[z_pos],
+                    mode='markers',
+                    marker=dict(size=size, color=color, opacity=opacity),
+                    hoverinfo="text",
+                    text=f"Runs: {row['batsman_runs']} - {'Run'}"
+                ))
+        
+            # Twinkle effect for wickets (already added in the wicket balls loop)
         
             fig.update_layout(
                 scene=dict(
@@ -3564,14 +3578,15 @@ else :
                     yaxis=dict(title='Y-axis', range=[-2, 10]),
                     zaxis=dict(title='Z-axis (Height)', range=[0, 2]),
                     camera=dict(
-                            eye=dict(x=1, y=2.5, z=2.5)  # Adjust these values to control orientation
-                        )
+                        eye=dict(x=1, y=2.5, z=2.5)  # Adjust these values to control orientation
+                    )
                 ),
                 width=350,
                 height=700,
                 showlegend=False
             )
             return fig
+
         
         # Display each plot in the respective column
         with col1:
