@@ -2889,10 +2889,6 @@ else :
                         <span class="bold">6s:</span> {int(total_sixes)} 🟫 ({percent_sixes:.1f}%)
                     </div>
             """
-        
-            # Add the "Most Productive Shot" only if total_runs >= 80
-            if total_runs >= 80 and max_shot != "N/A":
-                stats_content += f"""<div class="highlight">Most Productive Shot: {max_shot}</div>"""   
             # Render the stats content
             st.markdown(stats_content, unsafe_allow_html=True)
 
