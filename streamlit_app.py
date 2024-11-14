@@ -3693,6 +3693,6 @@ else :
                 run_fig_bowler = create_heatmap(run_count_grid_bowler, "Runs", run_count_grid_bowler)
                 st.plotly_chart(run_fig_bowler, use_container_width=True)
         else:
-            st.write(##"No Bowling Data Available")
+            st.write("##No Bowling Data Available")
 
                     
