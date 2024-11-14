@@ -2827,7 +2827,9 @@ else :
                     boundary_counts[shot_type] += 1
                 else:
                     boundary_counts[shot_type] = 1
-        
+        if "DEFENDED" in boundary_counts:
+            del boundary_counts["DEFENDED"]
+
         # Find the shot type with the highest boundary count
         if boundary_counts:
             max_shot = max(boundary_counts, key=boundary_counts.get)  # Shot type with the most 4s and 6s
