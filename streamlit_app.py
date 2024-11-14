@@ -2843,7 +2843,6 @@ else :
         fshot=len(c0)
         false_shot_percentage=(fshot/total_balls)*100
         with st.container():
-            # Create a compact stats box with a grey background and padding
             st.markdown(
                 f"""
                 <style>
@@ -2869,26 +2868,24 @@ else :
                     .bold {{
                         font-weight: bold;
                     }}
+                    .highlight {{
+                        color: #d9534f;
+                        font-weight: bold;
+                        font-size: 16px;
+                        margin-top: 10px;
+                    }}
                 </style>
                 """, unsafe_allow_html=True)
-            st.markdown(f"""
+        
+            # Define the main stats container
+            stats_content = f"""
                 <div class="stats-box">
                     <div class="stats-title">{batsman_selected}</div>
-                    <div class="stats-details">
-                        Runs: {int(total_runs)}  
-                    </div>
-                    <div class="stats-details">
-                        Balls: {int(total_balls)}  
-                    </div>
-                    <div class="stats-details">
-                        Dismissals: {int(total_dismissals)} 🟥
-                    </div>
-                    <div class="stats-details">
-                        S/R: {strike_rate:.1f}  
-                    </div>
-                    <div class="stats-details">
-                        Avg: {avg_runs:.1f}
-                    </div>
+                    <div class="stats-details">Runs: {int(total_runs)}</div>
+                    <div class="stats-details">Balls: {int(total_balls)}</div>
+                    <div class="stats-details">Dismissals: {int(total_dismissals)} 🟥</div>
+                    <div class="stats-details">S/R: {strike_rate:.1f}</div>
+                    <div class="stats-details">Avg: {avg_runs:.1f}</div>
                     <div class="compact-line">
                         <span class="bold">0s:</span> <span class="white-square"></span> ({percent_zeros:.1f}%) | 
                         <span class="bold">1s:</span> {int(total_ones)} 🟩 ({percent_ones:.1f}%) | 
@@ -2897,11 +2894,18 @@ else :
                         <span class="bold">4s:</span> {int(total_fours)} 🟨 ({percent_fours:.1f}%) | 
                         <span class="bold">6s:</span> {int(total_sixes)} 🟫 ({percent_sixes:.1f}%)
                     </div>
-                    if total_runs >= 80:
-                        <div class="highlight">Most Productive Shot: {max_shot}</div>
-                    <div class="highlight">False Shot %: {false_shot_percentage:.1f}%</div>
-                </div>
-            """, unsafe_allow_html=True)
+            """
+        
+            # Add the "Most Productive Shot" only if total_runs >= 80
+            if total_runs >= 80:
+                stats_content += f"""<div class="highlight">Most Productive Shot: {max_shot}</div>"""
+        
+            # Add False Shot % to stats content
+            stats_content += f"""<div class="highlight">False Shot %: {false_shot_percentage:.1f}%</div></div>"""
+        
+            # Render the stats content
+            st.markdown(stats_content, unsafe_allow_html=True)
+
         
         def get_sector_angle(zone, batting_style, offset=0):
             base_angles = {
