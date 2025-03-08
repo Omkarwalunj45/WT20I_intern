@@ -958,7 +958,10 @@ if sidebar_option == "Player Profile":
             result_df =result_df[new_order]
  
             st.markdown("### Opponentwise Performance")
-            st.table(result_df.style.set_table_attributes("style='font-weight: bold;'"))
+            st.table(
+                        result_df.style
+                        .set_table_attributes("style='font-weight: bold; white-space: nowrap;'")
+                    )
             
         
             tdf = pdf[pdf['batsman'] == player_name]
@@ -1024,7 +1027,7 @@ if sidebar_option == "Player Profile":
             result_df[columns_to_convert] = result_df[columns_to_convert].astype(int)
                     
             # Display the results
-            st.markdown(f"### **Yearwise Performnce**")
+            st.markdown(f"### **Yearwise Performance**")
             cols = result_df.columns.tolist()
 
             # # Specify the desired order with 'year' first
@@ -1069,7 +1072,7 @@ if sidebar_option == "Player Profile":
                     
             # Display the results
             result_df = result_df.drop(columns=['MATCHES'])
-            st.markdown(f"### **Inningwise Performnce**")
+            st.markdown(f"### **Inningwise Performance**")
             st.table(result_df.reset_index(drop=True).style.set_table_attributes("style='font-weight: bold;'"))
         
 
