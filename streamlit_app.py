@@ -960,8 +960,10 @@ if sidebar_option == "Player Profile":
             st.markdown("### Opponentwise Performance")
             st.table(
                         result_df.style
-                        .set_table_attributes("style='font-weight: bold; white-space: nowrap;'")
+                        .set_table_attributes("style='font-weight: bold; width: 100%;'")
+                        .set_properties(**{"width": "150px"})  # Adjust column width
                     )
+
             
         
             tdf = pdf[pdf['batsman'] == player_name]
